@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "private": true,
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   },
   "scripts": {
     "start": "tsx watch src/server.ts",
