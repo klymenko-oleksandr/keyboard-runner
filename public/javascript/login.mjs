@@ -1,3 +1,5 @@
+import { USERNAME_PATTERN, USERNAME_RULES_HINT } from './constants/validation.mjs';
+
 const username = sessionStorage.getItem('username');
 
 if (username) {
@@ -6,24 +8,33 @@ if (username) {
 
 const submitButton = document.getElementById('submit-button');
 const input = document.getElementById('username-input');
+const errorElement = document.getElementById('login-error');
 
-const getInputValue = () => input.value;
+const showError = message => {
+	errorElement.textContent = message;
+};
 
 const onClickSubmitButton = () => {
-	const inputValue = getInputValue();
+	const inputValue = input.value.trim();
 	if (!inputValue) {
+		return;
+	}
+	// The username becomes part of a CSS class (`user-progress ${username}`),
+	// so spaces and special characters are not allowed.
+	if (!USERNAME_PATTERN.test(inputValue)) {
+		showError(USERNAME_RULES_HINT);
 		return;
 	}
 	sessionStorage.setItem('username', inputValue);
 	window.location.replace('/game');
 };
 
-const onKeyUp = ev => {
-	const enterKeyCode = 13;
-	if (ev.keyCode === enterKeyCode) {
+const onKeyDown = event => {
+	if (event.key === 'Enter') {
 		submitButton.click();
 	}
 };
 
 submitButton.addEventListener('click', onClickSubmitButton);
-window.addEventListener('keyup', onKeyUp);
+input.addEventListener('input', () => showError(''));
+window.addEventListener('keydown', onKeyDown);

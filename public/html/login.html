@@ -17,11 +17,14 @@
 <body>
   <div id="root">
     <div id="login-page" class="full-screen flex-centered">
-      <div class="flex">
-        <div class="username-input-container">
-          <input id="username-input" autofocus placeholder="username" type="text">
+      <div class="login-form">
+        <div class="flex">
+          <div class="username-input-container">
+            <input id="username-input" autofocus placeholder="username" type="text" maxlength="20" autocomplete="off">
+          </div>
+          <button id="submit-button" class="no-select">submit</button>
         </div>
-        <button id="submit-button" class="no-select">submit</button>
+        <p id="login-error" class="login-error" role="alert"></p>
       </div>
     </div>
   </div>

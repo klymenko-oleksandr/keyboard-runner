@@ -19,4 +19,5 @@ socketHandler(socketIo);
 
 httpServer.listen(PORT, () => console.log(`Listen server on port ${PORT}`));
 
+export { app, httpServer };
 export default { app, httpServer };
