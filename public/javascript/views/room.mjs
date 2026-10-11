@@ -1,52 +1,53 @@
 import { createElement } from '../helpers/domHelper.mjs';
 
-const appendRoomElement = ({ name, numberOfUsers, onJoin = () => {} }) => {
-	const roomsContainer = document.querySelector('#rooms-wrapper');
+const getNumberOfUsersString = numberOfUsers =>
+	`${numberOfUsers} ${numberOfUsers === 1 ? 'user' : 'users'} connected`;
+
+const createRoomElement = ({ name, numberOfUsers, onJoin }) => {
+	const connectedUsersElement = createElement({
+		tagName: 'div',
+		className: 'connected-users',
+		innerElements: [getNumberOfUsersString(numberOfUsers)],
+	});
 
 	const nameElement = createElement({
 		tagName: 'div',
 		className: 'room-name',
-		attributes: { 'data-room-name': name },
+		attributes: { title: name },
 		innerElements: [name],
-	});
-
-	const numberOfUsersString = getNumberOfUsersString(numberOfUsers);
-	const connectedUsersElement = createElement({
-		tagName: 'div',
-		className: 'connected-users',
-		attributes: { 'data-room-name': name, 'data-room-number-of-users': numberOfUsers },
-		innerElements: [numberOfUsersString],
 	});
 
 	const joinButton = createElement({
 		tagName: 'button',
 		className: 'join-btn',
-		attributes: { 'data-room-name': name },
 		innerElements: ['Join'],
 	});
+	joinButton.addEventListener('click', () => onJoin(name));
 
-	const roomElement = createElement({
+	return createElement({
 		tagName: 'div',
 		className: 'room',
-		attributes: { 'data-room-name': name },
-		innerElements: [nameElement, connectedUsersElement, joinButton],
+		innerElements: [connectedUsersElement, nameElement, joinButton],
 	});
-
-	roomsContainer.append(roomElement);
-
-	joinButton.addEventListener('click', onJoin);
-
-	return roomElement;
 };
 
-const updateNumberOfUsersInRoom = ({ name, numberOfUsers }) => {
-	const roomConnectedUsersElement = document.querySelector(`.connected-users[data-room-name='${name}']`);
-	roomConnectedUsersElement.innerText = getNumberOfUsersString(numberOfUsers);
-	roomConnectedUsersElement.dataset.roomNumberOfUsers = numberOfUsers;
+/**
+ * The server always sends the full (small) list, so we simply re-render it.
+ * No need to look rooms up by name -> any room name is safe, even with quotes.
+ */
+export const renderRooms = ({ rooms, onJoin }) => {
+	const roomsContainer = document.querySelector('#rooms-wrapper');
+
+	if (rooms.length === 0) {
+		roomsContainer.replaceChildren(
+			createElement({
+				tagName: 'p',
+				className: 'rooms-empty',
+				innerElements: ['No open rooms yet. Create the first one!'],
+			}),
+		);
+		return;
+	}
+
+	roomsContainer.replaceChildren(...rooms.map(room => createRoomElement({ ...room, onJoin })));
 };
-
-const getNumberOfUsersString = numberOfUsers => `${numberOfUsers} connected`;
-
-const removeRoomElement = name => document.querySelector(`.room[data-room-name='${name}']`)?.remove();
-
-export { appendRoomElement, updateNumberOfUsersInRoom, removeRoomElement };

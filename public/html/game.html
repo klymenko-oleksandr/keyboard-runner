@@ -9,38 +9,49 @@
   <link rel="stylesheet" href="/styles/rooms.css">
   <link rel="stylesheet" href="/styles/game.css">
   <link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=JetBrains+Mono:wght@400;600&display=swap"
     rel="stylesheet">
   <script src="/socket.io/socket.io.js"></script>
   <script defer type="module" src="/javascript/game.mjs"></script>
-  <title>Typing Race</title>
+  <title>Keyboard Runner</title>
 </head>
 
 <body>
   <div id="root">
-    <div id="rooms-page" class="full-screen">
+    <div id="rooms-page" class="full-screen display-none">
+      <header class="top-bar">
+        <span class="logo">⌨ Keyboard Runner</span>
+        <div class="current-user-info">
+          <span>Signed in as <strong id="current-username"></strong></span>
+          <button id="logout-btn" class="btn btn-small">Change user</button>
+        </div>
+      </header>
       <h1 class="title">Join Room Or Create New</h1>
-      <button id="add-room-btn">Create Room</button>
-      <div id="rooms-wrapper">
-      </div>
+      <button id="add-room-btn" class="btn">Create Room</button>
+      <div id="rooms-wrapper"></div>
     </div>
-    <div id="game-page" class="flex full-screen display-none">
-      <div>
+
+    <div id="game-page" class="full-screen display-none">
+      <aside class="room-sidebar">
         <h1 id="room-name">Room name</h1>
-        <button id="quit-room-btn">Back to Rooms</button>
+        <button id="quit-room-btn" class="btn">‹ Back To Rooms</button>
         <div id="users-wrapper"></div>
-      </div>
-      <div>
+      </aside>
+      <main>
         <div id="game-container">
-          <button id="ready-btn">READY</button>
-          <div id="timer" class="display-none">5</div>
-          <p id="text-container" class="display-none">Sample text</p>
           <div id="game-timer" class="display-none">
-            <span id="game-timer-seconds">5</span>
+            <span id="game-timer-seconds"></span>
             <span> seconds left</span>
           </div>
+          <button id="ready-btn" class="btn">READY</button>
+          <div id="timer" class="display-none"></div>
+          <p id="text-container" class="display-none"></p>
+          <div class="game-footer">
+            <span id="typing-speed" class="display-none"></span>
+            <span id="finished-message" class="display-none">Finished! Waiting for the others…</span>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   </div>
 </body>

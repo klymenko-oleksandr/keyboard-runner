@@ -7,6 +7,7 @@ export const createElement = ({ tagName, className, attributes = {}, innerElemen
 
 	Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]));
 
+	// strings are appended as text nodes -> user input can never become HTML (no XSS)
 	innerElements.forEach(innerElement => element.append(innerElement));
 
 	return element;
@@ -23,3 +24,6 @@ export const removeClass = (element, className) => {
 };
 
 export const formatClassNames = className => className.split(' ').filter(Boolean);
+
+export const show = element => removeClass(element, 'display-none');
+export const hide = element => addClass(element, 'display-none');

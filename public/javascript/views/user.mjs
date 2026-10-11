@@ -1,34 +1,33 @@
-import { addClass } from '../helpers/domHelper.mjs';
-import { createElement } from '../helpers/domHelper.mjs';
+import { addClass, createElement } from '../helpers/domHelper.mjs';
 
-const appendUserElement = ({ username, ready, isCurrentUser }) => {
-	const usersContainer = document.querySelector('#users-wrapper');
+const getReadyStatusClass = ready => (ready ? 'ready-status-green' : 'ready-status-red');
 
-	const usernameElement = createElement({
-		tagName: 'div',
-		className: 'username',
-		attributes: { 'data-username': username },
-		innerElements: [isCurrentUser ? `${username} (you)` : username],
+const createUserElement = ({ username, ready, progress, finished, isCurrentUser }) => {
+	const readyStatusElement = createElement({
+		tagName: 'span',
+		className: `ready-status ${getReadyStatusClass(ready)}`,
+		attributes: { title: ready ? 'ready' : 'not ready' },
 	});
 
-	const readyStatusElement = createElement({
-		tagName: 'div',
-		className: 'ready-status',
-		attributes: { 'data-username': username, 'data-ready': Boolean(ready) },
-		innerElements: [getReadySign(ready)],
+	const usernameElement = createElement({
+		tagName: 'span',
+		className: 'username',
+		innerElements: isCurrentUser
+			? [username, createElement({ tagName: 'em', className: 'you-label', innerElements: [' (you)'] })]
+			: [username],
 	});
 
 	const headerWrapper = createElement({
 		tagName: 'div',
 		className: 'user-header',
-		attributes: { 'data-username': username },
 		innerElements: [readyStatusElement, usernameElement],
 	});
 
+	// Required format: `user-progress ${username}` (+ `finished`)
 	const progressElement = createElement({
 		tagName: 'div',
-		className: 'user-progress',
-		attributes: { 'data-username': username, style: `width: 0%;` },
+		className: `user-progress ${username}${finished ? ' finished' : ''}`,
+		attributes: { style: `width: ${progress}%;` },
 	});
 
 	const progressElementBlock = createElement({
@@ -37,37 +36,28 @@ const appendUserElement = ({ username, ready, isCurrentUser }) => {
 		innerElements: [progressElement],
 	});
 
-	const userElement = createElement({
+	return createElement({
 		tagName: 'div',
-		className: 'user',
-		attributes: { 'data-username': username },
+		className: `user${isCurrentUser ? ' current-user' : ''}`,
 		innerElements: [headerWrapper, progressElementBlock],
 	});
-
-	usersContainer.append(userElement);
-
-	return userElement;
 };
 
-const changeReadyStatus = ({ username, ready }) => {
-	const readyStatusElement = document.querySelector(`.ready-status[data-username='${username}']`);
-	readyStatusElement.innerHTML = getReadySign(ready);
-	readyStatusElement.dataset.ready = Boolean(ready);
+export const renderUsers = ({ users, currentUsername }) => {
+	const usersContainer = document.querySelector('#users-wrapper');
+	const elements = users.map(user => createUserElement({ ...user, isCurrentUser: user.username === currentUsername }));
+	usersContainer.replaceChildren(...elements);
 };
 
-const setProgress = ({ username, progress }) => {
-	const progressElement = document.querySelector(`.user-progress[data-username='${username}']`);
+export const setProgress = ({ username, progress, finished }) => {
+	// usernames are validated ([A-Za-z0-9_-]), so they are safe as a class selector
+	const progressElement = document.querySelector(`.user-progress.${CSS.escape(username)}`);
+	if (!progressElement) {
+		return;
+	}
 
-	if (progress === 100) {
-		progressElement.style.width = `${progress}%`;
+	progressElement.style.width = `${progress}%`;
+	if (finished) {
 		addClass(progressElement, 'finished');
-	} else {
-		progressElement.style.width = `${progress}%`;
 	}
 };
-
-const removeUserElement = username => document.querySelector(`.user[data-username='${username}']`)?.remove();
-
-const getReadySign = ready => (ready ? '🟢' : '🔴');
-
-export { appendUserElement, changeReadyStatus, setProgress, removeUserElement };

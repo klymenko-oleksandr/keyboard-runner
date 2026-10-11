@@ -1,33 +1,83 @@
-#rooms-wrapper {
-  display: flex
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 25px;
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.current-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
 }
 
 #add-room-btn {
-  padding: 10px 25px;
-  border: 1px solid dimgray;
-  background-color: var(--main-button-background-color);
-  margin: 10px 25px;
+  margin: 0 25px 10px;
+}
+
+#rooms-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.rooms-empty {
+  margin: 15px;
+  color: var(--muted-font-color);
 }
 
 .room {
-  border: 1px solid var(--main-button-border-color);
-  margin: 10px 15px;
-  padding: 15px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  width: 220px;
   height: 200px;
-  min-width: 200px;
+  margin: 10px 15px;
+  padding: 36px 15px 20px;
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.connected-users {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--muted-font-color);
 }
 
 .room-name {
-  font-size: large;
-  font-weight: bold;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .join-btn {
-  background-color:var(--main-button-background-color);
+  padding: 7px 28px;
   border: 1px solid var(--main-button-border-color);
-  padding: 5px 20px;
+  border-radius: 8px;
+  background-color: var(--main-button-background-color);
+  font-weight: 600;
+}
+
+.join-btn:hover {
+  background-color: var(--main-button-hover-color);
 }
