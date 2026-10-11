@@ -1,8 +1,27 @@
-import { Server } from 'socket.io';
-import * as config from './config';
+import { LOBBY_CHANNEL, SERVER_EVENTS } from './events';
+import { authMiddleware } from './middleware/authMiddleware';
+import { userRegistry } from './services/userRegistry';
+import { registerRoomHandlers } from './handlers/roomHandlers';
+import { registerGameHandlers } from './handlers/gameHandlers';
+import { getVisibleRooms } from './game/gameFlow';
+import { removePlayerFromRoom } from './game/roomMembership';
+import type { AppServer } from './types';
 
-export default (io: Server) => {
+export default (io: AppServer) => {
+	io.use(authMiddleware);
+
 	io.on('connection', socket => {
-		const username = socket.handshake.query.username;
+		// A fresh connection always starts on the rooms page
+		socket.join(LOBBY_CHANNEL);
+		socket.emit(SERVER_EVENTS.ROOMS_UPDATED, getVisibleRooms());
+
+		registerRoomHandlers(io, socket);
+		registerGameHandlers(io, socket);
+
+		// Closed tab, reload, lost network... Leaving must be handled exactly like "Back to rooms".
+		socket.on('disconnect', () => {
+			removePlayerFromRoom(io, socket);
+			userRegistry.remove(socket.data.username);
+		});
 	});
 };

@@ -4,10 +4,13 @@ import { Server } from 'socket.io';
 import socketHandler from './socket';
 import routes from './routes';
 import { STATIC_PATH, PORT } from './config';
+import type { ClientToServerEvents, ServerToClientEvents, SocketData } from './socket/types';
 
 const app = express();
 const httpServer = new http.Server(app);
-const socketIo = new Server(httpServer);
+const socketIo = new Server<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>(
+	httpServer,
+);
 
 app.use(express.static(STATIC_PATH));
 
