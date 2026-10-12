@@ -23,6 +23,7 @@ Built for the Binary Studio Academy **HTTP, REST, WebSockets** homework with **E
 - "Race track" UI: lanes with cars, start lights, checkered finish line, timing-tower results
 - Live **WPM** and **chars/min** while typing, red flash on a wrong key
 - "Desktop only" notice on touch devices (the game needs a physical keyboard)
+- A small design system (tokens + components) and a live **styleguide** at `/styleguide` with every component
 - "Signed in as …" header with a **Change user** button
 - Final progress bars stay visible while the results modal is open
 - One-click deploy to Render (`render.yaml`)
@@ -56,7 +57,12 @@ src/
 ├── helpers/validation.ts     username / room name rules
 └── socket/
     ├── index.ts              wiring: middleware, handlers, disconnect
-    ├── events.ts             event names (mirrored in public/javascript/constants/events.mjs)
+    ├── events.ts             event names (mirrored in public/styles/                  generated from the "Keyboard Runner" design system
+├── tokens.css                  colours, fonts, spacing, radii, shadows, sizes (CSS variables)
+├── components.css              buttons, grid slots, lanes, start lights, modals... (only tokens, no raw values)
+└── layout.css                  page layouts and breakpoints
+
+public/javascript/constants/events.mjs)
     ├── types.ts              domain types, DTOs, typed socket.io events
     ├── middleware/           handshake: reject invalid or duplicate usernames
     ├── handlers/             what each client event does (rooms, ready, progress)

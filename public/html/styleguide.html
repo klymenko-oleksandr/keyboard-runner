@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/styles/reset.css">
+  <link rel="stylesheet" href="/styles/tokens.css">
+  <link rel="stylesheet" href="/styles/components.css">
+  <link rel="stylesheet" href="/styles/layout.css">
+  <title>Keyboard Runner styleguide</title>
+  <style>
+    /* page chrome of the styleguide itself */
+    .sg-page { max-width: 1100px; margin: 0 auto; padding: var(--space-10) var(--space-8) var(--space-16); display: flex; flex-direction: column; gap: var(--space-12); }
+    .sg-header { display: flex; flex-direction: column; gap: var(--space-2); }
+    .sg-section { display: flex; flex-direction: column; gap: var(--space-2); }
+    .sg-title { font-family: var(--font-display); font-weight: 700; font-size: 30px; }
+    .sg-summary { max-width: 70ch; color: var(--muted); }
+    .sg-summary code { font-family: var(--font-mono); font-size: 14px; color: var(--line); }
+    .sg-preview { border: 1px dashed var(--divider); border-radius: var(--radius-md); overflow-x: auto; }
+    .sg-preview .modal { max-height: none; }
+#sg-Button .row {display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center;padding:var(--space-6)}
+#sg-ReadyButton .wrap {display:flex;gap:var(--space-6);padding:var(--space-6);background:var(--paper);flex-wrap:wrap;justify-content:center}
+#sg-ReadyButton .col {display:flex;flex-direction:column;align-items:center;gap:var(--space-3)}
+#sg-TextField .grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8);padding:var(--space-6)}
+#sg-TextField .row {display:flex;gap:var(--space-3)}
+#sg-Briefing .wrap {padding:var(--space-6);max-width:420px}
+#sg-GridSlot .grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-7);padding:var(--space-6)}
+#sg-StartLights .row {display:flex;flex-wrap:wrap;gap:var(--space-6);padding:var(--space-6)}
+#sg-RaceClock .row {display:flex;gap:var(--space-6);padding:var(--space-6)}
+#sg-Lane .wrap {padding:var(--space-6)}
+#sg-RacePanel .wrap {padding:var(--space-6)}
+#sg-RaceText .wrap {padding:var(--space-6)}
+#sg-ResultsTable .wrap {padding:var(--space-6);display:flex;justify-content:center}
+#sg-Modal .wrap {padding:var(--space-6);display:flex;justify-content:center}
+#sg-DesktopOnlyNotice .wrap {padding:var(--space-6);display:flex;justify-content:center}
+#sg-CheckerBand .wrap {padding:var(--space-6)}
+#sg-Kerb .wrap {padding:var(--space-6)}
+  </style>
+</head>
+
+<body>
+  <div class="checker-band" aria-hidden="true"></div>
+  <main class="sg-page">
+    <header class="sg-header">
+      <span class="brand">Keyboard Runner</span>
+      <h1 class="page-title">Styleguide</h1>
+      <p class="page-subtitle">Every component of the game, built from the same tokens.css and components.css as the game itself.</p>
+    </header>
+    <section class="sg-section" id="sg-Button" aria-labelledby="sg-Button-title">
+      <h2 class="sg-title" id="sg-Button-title">Button</h2>
+      <p class="sg-summary">Actions on asphalt and pit: <code>.btn</code> plus one variant.</p>
+      <div class="sg-preview">
+<div class="row">
+  <button class="btn btn-primary btn-large">Enter the grid</button>
+  <button class="btn btn-primary">Close</button>
+  <button class="btn btn-primary btn-small">Join</button>
+  <button class="btn btn-ghost">Continue anyway</button>
+  <button class="btn btn-ghost btn-small">‹ Back to rooms</button>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-ReadyButton" aria-labelledby="sg-ReadyButton-title">
+      <h2 class="sg-title" id="sg-ReadyButton-title">ReadyButton</h2>
+      <p class="sg-summary">The big READY / NOT READY switch, the only button that lives on paper.</p>
+      <div class="sg-preview">
+<div class="wrap">
+  <div class="col"><button class="btn-ready">READY</button><p class="ready-hint">The race starts when every driver is ready.</p></div>
+  <div class="col"><button class="btn-ready is-ready">NOT READY</button><p class="ready-hint">The race starts when every driver is ready.</p></div>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-TextField" aria-labelledby="sg-TextField-title">
+      <h2 class="sg-title" id="sg-TextField-title">TextField</h2>
+      <p class="sg-summary">Label, input and error for the one form in the game, the driver name.</p>
+      <div class="sg-preview">
+<div class="grid">
+  <div>
+    <label class="field-label" for="sg-TextField-a">Your driver name</label>
+    <div class="row"><input class="input" id="sg-TextField-a" placeholder="username"><button class="btn btn-primary btn-large">Enter the grid</button></div>
+    <p class="form-error" role="alert"></p>
+  </div>
+  <div>
+    <label class="field-label" for="sg-TextField-b">Your driver name</label>
+    <div class="row"><input class="input" id="sg-TextField-b" value="max verstappen"><button class="btn btn-primary btn-large">Enter the grid</button></div>
+    <p class="form-error" role="alert">Use 1-20 characters: latin letters, digits, "_" or "-".</p>
+  </div>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-Briefing" aria-labelledby="sg-Briefing-title">
+      <h2 class="sg-title" id="sg-Briefing-title">Briefing</h2>
+      <p class="sg-summary">The "Race briefing" panel: what the game is and how to play, in four numbered steps.</p>
+      <div class="sg-preview">
+<div class="wrap">
+<section class="briefing" aria-labelledby="sg-Briefing-t">
+  <h2 class="briefing-title" id="sg-Briefing-t">Race briefing</h2>
+  <p class="briefing-lead">Up to 5 drivers, one text, 60 seconds.</p>
+  <ol class="briefing-steps">
+    <li class="briefing-step"><span class="briefing-step-number">1</span><span>Create a room or join one on the grid.</span></li>
+    <li class="briefing-step"><span class="briefing-step-number">2</span><span>Press Ready. When every driver is ready, a 5-second countdown starts and the start lights come on.</span></li>
+    <li class="briefing-step"><span class="briefing-step-number">3</span><span>When the lights go out, type the text exactly. A wrong key keeps you in place.</span></li>
+    <li class="briefing-step"><span class="briefing-step-number">4</span><span>First across the line wins. After 60 seconds, the most characters typed wins.</span></li>
+  </ol>
+  <p class="briefing-note">Desktop only: you need a physical keyboard.</p>
+</section>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-GridSlot" aria-labelledby="sg-GridSlot-title">
+      <h2 class="sg-title" id="sg-GridSlot-title">GridSlot</h2>
+      <p class="sg-summary">A room in the lobby, drawn as a starting-grid box: painted <code>line</code> borders on three sides (<code>line-width</code>), open at the bottom, no radius, no fill.</p>
+      <div class="sg-preview">
+<div class="grid">
+  <button class="slot slot-create"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg><span>Create room</span></button>
+  <div class="slot"><div class="slot-header"><span class="slot-number" aria-hidden="true">P1</span><span class="slot-count">3/5 drivers</span></div><div class="slot-title">Morning sprint</div><button class="btn btn-primary btn-small" aria-label="Join Morning sprint">Join</button></div>
+  <div class="slot"><div class="slot-header"><span class="slot-number" aria-hidden="true">P2</span><span class="slot-count">1/5 drivers</span></div><div class="slot-title">Kyiv typists</div><button class="btn btn-primary btn-small" aria-label="Join Kyiv typists">Join</button></div>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-StartLights" aria-labelledby="sg-StartLights-title">
+      <h2 class="sg-title" id="sg-StartLights-title">StartLights</h2>
+      <p class="sg-summary">Five Formula 1 start lights in a <code>pit</code> housing: <code>div.start-lights</code> with five <code>span.light</code>; add <code>.on</code> to light one (<code>light-red</code> with <code>glow-red</code>).</p>
+      <div class="sg-preview">
+<div class="row">
+  <div class="start-lights" role="img" aria-label="Start lights off"><span class="light"></span><span class="light"></span><span class="light"></span><span class="light"></span><span class="light"></span></div>
+  <div class="start-lights" role="img" aria-label="3 start lights on"><span class="light on"></span><span class="light on"></span><span class="light on"></span><span class="light"></span><span class="light"></span></div>
+  <div class="start-lights" role="img" aria-label="All start lights on"><span class="light on"></span><span class="light on"></span><span class="light on"></span><span class="light on"></span><span class="light on"></span></div>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-RaceClock" aria-labelledby="sg-RaceClock-title">
+      <h2 class="sg-title" id="sg-RaceClock-title">RaceClock</h2>
+      <p class="sg-summary">Time left in the race, top right of the race header.</p>
+      <div class="sg-preview">
+<div class="row">
+  <div class="game-timer"><span class="game-timer-value">1:00</span><span class="game-timer-label">left</span></div>
+  <div class="game-timer"><span class="game-timer-value">0:38</span><span class="game-timer-label">left</span></div>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-Lane" aria-labelledby="sg-Lane-title">
+      <h2 class="sg-title" id="sg-Lane-title">Lane</h2>
+      <p class="sg-summary">One driver on the track.</p>
+      <div class="sg-preview">
+<div class="wrap">
+<section class="track" aria-label="Drivers">
+  <div class="kerb" aria-hidden="true"></div>
+  <div class="lane"><div class="lane-driver"><span class="ready-status ready-status-green" title="ready"></span><span class="username">dave</span></div><div class="lane-track"><div class="user-progress dave finished" style="width:100%"><svg class="car" viewBox="0 0 58 28" width="58" height="28" aria-hidden="true"><rect class="car-wheel" x="10" y="2" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="38" y="2" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="10" y="21" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="38" y="21" width="10" height="5" rx="1.5"></rect><path d="M4 9 Q4 6 8 6 L44 6 Q56 8 56 14 Q56 20 44 22 L8 22 Q4 22 4 19 Z" fill="currentColor"></path><rect class="car-cockpit" x="30" y="10" width="8" height="8" rx="2"></rect></svg></div></div><span class="lane-status">finished</span><div class="finish-line" aria-hidden="true"></div></div>
+  <div class="lane"><div class="lane-driver"><span class="ready-status ready-status-green" title="ready"></span><span class="username">bob</span></div><div class="lane-track"><div class="user-progress bob" style="width:61%"><svg class="car" viewBox="0 0 58 28" width="58" height="28" aria-hidden="true"><rect class="car-wheel" x="10" y="2" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="38" y="2" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="10" y="21" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="38" y="21" width="10" height="5" rx="1.5"></rect><path d="M4 9 Q4 6 8 6 L44 6 Q56 8 56 14 Q56 20 44 22 L8 22 Q4 22 4 19 Z" fill="currentColor"></path><rect class="car-cockpit" x="30" y="10" width="8" height="8" rx="2"></rect></svg></div></div><span class="lane-status">61%</span><div class="finish-line" aria-hidden="true"></div></div>
+  <div class="lane current-user"><div class="lane-driver"><span class="ready-status ready-status-green" title="ready"></span><span class="username">alice<em class="you-label"> (you)</em></span></div><div class="lane-track"><div class="user-progress alice" style="width:44%"><svg class="car" viewBox="0 0 58 28" width="58" height="28" aria-hidden="true"><rect class="car-wheel" x="10" y="2" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="38" y="2" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="10" y="21" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="38" y="21" width="10" height="5" rx="1.5"></rect><path d="M4 9 Q4 6 8 6 L44 6 Q56 8 56 14 Q56 20 44 22 L8 22 Q4 22 4 19 Z" fill="currentColor"></path><rect class="car-cockpit" x="30" y="10" width="8" height="8" rx="2"></rect></svg></div></div><span class="lane-status">44%</span><div class="finish-line" aria-hidden="true"></div></div>
+  <div class="lane"><div class="lane-driver"><span class="ready-status ready-status-red" title="not ready"></span><span class="username">carol</span></div><div class="lane-track"><div class="user-progress carol" style="width:0%"><svg class="car" viewBox="0 0 58 28" width="58" height="28" aria-hidden="true"><rect class="car-wheel" x="10" y="2" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="38" y="2" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="10" y="21" width="10" height="5" rx="1.5"></rect><rect class="car-wheel" x="38" y="21" width="10" height="5" rx="1.5"></rect><path d="M4 9 Q4 6 8 6 L44 6 Q56 8 56 14 Q56 20 44 22 L8 22 Q4 22 4 19 Z" fill="currentColor"></path><rect class="car-cockpit" x="30" y="10" width="8" height="8" rx="2"></rect></svg></div></div><span class="lane-status">0%</span><div class="finish-line" aria-hidden="true"></div></div>
+  <div class="kerb" aria-hidden="true"></div>
+</section>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-RacePanel" aria-labelledby="sg-RacePanel-title">
+      <h2 class="sg-title" id="sg-RacePanel-title">RacePanel</h2>
+      <p class="sg-summary">The paper surface under the track where the race happens: <code>section.race-panel</code> (<code>paper</code>, <code>ink</code> text, <code>radius-md</code>).</p>
+      <div class="sg-preview">
+<div class="wrap">
+<section class="race-panel">
+  <div class="countdown" aria-live="polite">3</div>
+  <div class="race-stats"><span></span><span></span></div>
+</section>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-RaceText" aria-labelledby="sg-RaceText-title">
+      <h2 class="sg-title" id="sg-RaceText-title">RaceText</h2>
+      <p class="sg-summary">The text being typed, in <code>text-race</code> (monospace) on paper: <code>p.race-text</code> with three spans, <code>span.typed-text</code> (<code>yellow</code> highlight, <code>ink</code>), <code>span.next-char</code> (<code>ink</code>, a 3px <code>kerb-red</code> underline) and the rest in <code>ink-faded</code>.</p>
+      <div class="sg-preview">
+<div class="wrap">
+<section class="race-panel">
+  <p class="race-text"><span class="typed-text">A WebSocket is a long-lived, two-way connection between a browser and a server. Unlike a regular </span><span class="next-char mistake">H</span><span>TTP request, the server can push data at any moment, which makes it perfect for chats, live dashboards and multiplayer games.</span></p>
+  <div class="race-stats"><span><strong>62</strong> WPM <strong>312</strong> chars/min</span><span></span></div>
+</section>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-ResultsTable" aria-labelledby="sg-ResultsTable-title">
+      <h2 class="sg-title" id="sg-ResultsTable-title">ResultsTable</h2>
+      <p class="sg-summary">The final classification inside a Modal, styled like a timing tower: <code>table.results-table</code> with columns Pos, Driver, Time, WPM, Chars/min.</p>
+      <div class="sg-preview">
+<div class="wrap">
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="sg-ResultsTable-r">
+  <div class="checker-band" aria-hidden="true"></div>
+  <div class="modal-body">
+    <h1 class="modal-title" id="sg-ResultsTable-r">Final classification</h1>
+    <table class="results-table">
+      <thead><tr><th class="col-pos" scope="col">Pos</th><th scope="col">Driver</th><th class="col-num" scope="col">Time</th><th class="col-num" scope="col">WPM</th><th class="col-num" scope="col">Chars/min</th></tr></thead>
+      <tbody>
+        <tr class="user-result winner"><td class="col-pos">P1</td><td class="col-driver"><span class="result-username" data-place="1">dave</span></td><td class="col-num">41.2 s</td><td class="col-num col-wpm">66</td><td class="col-num">328</td></tr>
+        <tr class="user-result"><td class="col-pos">P2</td><td class="col-driver"><span class="result-username" data-place="2">bob</span></td><td class="col-num">+11.6 s</td><td class="col-num col-wpm">51</td><td class="col-num">256</td></tr>
+        <tr class="user-result current-user"><td class="col-pos">P3</td><td class="col-driver"><span class="result-username" data-place="3">alice</span><em class="you-label"> (you)</em></td><td class="col-num">92% done</td><td class="col-num col-wpm">41</td><td class="col-num">207</td></tr>
+      </tbody>
+    </table>
+    <p class="modal-note">Gaps are to the winner. Drivers still typing at the flag are ranked by characters typed. WPM counts every 5 characters as a word.</p>
+    <div class="modal-footer"><button class="btn btn-primary">Close</button></div>
+  </div>
+</div>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-Modal" aria-labelledby="sg-Modal-title">
+      <h2 class="sg-title" id="sg-Modal-title">Modal</h2>
+      <p class="sg-summary">A dialog over the game: <code>div.modal-overlay</code> (dimmed) around <code>div.modal[role=dialog][aria-modal=true]</code> (<code>pit</code>, <code>radius-lg</code>, <code>shadow-modal</code>) that starts with a <code>.checker-band</code>, then <code>div.modal-body</code> with <code>h1.modal-title</code>, the content, an optional <code>p.modal-note</code> (<code>muted-dark</code>) and <code>div.modal-footer</code> with one <code>.btn-primary</code>.</p>
+      <div class="sg-preview">
+<div class="wrap">
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="sg-Modal-m">
+  <div class="checker-band" aria-hidden="true"></div>
+  <div class="modal-body">
+    <h1 class="modal-title" id="sg-Modal-m">Room "Monaco" already exists</h1>
+    <div class="modal-footer"><button class="btn btn-primary">Close</button></div>
+  </div>
+</div>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-DesktopOnlyNotice" aria-labelledby="sg-DesktopOnlyNotice-title">
+      <h2 class="sg-title" id="sg-DesktopOnlyNotice-title">DesktopOnlyNotice</h2>
+      <p class="sg-summary">Shown over the page on touch-only devices (<code>@media (hover: none) and (pointer: coarse)</code>), because the race needs a physical keyboard.</p>
+      <div class="sg-preview">
+<div class="wrap">
+<div class="mobile-notice-card" role="dialog" aria-modal="true" aria-labelledby="sg-DesktopOnlyNotice-n">
+  <div class="checker-band" aria-hidden="true"></div>
+  <div class="mobile-notice-body">
+    <h2 id="sg-DesktopOnlyNotice-n">Grab a keyboard</h2>
+    <p>Keyboard Runner is a typing race, so it needs a physical keyboard. Open it on a laptop or desktop to play.</p>
+    <button class="btn btn-ghost">Continue anyway</button>
+  </div>
+</div>
+</div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-CheckerBand" aria-labelledby="sg-CheckerBand-title">
+      <h2 class="sg-title" id="sg-CheckerBand-title">CheckerBand</h2>
+      <p class="sg-summary">The chequered flag as a strip: <code>div.checker-band</code> (<code>checker</code>-sized squares of <code>pit</code> and <code>line</code>).</p>
+      <div class="sg-preview">
+<div class="wrap"><div class="checker-band" aria-hidden="true"></div></div>
+      </div>
+    </section>
+    <section class="sg-section" id="sg-Kerb" aria-labelledby="sg-Kerb-title">
+      <h2 class="sg-title" id="sg-Kerb-title">Kerb</h2>
+      <p class="sg-summary">Red and white kerb stones: <code>div.kerb</code>, <code>kerb-height</code> tall, 28px stripes of <code>kerb-red</code> and <code>line</code>.</p>
+      <div class="sg-preview">
+<div class="wrap"><div class="kerb" aria-hidden="true"></div></div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

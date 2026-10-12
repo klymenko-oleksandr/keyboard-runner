@@ -16,13 +16,13 @@ const createRoomElement = ({ name, numberOfUsers, slot, maxUsers, onJoin }) => {
 
 	const connectedUsersElement = createElement({
 		tagName: 'span',
-		className: 'connected-users',
+		className: 'slot-count',
 		innerElements: [getNumberOfUsersString(numberOfUsers, maxUsers)],
 	});
 
 	const nameElement = createElement({
 		tagName: 'div',
-		className: 'room-name',
+		className: 'slot-title',
 		attributes: { title: name },
 		innerElements: [name],
 	});
