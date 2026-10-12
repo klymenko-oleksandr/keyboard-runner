@@ -2,6 +2,7 @@ import { CLIENT_EVENTS, SERVER_EVENTS } from '../events';
 import { getProgressPercent, isFinished } from '../helpers/roomHelpers';
 import { broadcastRoomUsers, tryFinishGame, tryStartCountdown } from '../game/gameFlow';
 import { getCurrentRoom } from '../game/roomMembership';
+import { getCommentator } from '../../commentator';
 import type { AppServer, AppSocket } from '../types';
 
 export const registerGameHandlers = (io: AppServer, socket: AppSocket) => {
@@ -43,6 +44,7 @@ export const registerGameHandlers = (io: AppServer, socket: AppSocket) => {
 			return;
 		}
 
+		const previousTypedChars = player.typedChars;
 		player.typedChars = typedChars;
 		if (typedChars === room.textLength) {
 			player.finishTimeMs = Date.now() - (room.gameStartedAt as number);
@@ -53,6 +55,7 @@ export const registerGameHandlers = (io: AppServer, socket: AppSocket) => {
 			progress: getProgressPercent(player, room),
 			finished: isFinished(player),
 		});
+		getCommentator(io).progressUpdated(room, player.username, previousTypedChars);
 
 		tryFinishGame(io, room);
 	});

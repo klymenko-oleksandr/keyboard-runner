@@ -18,6 +18,7 @@ export const SERVER_EVENTS = {
 	GAME_STARTED: 'game:started',
 	PROGRESS_UPDATED: 'game:progress-updated',
 	GAME_FINISHED: 'game:finished',
+	COMMENT: 'commentator:comment',
 } as const;
 
 // Messages of errors thrown from the connection middleware (arrive as `connect_error` on the client)

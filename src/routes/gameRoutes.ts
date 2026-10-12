@@ -3,6 +3,7 @@ import path from 'path';
 import { HTML_FILES_PATH } from '../config';
 import { texts } from '../data';
 import { MAXIMUM_USERS_FOR_ONE_ROOM, SECONDS_FOR_GAME, SECONDS_TIMER_BEFORE_START_GAME } from '../socket/config';
+import { COMMENTATOR_NAME } from '../commentator/config';
 
 const router = Router();
 
@@ -29,6 +30,7 @@ router.get('/config', (req, res) => {
 		maxUsers: MAXIMUM_USERS_FOR_ONE_ROOM,
 		countdownSeconds: SECONDS_TIMER_BEFORE_START_GAME,
 		gameSeconds: SECONDS_FOR_GAME,
+		commentatorName: COMMENTATOR_NAME,
 	});
 });
 

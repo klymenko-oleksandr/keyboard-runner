@@ -7,6 +7,7 @@ import { SECONDS_FOR_GAME, SECONDS_TIMER_BEFORE_START_GAME, START_LIGHTS_HOLD_MS
 import { LOBBY_CHANNEL, SERVER_EVENTS } from '../events';
 import { roomRepository } from '../services/roomRepository';
 import { texts } from '../../data';
+import { getCommentator } from '../../commentator';
 import {
 	areAllFinished,
 	areAllReady,
@@ -62,6 +63,7 @@ export const tryStartCountdown = (io: AppServer, room: Room): boolean => {
 		seconds: SECONDS_TIMER_BEFORE_START_GAME,
 	});
 	broadcastRooms(io); // the room disappears from the list
+	getCommentator(io).raceAnnounced(room);
 
 	// The client shows the countdown; the extra random hold is known only to the server
 	const holdMs = START_LIGHTS_HOLD_MS.MIN + Math.random() * (START_LIGHTS_HOLD_MS.MAX - START_LIGHTS_HOLD_MS.MIN);
@@ -75,6 +77,7 @@ const startGame = (io: AppServer, room: Room) => {
 	room.gameStartedAt = Date.now();
 
 	io.to(room.channel).emit(SERVER_EVENTS.GAME_STARTED, { seconds: SECONDS_FOR_GAME });
+	getCommentator(io).raceStarted(room);
 
 	room.timer = setTimeout(() => finishGame(io, room), SECONDS_FOR_GAME * 1000);
 };
@@ -104,12 +107,14 @@ const finishGame = (io: AppServer, room: Room) => {
 	resetPlayersForNextRace(room);
 
 	io.to(room.channel).emit(SERVER_EVENTS.GAME_FINISHED, { results });
+	getCommentator(io).raceFinished(room, results);
 	broadcastRoomUsers(io, room); // everyone is "not ready" again
 	broadcastRooms(io); // the room is visible in the list again (if not full)
 };
 
 /** Last user left: stop timers and forget the room */
-export const destroyRoom = (room: Room) => {
+export const destroyRoom = (io: AppServer, room: Room) => {
 	clearRoomTimer(room);
+	getCommentator(io).roomClosed(room);
 	roomRepository.delete(room.name);
 };

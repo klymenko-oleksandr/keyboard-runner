@@ -1,6 +1,7 @@
 import { LOBBY_CHANNEL, SERVER_EVENTS } from '../events';
 import { roomRepository } from '../services/roomRepository';
 import { createPlayer, toPlayerDtos, toRoomDetailsDto } from '../helpers/roomHelpers';
+import { getCommentator } from '../../commentator';
 import {
 	broadcastRooms,
 	broadcastRoomUsers,
@@ -50,12 +51,16 @@ export const removePlayerFromRoom = (io: AppServer, socket: AppSocket) => {
 	socket.join(LOBBY_CHANNEL); // back on the rooms page -> receives the list below
 
 	if (room.players.size === 0) {
-		destroyRoom(room);
+		destroyRoom(io, room);
 		broadcastRooms(io);
 		return;
 	}
 
 	broadcastRoomUsers(io, room);
+
+	if (room.status !== 'waiting') {
+		getCommentator(io).driverLeft(room, socket.data.username);
+	}
 
 	// Both transitions broadcast the rooms list themselves
 	const stateChanged = tryStartCountdown(io, room) || tryFinishGame(io, room);

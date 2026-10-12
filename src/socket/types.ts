@@ -1,5 +1,6 @@
 import type { Server, Socket } from 'socket.io';
 import { CLIENT_EVENTS, SERVER_EVENTS } from './events';
+import type { CommentDto } from '../commentator/types';
 
 /* ---------- Domain (lives only on the server) ---------- */
 
@@ -78,6 +79,7 @@ export interface ServerToClientEvents {
 	[SERVER_EVENTS.GAME_STARTED]: (payload: { seconds: number }) => void;
 	[SERVER_EVENTS.PROGRESS_UPDATED]: (payload: { username: string; progress: number; finished: boolean }) => void;
 	[SERVER_EVENTS.GAME_FINISHED]: (payload: { results: GameResultDto[] }) => void;
+	[SERVER_EVENTS.COMMENT]: (comment: CommentDto) => void;
 }
 
 export interface SocketData {
