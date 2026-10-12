@@ -57,12 +57,7 @@ src/
 ├── helpers/validation.ts     username / room name rules
 └── socket/
     ├── index.ts              wiring: middleware, handlers, disconnect
-    ├── events.ts             event names (mirrored in public/styles/                  generated from the "Keyboard Runner" design system
-├── tokens.css                  colours, fonts, spacing, radii, shadows, sizes (CSS variables)
-├── components.css              buttons, grid slots, lanes, start lights, modals... (only tokens, no raw values)
-└── layout.css                  page layouts and breakpoints
-
-public/javascript/constants/events.mjs)
+    ├── events.ts             event names (mirrored in public/javascript/constants/events.mjs)
     ├── types.ts              domain types, DTOs, typed socket.io events
     ├── middleware/           handshake: reject invalid or duplicate usernames
     ├── handlers/             what each client event does (rooms, ready, progress)
@@ -70,6 +65,11 @@ public/javascript/constants/events.mjs)
     ├── game/roomMembership.ts join / leave (shared by "Back to rooms" and disconnect)
     ├── helpers/              pure functions over a room (results, progress, visibility)
     └── services/             in-memory stores: online users, rooms
+
+public/styles/                  generated from the "Keyboard Runner" design system
+├── tokens.css                  colours, fonts, spacing, radii, shadows, sizes (CSS variables)
+├── components.css              buttons, grid slots, lanes, start lights, modals... (only tokens, no raw values)
+└── layout.css                  page layouts and breakpoints
 
 public/javascript/
 ├── game.mjs                  entry: socket connection, page switching
