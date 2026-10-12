@@ -71,18 +71,37 @@
         <div class="kerb" aria-hidden="true"></div>
       </section>
 
-      <section id="game-container" class="race-panel">
-        <div id="ready-panel" class="ready-panel">
-          <button id="ready-btn" class="btn btn-ready">READY</button>
-          <p class="ready-hint">The race starts when every driver is ready.</p>
-        </div>
-        <div id="timer" class="countdown display-none" aria-live="polite"></div>
-        <p id="text-container" class="race-text display-none"></p>
-        <div class="race-stats">
-          <span id="typing-speed" class="display-none"></span>
-          <span id="finished-message" class="display-none">Finished! Waiting for the other drivers…</span>
-        </div>
-      </section>
+      <div class="race-body">
+        <section id="game-container" class="race-panel">
+          <div id="ready-panel" class="ready-panel">
+            <button id="ready-btn" class="btn btn-ready">READY</button>
+            <p class="ready-hint">The race starts when every driver is ready.</p>
+          </div>
+          <div id="timer" class="countdown display-none" aria-live="polite"></div>
+          <p id="text-container" class="race-text display-none"></p>
+          <div class="race-stats">
+            <span id="typing-speed" class="display-none"></span>
+            <span id="finished-message" class="display-none">Finished! Waiting for the other drivers…</span>
+          </div>
+        </section>
+
+        <aside id="commentary" class="commentary" aria-labelledby="commentary-name">
+          <header class="commentary-header">
+            <svg class="commentary-mic" aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="2.5" width="6" height="11.5" rx="3"></rect>
+              <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"></path>
+            </svg>
+            <div class="commentary-who">
+              <span class="commentary-live"><span class="live-dot" aria-hidden="true"></span><span class="live-label">Live</span></span>
+              <h2 id="commentary-name" class="commentary-name">Commentator</h2>
+            </div>
+            <div class="commentary-eq" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+          </header>
+          <ol id="commentary-feed" class="commentary-feed" role="log" aria-live="polite"></ol>
+          <p class="commentary-empty">Коментатор вийде в ефір, щойно всі гонщики будуть готові.</p>
+        </aside>
+      </div>
     </div>
 
     <div id="mobile-notice" class="mobile-notice" role="dialog" aria-modal="true" aria-labelledby="mobile-notice-title">

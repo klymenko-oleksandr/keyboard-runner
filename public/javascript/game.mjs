@@ -4,6 +4,7 @@ import { fetchConfig } from './helpers/api.mjs';
 import { createRoomsPage } from './pages/roomsPage.mjs';
 import { createRoomPage } from './pages/roomPage.mjs';
 import { renderBriefing } from './views/briefing.mjs';
+import { createCommentaryPanel } from './views/commentary.mjs';
 import { initMobileNotice } from './views/mobileNotice.mjs';
 import { showMessageModal } from './views/modal.mjs';
 
@@ -66,6 +67,7 @@ const init = async () => {
 	const roomPage = createRoomPage({
 		socket,
 		username,
+		commentary: createCommentaryPanel({ commentatorName: config?.commentatorName }),
 		onLeave: () => roomsPage.show(),
 	});
 

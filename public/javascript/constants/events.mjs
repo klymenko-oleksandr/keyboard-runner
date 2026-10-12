@@ -15,6 +15,7 @@ export const SERVER_EVENTS = {
 	GAME_STARTED: 'game:started',
 	PROGRESS_UPDATED: 'game:progress-updated',
 	GAME_FINISHED: 'game:finished',
+	COMMENT: 'commentator:comment',
 };
 
 export const CONNECTION_ERRORS = {

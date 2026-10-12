@@ -13,7 +13,7 @@ const formatClock = seconds => `${Math.floor(seconds / 60)}:${String(seconds % 6
  * Room + race page (#game-page).
  * The server decides WHEN things happen (countdown, start, finish) — this page only reacts to events.
  */
-export const createRoomPage = ({ socket, username, onLeave }) => {
+export const createRoomPage = ({ socket, username, commentary, onLeave }) => {
 	const elements = {
 		page: document.querySelector('#game-page'),
 		roomName: document.querySelector('#room-name'),
@@ -78,6 +78,7 @@ export const createRoomPage = ({ socket, username, onLeave }) => {
 	const enter = ({ name, users }) => {
 		isInRoom = true;
 		elements.roomName.textContent = name;
+		commentary.clear();
 		updateUsers(users);
 		showWaitingState();
 		show(elements.page);
@@ -121,6 +122,7 @@ export const createRoomPage = ({ socket, username, onLeave }) => {
 		}
 		hide(elements.quitButton);
 		hide(elements.readyPanel);
+		commentary.clear(); // new race, new broadcast
 
 		// Load the text while the countdown is running; show it only when the game starts
 		textPromise = fetchText(textId);
@@ -176,6 +178,13 @@ export const createRoomPage = ({ socket, username, onLeave }) => {
 	socket.on(SERVER_EVENTS.PROGRESS_UPDATED, progress => {
 		if (isInRoom) {
 			setProgress(progress);
+		}
+	});
+
+	// The commentator lives on the server; the page only shows what he says
+	socket.on(SERVER_EVENTS.COMMENT, comment => {
+		if (isInRoom) {
+			commentary.add(comment);
 		}
 	});
 

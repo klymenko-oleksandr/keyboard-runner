@@ -469,6 +469,170 @@ button {
   color: var(--ink);
 }
 
+/* ---------- Commentary (the commentator's booth) ---------- */
+
+.commentary {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background-color: var(--pit);
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 2px dashed var(--divider);
+}
+
+.commentary-mic {
+  flex-shrink: 0;
+  color: var(--muted-dark);
+  transition: color 0.3s;
+}
+
+.commentary-who {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.commentary-live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted-dark);
+}
+
+.live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  background-color: var(--light-off);
+}
+
+.commentary-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+/* four bars that "talk" while a new comment comes in */
+.commentary-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+}
+
+.commentary-eq span {
+  width: 4px;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  background-color: var(--light-off);
+  transform: scaleY(0.25);
+  transform-origin: bottom;
+}
+
+.commentary.is-on-air .live-dot {
+  background-color: var(--light-red);
+  box-shadow: var(--glow-red-soft);
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+
+.commentary.is-on-air .commentary-live { color: var(--line); }
+
+.commentary.is-speaking .commentary-mic { color: var(--yellow); }
+
+.commentary.is-speaking .commentary-eq span {
+  background-color: var(--yellow);
+  animation: eq-talk 0.5s ease-in-out infinite alternate;
+}
+
+.commentary.is-speaking .commentary-eq span:nth-child(2) { animation-delay: -0.2s; }
+.commentary.is-speaking .commentary-eq span:nth-child(3) { animation-delay: -0.35s; }
+.commentary.is-speaking .commentary-eq span:nth-child(4) { animation-delay: -0.1s; }
+
+.commentary-feed {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--space-2) 0;
+  list-style: none;
+}
+
+.commentary-empty {
+  padding: var(--space-6) var(--space-4);
+  font-size: 15px;
+  color: var(--muted-dark);
+}
+
+.commentary.has-comments .commentary-empty { display: none; }
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-2) var(--space-4);
+  padding-left: var(--space-3);
+  border-left: var(--line-width) solid var(--divider);
+  color: var(--muted-dark);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.comment-tag {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.comment.is-latest {
+  color: var(--line);
+  font-size: 16px;
+  animation: comment-in 0.35s ease-out;
+}
+
+.comment.is-latest .comment-tag { color: var(--muted); }
+
+.comment-start,
+.comment-approaching { border-left-color: var(--kerb-red); }
+
+.comment-finish { border-left-color: var(--finish-green); }
+
+.comment-results { border-left-color: var(--yellow); }
+
+.comment-results .comment-tag,
+.comment-results.is-latest .comment-tag { color: var(--yellow); }
+
+.comment-filler .comment-text { font-style: italic; }
+
+@keyframes live-pulse {
+  50% { opacity: 0.35; }
+}
+
+@keyframes eq-talk {
+  from { transform: scaleY(0.2); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes comment-in {
+  from { opacity: 0; transform: translateY(-6px); }
+}
+
 /* ---------- Modal ---------- */
 
 .modal-overlay {
@@ -585,5 +749,5 @@ button {
 .mobile-notice-body p { color: var(--muted); }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+  * { transition: none !important; animation: none !important; }
 }

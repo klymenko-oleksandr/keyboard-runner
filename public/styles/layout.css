@@ -153,8 +153,18 @@ body {
   justify-content: flex-end;
 }
 
-#game-container {
+/* race text on the left, commentator's booth on the right */
+.race-body {
   flex-grow: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  grid-template-rows: minmax(440px, auto);
+  gap: var(--space-5);
+}
+
+/* the booth takes the height of the race panel and scrolls inside, it never makes the row taller */
+.race-body .commentary {
+  contain: size;
 }
 
 .ready-panel {
@@ -227,6 +237,20 @@ body {
 
   .race-panel {
     padding: var(--space-7) var(--space-5) 64px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .race-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .race-body {
+    grid-template-rows: auto;
+  }
+
+  .race-body .commentary {
+    height: 340px;
   }
 }
 
