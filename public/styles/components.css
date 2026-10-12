@@ -609,7 +609,10 @@ button {
 .comment.is-latest .comment-tag { color: var(--muted); }
 
 .comment-start,
+.comment-overtake,
 .comment-approaching { border-left-color: var(--kerb-red); }
+
+.comment-rivalry { border-left-color: var(--yellow); }
 
 .comment-finish { border-left-color: var(--finish-green); }
 

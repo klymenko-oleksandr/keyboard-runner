@@ -1,32 +1,39 @@
 // One pure function per comment type: payload in, text out.
 // The phrasing avoids past-tense verbs about drivers: in Ukrainian they would need the driver's gender.
 import { take } from 'lodash';
-import { COMMENTATOR_NAME, VENUE } from '../config';
+import { COMMENTATOR_NAME, PHOTO_FINISH_MS, VENUE } from '../config';
 import { sentences } from '../helpers/text';
 import { getGap, getProgressPercent } from '../helpers/standings';
 import {
 	characters,
 	drivers,
 	formatRaceTime,
+	joinWithAnd,
 	joinWithOr,
+	meetings,
 	placeWord,
+	positionAccusative,
+	positionNominative,
 	positionWord,
 	races,
 	seconds,
 	wins,
 } from '../helpers/ukrainian';
 import type { GameResultDto } from '../../socket/types';
-import type { DriverProfile, Standing, Templates } from '../types';
+import type { CommentPayloads, DriverProfile, Standing, TemplateTools, Templates } from '../types';
 
 /* ---------- Pieces ---------- */
 
-const describeRecord = ({ races: count, wins: winsCount, bestWpm }: DriverProfile) => {
+const describeRecord = ({ races: count, wins: winsCount, bestWpm, winStreak }: DriverProfile) => {
 	if (count === 0) {
 		return 'Це дебютна гонка!';
 	}
 	const winsPart = winsCount > 0 ? `, із них ${wins(winsCount)}` : '';
 	const speedPart = bestWpm > 0 ? `, найкраща швидкість — ${bestWpm} WPM` : '';
-	return `На рахунку ${races(count)}${winsPart}${speedPart}.`;
+	return sentences(
+		`На рахунку ${races(count)}${winsPart}${speedPart}.`,
+		winStreak >= 2 && `Серія: ${wins(winStreak)} поспіль!`,
+	);
 };
 
 const describeDriver = (driver: DriverProfile, gridNumber: number) =>
@@ -44,6 +51,40 @@ const describeChaser = (leader: Standing, textLength: number) => (standing: Stan
 	return gap === 0
 		? `на ${position} позиції ${standing.username}, пліч-о-пліч із лідером`
 		: `на ${position} позиції ${standing.username} (${getProgressPercent(standing, textLength)}%), відставання ${characters(gap)}`;
+};
+
+const describeSpeedNews = (speed: CommentPayloads['finish']['speed'], { pick }: TemplateTools) => {
+	if (!speed) {
+		return '';
+	}
+	if (speed.kind === 'debut') {
+		return pick([`Для дебюту дуже непогано: ${speed.wpm} WPM.`, `${speed.wpm} WPM у першій же гонці. Запам'ятаймо це ім'я!`]);
+	}
+	return pick([
+		`І це новий особистий рекорд: ${speed.wpm} WPM замість ${speed.previousBest}!`,
+		`Особистий рекорд! ${speed.wpm} WPM, попередній найкращий результат — ${speed.previousBest}.`,
+	]);
+};
+
+const describeFinishLine = ({ username, place, finishTimeMs, isLast, previous }: CommentPayloads['finish'], { pick }: TemplateTools) => {
+	const time = formatRaceTime(finishTimeMs);
+	if (previous && previous.gapMs < PHOTO_FINISH_MS) {
+		return `Фотофініш! ${username} перетинає лінію лише на ${formatRaceTime(previous.gapMs)} пізніше за ${previous.username}: ${placeWord(place)} місце.`;
+	}
+	if (place === 1) {
+		return pick([
+			`Фінішну пряму перетинає ${username}, і це перше місце! Час: ${time}.`,
+			`Перемога! ${username} перетинає фінішну лінію з часом ${time}.`,
+			`І переможець — ${username}! Час на фініші: ${time}.`,
+		]);
+	}
+	if (isLast) {
+		return `Круг завершує ${username}: ${placeWord(place)} місце, ${time}. Усі гонщики на фініші!`;
+	}
+	return pick([
+		`Фінішну пряму перетинає ${username}: ${placeWord(place)} місце, ${time}.`,
+		`${username} на фініші: ${placeWord(place)} місце, час ${time}.`,
+	]);
 };
 
 const describeResult = (result: GameResultDto) =>
@@ -69,6 +110,34 @@ export const templates: Templates = {
 			driversCount === 1 && 'Сьогодні на трасі лише один гонщик. Змагання з самим собою — найчесніше!',
 			driversCount > 1 && gridNumber === 1 && `А тепер стартова решітка: сьогодні на трасі ${drivers(driversCount)}.`,
 			describeDriver(driver, gridNumber),
+		),
+
+	rivalry: ({ drivers: [first, second], record }, { pick }) => {
+		if (record.meetings === 1) {
+			return pick([
+				`${first} і ${second} уже зустрічалися на цій трасі, і тоді перемога була за ${record.lastWinner}. Чи буде реванш?`,
+				`А ось і повторна зустріч: ${first} проти ${second}. Минулого разу перемога за ${record.lastWinner}.`,
+			]);
+		}
+		const firstWins = record.wins[first] ?? 0;
+		const secondWins = record.wins[second] ?? 0;
+		const score =
+			firstWins === secondWins
+				? `рахунок рівний, ${firstWins}:${secondWins}`
+				: `рахунок ${firstWins}:${secondWins} на користь ${firstWins > secondWins ? first : second}`;
+		return sentences(
+			`${first} і ${second} — давні суперники: між ними вже ${meetings(record.meetings)}, ${score}.`,
+			`Минулого разу перемога за ${record.lastWinner}.`,
+		);
+	},
+
+	track: ({ book }, { pick }) =>
+		sentences(
+			pick([
+				`Сьогоднішня траса — уривок з книжки «${book.titleUk}», автор ${book.authorUk}.`,
+				`Друкуємо сьогодні класику: «${book.titleUk}», ${book.authorUk}.`,
+			]),
+			book.fact,
 		),
 
 	start: ({ seconds: raceSeconds, driversCount }, { pick }) =>
@@ -98,6 +167,21 @@ export const templates: Templates = {
 		);
 	},
 
+	overtake: ({ username, overtaken, position }, { pick }) => {
+		const rivals = overtaken.length > 1 ? `одразу ${joinWithAnd(overtaken)}` : overtaken[0];
+		if (position === 1) {
+			return pick([
+				`${username} обходить ${rivals} і очолює гонку!`,
+				`Зміна лідера! ${username} випереджає ${rivals}, і тепер попереду.`,
+				`${username} проривається на першу позицію, позаду лишається ${rivals}!`,
+			]);
+		}
+		return pick([
+			`${username} обходить ${rivals} і піднімається на ${positionAccusative(position)} позицію.`,
+			`Обгін! ${username} випереджає ${rivals}, тепер на ${positionWord(position)} позиції.`,
+		]);
+	},
+
 	approaching: ({ standings, username, charsLeft, isFirst }) => {
 		if (!isFirst) {
 			return `${username} теж виходить на фінішну пряму: лишилось ${characters(charsLeft)}.`;
@@ -114,30 +198,24 @@ export const templates: Templates = {
 		);
 	},
 
-	finish: ({ username, place, finishTimeMs, isLast }) => {
-		const time = formatRaceTime(finishTimeMs);
-		if (place === 1) {
-			return `Фінішну пряму перетинає ${username}, і це перше місце! Час: ${time}.`;
-		}
-		if (isLast) {
-			return `Круг завершує ${username}: ${placeWord(place)} місце, ${time}. Усі гонщики на фініші!`;
-		}
-		return `Фінішну пряму перетинає ${username}: ${placeWord(place)} місце, ${time}.`;
-	},
+	finish: (payload, tools) => sentences(describeFinishLine(payload, tools), describeSpeedNews(payload.speed, tools)),
 
 	retired: ({ username, isRaceRunning }) =>
 		isRaceRunning
 			? `${username} заїжджає в бокси й сходить з дистанції. Шкода, але гонка триває!`
 			: `${username} покидає стартову решітку ще до старту.`,
 
-	results: ({ results }) => {
+	results: ({ results, winnerStreak, comeback }) => {
 		const podium = take(results, 3).map(result => `${placeWord(result.place)} місце — ${describeResult(result)}`);
 		const everyoneFinished = results.every(result => result.finished);
+		const winner = results[0].username;
 
 		return sentences(
 			everyoneFinished ? 'Гонку завершено!' : 'Фінішний прапор, час вийшов!',
 			`Фінальний результат: ${podium.join('; ')}.`,
-			`Вітаємо ${results[0].username}!`,
+			comeback &&
+				`Камбек дня — ${comeback.username}: посеред гонки лише ${positionNominative(comeback.worstPosition)} позиція, а на фініші ${placeWord(comeback.place)} місце!`,
+			winnerStreak >= 2 ? `Вітаємо ${winner}: це вже ${wins(winnerStreak)} поспіль!` : `Вітаємо ${winner}!`,
 			`З вами був ${COMMENTATOR_NAME}. До зустрічі на трасі!`,
 		);
 	},

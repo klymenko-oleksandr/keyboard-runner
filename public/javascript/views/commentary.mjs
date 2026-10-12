@@ -7,8 +7,11 @@ const SPEAKING_MS = 2400;
 const TYPE_LABELS = {
 	greeting: 'Ефір',
 	lineup: 'Стартова решітка',
+	rivalry: 'Суперництво',
+	track: 'Траса',
 	start: 'Старт',
 	status: 'Ситуація на трасі',
+	overtake: 'Обгін',
 	approaching: 'Фінішна пряма',
 	finish: 'Фініш',
 	retired: 'Бокси',

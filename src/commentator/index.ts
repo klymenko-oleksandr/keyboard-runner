@@ -6,6 +6,7 @@ import { withCensorship } from './censorship/censorshipProxy';
 import { createCarFactory } from './drivers/carFactory';
 import { createDriverRepository } from './drivers/driverRepository';
 import { createCommentator } from './commentator';
+import { raceTexts } from '../texts';
 import type { AppServer } from '../socket/types';
 import type { Broadcaster } from './types';
 
@@ -24,5 +25,6 @@ export const getCommentator = memoize((io: AppServer) =>
 		broadcaster: withCensorship(createSocketBroadcaster(io)),
 		drivers: createDriverRepository(createCarFactory()),
 		createComment: createCommentFactory(),
+		getBook: textId => raceTexts.get(textId)?.book ?? null,
 	}),
 );
