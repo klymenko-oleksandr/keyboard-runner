@@ -1,6 +1,5 @@
 // Pure functions over a Room: no sockets, no timers. Easy to read and to unit-test.
 import { MAXIMUM_USERS_FOR_ONE_ROOM } from '../config';
-import { texts } from '../../data';
 import type { GameResultDto, Player, PlayerDto, Room, RoomDetailsDto, RoomSummaryDto } from '../types';
 
 export const createPlayer = (username: string): Player => ({
@@ -31,18 +30,6 @@ export const getProgressPercent = (player: Player, room: Room) => {
 		return 0;
 	}
 	return Math.floor((player.typedChars / room.textLength) * 100);
-};
-
-/** Next text is random, but never the same as the previous race in this room */
-export const pickRandomTextId = (previousId: number | null) => {
-	if (texts.length === 1) {
-		return 0;
-	}
-	let id: number;
-	do {
-		id = Math.floor(Math.random() * texts.length);
-	} while (id === previousId);
-	return id;
 };
 
 /** Typing speed: chars per minute, and WPM where every 5 characters count as one word */

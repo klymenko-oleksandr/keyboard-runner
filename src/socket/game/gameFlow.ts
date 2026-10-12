@@ -6,14 +6,13 @@
 import { SECONDS_FOR_GAME, SECONDS_TIMER_BEFORE_START_GAME, START_LIGHTS_HOLD_MS } from '../config';
 import { LOBBY_CHANNEL, SERVER_EVENTS } from '../events';
 import { roomRepository } from '../services/roomRepository';
-import { texts } from '../../data';
+import { raceTexts } from '../../texts';
 import { getCommentator } from '../../commentator';
 import {
 	areAllFinished,
 	areAllReady,
 	buildResults,
 	isJoinable,
-	pickRandomTextId,
 	resetPlayersForNextRace,
 	toPlayerDtos,
 	toRoomSummaryDto,
@@ -51,11 +50,12 @@ export const tryStartCountdown = (io: AppServer, room: Room): boolean => {
 		return false;
 	}
 
-	const textId = pickRandomTextId(room.lastTextId);
+	// A passage from a book or a classic text, never the same as the previous race in this room
+	const { id: textId, text } = raceTexts.pick(room.lastTextId);
 	room.status = 'countdown';
 	room.textId = textId;
 	room.lastTextId = textId;
-	room.textLength = texts[textId].length;
+	room.textLength = text.length;
 
 	// The client receives only the id and loads the text itself: GET /game/texts/:id
 	io.to(room.channel).emit(SERVER_EVENTS.COUNTDOWN_STARTED, {
