@@ -183,6 +183,30 @@
 </div>
       </div>
     </section>
+    <section class="sg-section" id="sg-Commentary" aria-labelledby="sg-Commentary-title">
+      <h2 class="sg-title" id="sg-Commentary-title">Commentary</h2>
+      <p class="sg-summary">The commentator's booth next to the race panel: <code>aside.commentary</code> (<code>pit</code>, <code>radius-md</code>) with a header (mic, LIVE dot, name, four talking bars) and <code>ol.commentary-feed</code>. Each <code>li.comment.comment-&lt;type&gt;</code> has a tag and a text; the colour of the left line follows the type (<code>kerb-red</code> start / finish straight, <code>finish-green</code> finish, <code>yellow</code> results). <code>.is-on-air</code> lights the LIVE dot, <code>.is-speaking</code> animates the bars for a moment after each comment, <code>.is-latest</code> highlights the newest one.</p>
+      <div class="sg-preview">
+<div class="wrap" style="max-width: 380px">
+<aside class="commentary has-comments is-on-air is-speaking" style="height: 420px" aria-labelledby="sg-Commentary-n">
+  <header class="commentary-header">
+    <svg class="commentary-mic" aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="11.5" rx="3"></rect><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"></path></svg>
+    <div class="commentary-who">
+      <span class="commentary-live"><span class="live-dot" aria-hidden="true"></span><span class="live-label">Live</span></span>
+      <h2 id="sg-Commentary-n" class="commentary-name">Таб Шифтович</h2>
+    </div>
+    <div class="commentary-eq" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  </header>
+  <ol class="commentary-feed">
+    <li class="comment comment-start"><span class="comment-tag">Старт</span><p class="comment-text">Вогні згасли, і гонку розпочато! На все про все 60 секунд.</p></li>
+    <li class="comment comment-filler"><span class="comment-tag">Між іншим</span><p class="comment-text">Мій улюблений гонщик — Backspace. Завжди повертається!</p></li>
+    <li class="comment comment-approaching"><span class="comment-tag">Фінішна пряма</span><p class="comment-text">До фінішу зовсім небагато, і на фінішну пряму виходить dave: лишилось 30 символів!</p></li>
+    <li class="comment comment-finish is-latest"><span class="comment-tag">Фініш</span><p class="comment-text">Фінішну пряму перетинає dave, і це перше місце! Час: 41,2 с.</p></li>
+  </ol>
+</aside>
+</div>
+      </div>
+    </section>
     <section class="sg-section" id="sg-ResultsTable" aria-labelledby="sg-ResultsTable-title">
       <h2 class="sg-title" id="sg-ResultsTable-title">ResultsTable</h2>
       <p class="sg-summary">The final classification inside a Modal, styled like a timing tower: <code>table.results-table</code> with columns Pos, Driver, Time, WPM, Chars/min.</p>

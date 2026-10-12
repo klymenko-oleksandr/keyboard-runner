@@ -2,7 +2,7 @@
 
 A real-time multiplayer typing race. Players join rooms, press **READY**, and race to type the same text. The first to finish wins. If time runs out, the player with the most correctly typed characters wins.
 
-Built for the Binary Studio Academy **HTTP, REST, WebSockets** homework with **Express + Socket.io + TypeScript** on the server and **vanilla JS (ES modules)** in the browser.
+Built for the Binary Studio Academy **HTTP, REST, WebSockets** homework with **Express + Socket.io + TypeScript** on the server and **vanilla JS (ES modules)** in the browser. The **Patterns, Practices and Principles** homework added a live race commentator (see [Commentator](#commentator)).
 
 ## Features
 
@@ -13,6 +13,7 @@ Built for the Binary Studio Academy **HTTP, REST, WebSockets** homework with **E
 - **F1-style start**: the 5 red start lights come on one per second during the last 5 seconds, stay on for a random 0.3–2 s that only the server knows, then go out. Lights out = go, so nobody can jump the start
 - **Race**: correctly typed characters are highlighted, the next character is underlined, and every player's progress bar updates live
 - **Results**: players who finished are ranked by finish time, then everyone else by typed characters. Players who left are not listed. Each row shows the time (or the gap to the winner), WPM and chars/min
+- **Commentator** Таб Шифтович covers every race live in Ukrainian, from the greeting to the podium, in a booth next to the race text
 - Every edge case caused by leaving is handled. If the last not-ready player leaves, the countdown starts. If the last player still typing leaves, the race ends
 
 ### Extras
@@ -35,6 +36,7 @@ Requires Node.js 22.
 ```bash
 npm install
 npm start          # dev mode with auto-restart (tsx watch)
+npm test           # unit tests (node:test)
 ```
 
 Open http://localhost:3002. To play against yourself, open a second **tab**: `sessionStorage` is per tab, so each tab can log in as a different user.
@@ -55,6 +57,7 @@ src/
 ├── server.ts                 Express + HTTP server + socket.io, exports { app, httpServer }
 ├── routes/                   /login, /game, GET /game/texts/:id
 ├── helpers/validation.ts     username / room name rules
+├── commentator/              the race commentator (see below)
 └── socket/
     ├── index.ts              wiring: middleware, handlers, disconnect
     ├── events.ts             event names (mirrored in public/javascript/constants/events.mjs)
@@ -102,10 +105,69 @@ The server owns every timer. Clients get one event per transition with the numbe
 | S → C | `game:started` | `{ seconds }` |
 | S → C | `game:progress-updated` | `{ username, progress, finished }` |
 | S → C | `game:finished` | `{ results: [{ place, username, finished, progress, finishTimeMs, wpm, charsPerMinute }] }` |
+| S → C | `commentator:comment` | `{ id, type, text, createdAt }` |
 
-HTTP: `GET /game/texts/:id` → `{ id, text }`, `GET /game/config` → `{ maxUsers, countdownSeconds, gameSeconds }`.
+HTTP: `GET /game/texts/:id` → `{ id, text }`, `GET /game/config` → `{ maxUsers, countdownSeconds, gameSeconds, commentatorName }`.
 
 State is kept **in memory** in a single Node.js process, so the app is meant to run as one instance.
+
+## Commentator
+
+Таб Шифтович comments on every race, following the rules of the Ukrainian typing-race federation. All the logic runs on the server. The browser only shows what arrives in `commentator:comment`.
+
+| When | What he says |
+|---|---|
+| Countdown starts | Greeting with the venue and the weather, then one comment per driver on the grid: name, car (colour, brand, number) and record (races, wins, best WPM, or "debut race") |
+| Lights out | Start, time on the clock |
+| Every 30 s | Standings: who is where, progress, gap to the leader in characters, time left |
+| 30 characters before the finish | Who reaches the finish straight. The first one also gets a prediction for second place |
+| A driver finishes | "Фінішну пряму перетинає …" with place and time. The last finisher gets their own line |
+| A driver leaves | Pit lane, retired |
+| Race over | Top 3 with times (or distance covered if the flag came first) and a goodbye |
+| Silence for 10 s | A joke or a fact about keyboards and racing, never the same one twice in a race |
+
+No bad words, ever: that's a disqualification. His own phrases are checked by a test, and usernames (the only text from players) go through the censorship proxy before they reach anyone.
+
+### Structure
+
+```
+src/commentator/
+├── index.ts                  composition root: getCommentator(io) wires the real dependencies
+├── commentator.ts            FACADE: raceAnnounced / raceStarted / progressUpdated / driverLeft / raceFinished / roomClosed
+├── config.ts                 name, venue, intervals (30 s status, 30 chars, 10 s of silence)
+├── types.ts                  comment types, payload of each type, driver profile
+├── comments/
+│   ├── commentFactory.ts     FACTORY: createComment(type, payload) -> { id, type, text, createdAt }
+│   ├── templates.ts          one pure function per comment type
+│   └── phrases.ts            jokes, facts, weather, car colours and brands (data only)
+├── drivers/
+│   ├── carFactory.ts         FACTORY: a car for every new driver
+│   └── driverRepository.ts   in-memory profiles: car, races, wins, best WPM
+├── censorship/
+│   ├── censorshipProxy.ts    PROXY around the broadcaster: masks bad words
+│   └── profanity.ts          the filter itself
+└── helpers/                  pure functions: standings, race moments, Ukrainian plurals, text pipeline
+```
+
+The game talks to the commentator in exactly one line per event, e.g. `getCommentator(io).raceStarted(room)` in `gameFlow.ts`.
+
+### Patterns
+
+- **Facade** (`commentator.ts`): the game sees six methods. Behind them are the comment factory, driver profiles, timers for status reports and jokes, race-moment detection and the broadcaster.
+- **Factory** (`commentFactory.ts`, `carFactory.ts`): `createComment('finish', { … })` hides how a comment is built. Type and payload are checked together at compile time (`CommentPayloads`). The car factory gives every new driver a random car.
+- **Proxy** (`censorshipProxy.ts`): a real ES `Proxy` with the same interface as the broadcaster. It intercepts `say` and masks bad words before the comment goes out.
+
+### Functional programming
+
+- **Pure functions**: templates, standings, race moments (`isApproachMoment`, `isFinishMoment`), `applyResult` (returns a new driver profile, no mutation)
+- **Currying / partial application**: `pluralize(['секунда', 'секунди', 'секунд'])` returns `seconds(n)` (lodash `curry`), `joinWith('чи')`, `pickWith(random)(items)`, `partial(say, room)` in the facade
+- **Higher-order functions**: `createCommentFactory(deps)` and `createCarFactory(random)` return functions, `memoize(createCommentator)` in `index.ts`, `describeChaser(leader, textLength)` returns the mapper for `map`
+- **Composition**: every comment passes through `polish = flow(collapseSpaces, removeSpaceBeforePunctuation, trim)`
+- **Injected side effects**: randomness and the clock are parameters, so tests get the same text every time
+
+### Data
+
+Driver profiles live in server memory, like rooms. Render's free instance sleeps after ~15 minutes, and after that the profiles start from zero. To keep them, implement `DriverRepository` on top of a database (e.g. MongoDB Atlas, which replaced mLab) and plug it in `index.ts`.
 
 ## Deploy (Render)
 
