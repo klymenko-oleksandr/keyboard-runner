@@ -1,10 +1,14 @@
 import { USERNAME_PATTERN, USERNAME_RULES_HINT } from './constants/validation.mjs';
+import { getUsername, saveUsername } from './helpers/session.mjs';
+import { fetchConfig } from './helpers/api.mjs';
+import { renderBriefing } from './views/briefing.mjs';
+import { initMobileNotice } from './views/mobileNotice.mjs';
 
-const username = sessionStorage.getItem('username');
-
-if (username) {
+if (getUsername()) {
 	window.location.replace('/game');
 }
+
+initMobileNotice();
 
 const submitButton = document.getElementById('submit-button');
 const input = document.getElementById('username-input');
@@ -17,6 +21,7 @@ const showError = message => {
 const onClickSubmitButton = () => {
 	const inputValue = input.value.trim();
 	if (!inputValue) {
+		showError('Enter a username to start.');
 		return;
 	}
 	// The username becomes part of a CSS class (`user-progress ${username}`),
@@ -25,7 +30,7 @@ const onClickSubmitButton = () => {
 		showError(USERNAME_RULES_HINT);
 		return;
 	}
-	sessionStorage.setItem('username', inputValue);
+	saveUsername(inputValue);
 	window.location.replace('/game');
 };
 
@@ -38,3 +43,7 @@ const onKeyDown = event => {
 submitButton.addEventListener('click', onClickSubmitButton);
 input.addEventListener('input', () => showError(''));
 window.addEventListener('keydown', onKeyDown);
+
+fetchConfig()
+	.then(config => renderBriefing(document.getElementById('briefing'), config))
+	.catch(() => {}); // the briefing is a nice-to-have, login works without it

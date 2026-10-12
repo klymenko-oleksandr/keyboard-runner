@@ -5,6 +5,9 @@ import { fetchText } from '../helpers/api.mjs';
 import { renderUsers, setProgress } from '../views/user.mjs';
 import { showMessageModal, showResultsModal } from '../views/modal.mjs';
 import { createTypingRace } from '../game/typingRace.mjs';
+import { getLightsForSecondsLeft, lightsOut, setLightsOn } from '../views/startLights.mjs';
+
+const formatClock = seconds => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
 /**
  * Room + race page (#game-page).
@@ -16,6 +19,7 @@ export const createRoomPage = ({ socket, username, onLeave }) => {
 		roomName: document.querySelector('#room-name'),
 		quitButton: document.querySelector('#quit-room-btn'),
 		readyButton: document.querySelector('#ready-btn'),
+		readyPanel: document.querySelector('#ready-panel'),
 		timer: document.querySelector('#timer'),
 		textContainer: document.querySelector('#text-container'),
 		gameTimer: document.querySelector('#game-timer'),
@@ -43,7 +47,8 @@ export const createRoomPage = ({ socket, username, onLeave }) => {
 		hide(elements.typingSpeed);
 		hide(elements.finishedMessage);
 		show(elements.quitButton);
-		show(elements.readyButton);
+		show(elements.readyPanel);
+		lightsOut();
 	};
 
 	const updateReadyButton = () => {
@@ -115,16 +120,21 @@ export const createRoomPage = ({ socket, username, onLeave }) => {
 			return;
 		}
 		hide(elements.quitButton);
-		hide(elements.readyButton);
+		hide(elements.readyPanel);
 
 		// Load the text while the countdown is running; show it only when the game starts
 		textPromise = fetchText(textId);
 		textPromise.catch(() => {}); // handled in GAME_STARTED
 
+		// F1 start: the last 5 seconds light the 5 red lights one by one.
+		// At 0 they stay on for a random moment (only the server knows it) — then "lights out" = GAME_STARTED.
 		show(elements.timer);
 		stopVisualTimer = startCountdown({
 			seconds,
-			onTick: secondsLeft => (elements.timer.textContent = secondsLeft),
+			onTick: secondsLeft => {
+				elements.timer.textContent = secondsLeft > 0 ? secondsLeft : '';
+				setLightsOn(getLightsForSecondsLeft(secondsLeft));
+			},
 		});
 	});
 
@@ -134,6 +144,7 @@ export const createRoomPage = ({ socket, username, onLeave }) => {
 		}
 		stopVisualTimer();
 		hide(elements.timer);
+		lightsOut(); // and away we go!
 
 		let text;
 		try {
@@ -149,7 +160,7 @@ export const createRoomPage = ({ socket, username, onLeave }) => {
 
 		stopVisualTimer = startCountdown({
 			seconds,
-			onTick: secondsLeft => (elements.gameTimerSeconds.textContent = secondsLeft),
+			onTick: secondsLeft => (elements.gameTimerSeconds.textContent = formatClock(secondsLeft)),
 		});
 
 		race = createTypingRace({

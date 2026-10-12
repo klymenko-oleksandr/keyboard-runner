@@ -1,13 +1,23 @@
 import { createElement } from '../helpers/domHelper.mjs';
 
-const getNumberOfUsersString = numberOfUsers =>
-	`${numberOfUsers} ${numberOfUsers === 1 ? 'user' : 'users'} connected`;
+const getNumberOfUsersString = (numberOfUsers, maxUsers) => {
+	const drivers = maxUsers ? `${numberOfUsers}/${maxUsers}` : String(numberOfUsers);
+	return `${drivers} ${numberOfUsers === 1 && !maxUsers ? 'driver' : 'drivers'}`;
+};
 
-const createRoomElement = ({ name, numberOfUsers, onJoin }) => {
+// Each room is a starting-grid slot: P1, P2, ...
+const createRoomElement = ({ name, numberOfUsers, slot, maxUsers, onJoin }) => {
+	const slotNumber = createElement({
+		tagName: 'span',
+		className: 'slot-number',
+		attributes: { 'aria-hidden': 'true' },
+		innerElements: [`P${slot}`],
+	});
+
 	const connectedUsersElement = createElement({
-		tagName: 'div',
+		tagName: 'span',
 		className: 'connected-users',
-		innerElements: [getNumberOfUsersString(numberOfUsers)],
+		innerElements: [getNumberOfUsersString(numberOfUsers, maxUsers)],
 	});
 
 	const nameElement = createElement({
@@ -19,15 +29,20 @@ const createRoomElement = ({ name, numberOfUsers, onJoin }) => {
 
 	const joinButton = createElement({
 		tagName: 'button',
-		className: 'join-btn',
+		className: 'join-btn btn btn-primary btn-small',
+		attributes: { 'aria-label': `Join ${name}` },
 		innerElements: ['Join'],
 	});
 	joinButton.addEventListener('click', () => onJoin(name));
 
 	return createElement({
 		tagName: 'div',
-		className: 'room',
-		innerElements: [connectedUsersElement, nameElement, joinButton],
+		className: 'room slot',
+		innerElements: [
+			createElement({ tagName: 'div', className: 'slot-header', innerElements: [slotNumber, connectedUsersElement] }),
+			nameElement,
+			joinButton,
+		],
 	});
 };
 
@@ -35,7 +50,7 @@ const createRoomElement = ({ name, numberOfUsers, onJoin }) => {
  * The server always sends the full (small) list, so we simply re-render it.
  * No need to look rooms up by name -> any room name is safe, even with quotes.
  */
-export const renderRooms = ({ rooms, onJoin }) => {
+export const renderRooms = ({ rooms, maxUsers, onJoin }) => {
 	const roomsContainer = document.querySelector('#rooms-wrapper');
 
 	if (rooms.length === 0) {
@@ -43,11 +58,13 @@ export const renderRooms = ({ rooms, onJoin }) => {
 			createElement({
 				tagName: 'p',
 				className: 'rooms-empty',
-				innerElements: ['No open rooms yet. Create the first one!'],
+				innerElements: ['No rooms on the grid yet. Create the first one.'],
 			}),
 		);
 		return;
 	}
 
-	roomsContainer.replaceChildren(...rooms.map(room => createRoomElement({ ...room, onJoin })));
+	roomsContainer.replaceChildren(
+		...rooms.map((room, index) => createRoomElement({ ...room, slot: index + 1, maxUsers, onJoin })),
+	);
 };

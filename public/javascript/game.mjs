@@ -1,18 +1,32 @@
 import { CONNECTION_ERRORS } from './constants/events.mjs';
+import { clearSession, getSessionId, getUsername } from './helpers/session.mjs';
+import { fetchConfig } from './helpers/api.mjs';
 import { createRoomsPage } from './pages/roomsPage.mjs';
 import { createRoomPage } from './pages/roomPage.mjs';
+import { renderBriefing } from './views/briefing.mjs';
+import { initMobileNotice } from './views/mobileNotice.mjs';
+import { showMessageModal } from './views/modal.mjs';
 
-const username = sessionStorage.getItem('username');
+const username = getUsername();
 
 const logout = () => {
-	sessionStorage.clear();
+	clearSession();
 	window.location.replace('/login');
 };
 
-const init = () => {
+const init = async () => {
+	initMobileNotice();
+
+	const config = await fetchConfig().catch(() => null);
+	if (config) {
+		renderBriefing(document.querySelector('#briefing'), config);
+	}
+
 	const socket = io('', {
 		query: { username },
-		// close the connection right away on reload, so the server frees the username immediately
+		// sessionId = "this browser tab". Lets the server recognise a page reload as the same user.
+		auth: { username, sessionId: getSessionId() },
+		// close the connection right away on reload/close, so the server frees the username quickly
 		closeOnBeforeunload: true,
 	});
 
@@ -28,8 +42,21 @@ const init = () => {
 		// any other error = network problem, socket.io keeps reconnecting by itself
 	});
 
+	// The server closed THIS connection: the same session connected again from another tab
+	// (e.g. "Duplicate tab"), and the newest tab wins.
+	socket.on('disconnect', reason => {
+		if (reason === 'io server disconnect') {
+			showMessageModal({
+				message: 'You opened Keyboard Runner in another tab, so this one was disconnected.',
+				buttonText: 'Back to login',
+				onClose: logout,
+			});
+		}
+	});
+
 	const roomsPage = createRoomsPage({
 		socket,
+		maxUsers: config?.maxUsers,
 		onEnterRoom: roomDetails => {
 			roomsPage.hide();
 			roomPage.enter(roomDetails);

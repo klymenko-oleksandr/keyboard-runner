@@ -3,81 +3,143 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  padding: 12px 25px;
-  background-color: var(--surface);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.logo {
-  font-weight: 800;
-  letter-spacing: 0.3px;
+  gap: 12px;
+  padding: 18px 48px;
 }
 
 .current-user-info {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 14px;
+  gap: 16px;
+  font-size: 15px;
+  color: var(--muted);
 }
 
-#add-room-btn {
-  margin: 0 25px 10px;
+.current-user-info strong {
+  color: var(--line);
 }
 
-#rooms-wrapper {
+.lobby {
   display: flex;
-  flex-wrap: wrap;
-  padding: 10px;
+  gap: 48px;
+  padding: 12px 48px 48px;
+}
+
+.lobby .briefing {
+  width: 340px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.grid-section {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 44px;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 8px 0 24px;
+  color: var(--muted);
+}
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 28px 26px;
+}
+
+/* the rooms are rendered into this wrapper, but they are cells of .rooms-grid */
+.rooms-wrapper {
+  display: contents;
 }
 
 .rooms-empty {
-  margin: 15px;
-  color: var(--muted-font-color);
+  grid-column: span 2;
+  align-self: center;
+  color: var(--muted);
 }
 
-.room {
-  position: relative;
+/* Starting-grid box: painted lines on three sides */
+.slot {
+  box-sizing: border-box;
+  height: 168px;
+  padding: 16px 18px;
+  border: 3px solid var(--line);
+  border-bottom: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.slot-create {
   align-items: center;
-  width: 220px;
-  height: 200px;
-  margin: 10px 15px;
-  padding: 36px 15px 20px;
-  background-color: var(--surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  justify-content: center;
+  gap: 10px;
+  border: 3px dashed var(--yellow);
+  border-bottom: none;
+  color: var(--yellow);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  transition: background-color 0.15s;
+}
+
+.slot-create:hover {
+  background-color: rgba(242, 194, 48, 0.08);
+}
+
+.slot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.slot-number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--ghost-border);
 }
 
 .connected-users {
-  position: absolute;
-  top: 10px;
-  left: 14px;
-  font-size: 12px;
-  font-style: italic;
-  color: var(--muted-font-color);
+  font-size: 14px;
+  color: var(--muted);
 }
 
 .room-name {
-  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 22px;
+  font-family: var(--font-display);
   font-weight: 600;
+  font-size: 26px;
 }
 
 .join-btn {
-  padding: 7px 28px;
-  border: 1px solid var(--main-button-border-color);
-  border-radius: 8px;
-  background-color: var(--main-button-background-color);
-  font-weight: 600;
+  align-self: flex-start;
 }
 
-.join-btn:hover {
-  background-color: var(--main-button-hover-color);
+@media (max-width: 900px) {
+  .top-bar,
+  .lobby {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .lobby {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .lobby .briefing {
+    width: auto;
+  }
+
+  .title {
+    font-size: 36px;
+  }
 }

@@ -29,7 +29,13 @@ export const createTypingRace = ({ text, container, speedElement, onProgress, on
 		}
 		const minutes = (Date.now() - startedAt) / 60000;
 		const charsPerMinute = minutes > 0 ? Math.round(typedChars / minutes) : 0;
-		speedElement.textContent = `${charsPerMinute} chars/min`;
+		const wpm = Math.round(charsPerMinute / 5); // a "word" = 5 characters
+		speedElement.replaceChildren(
+			createElement({ tagName: 'strong', innerElements: [String(wpm)] }),
+			' WPM ',
+			createElement({ tagName: 'strong', innerElements: [String(charsPerMinute)] }),
+			' chars/min',
+		);
 	};
 
 	const flashMistake = () => {
@@ -65,9 +71,7 @@ export const createTypingRace = ({ text, container, speedElement, onProgress, on
 		startedAt = Date.now();
 		typedChars = 0;
 		render();
-		if (speedElement) {
-			speedElement.textContent = '0 chars/min';
-		}
+		renderSpeed();
 		document.addEventListener('keydown', onKeyDown);
 	};
 

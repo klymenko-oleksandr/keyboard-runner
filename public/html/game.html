@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/styles/reset.css">
   <link rel="stylesheet" href="/styles/common.css">
   <link rel="stylesheet" href="/styles/rooms.css">
   <link rel="stylesheet" href="/styles/game.css">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=JetBrains+Mono:wght@400;600&display=swap"
-    rel="stylesheet">
   <script src="/socket.io/socket.io.js"></script>
   <script defer type="module" src="/javascript/game.mjs"></script>
   <title>Keyboard Runner</title>
@@ -18,40 +19,79 @@
 
 <body>
   <div id="root">
-    <div id="rooms-page" class="full-screen display-none">
+    <div class="checker-band" aria-hidden="true"></div>
+
+    <div id="rooms-page" class="page display-none">
       <header class="top-bar">
-        <span class="logo">⌨ Keyboard Runner</span>
+        <span class="brand">Keyboard Runner</span>
         <div class="current-user-info">
-          <span>Signed in as <strong id="current-username"></strong></span>
-          <button id="logout-btn" class="btn btn-small">Change user</button>
+          <span>Driver <strong id="current-username"></strong></span>
+          <button id="logout-btn" class="btn btn-ghost btn-small">Change user</button>
         </div>
       </header>
-      <h1 class="title">Join Room Or Create New</h1>
-      <button id="add-room-btn" class="btn">Create Room</button>
-      <div id="rooms-wrapper"></div>
+      <main class="lobby">
+        <section id="briefing" class="briefing"></section>
+        <section class="grid-section" aria-labelledby="rooms-title">
+          <h1 id="rooms-title" class="title">Pick your starting grid</h1>
+          <p class="subtitle">Rooms that are racing or full leave the grid until they open again.</p>
+          <div class="rooms-grid">
+            <button id="add-room-btn" class="slot slot-create">
+              <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.2" stroke-linecap="round">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+              <span>Create room</span>
+            </button>
+            <div id="rooms-wrapper" class="rooms-wrapper"></div>
+          </div>
+        </section>
+      </main>
     </div>
 
-    <div id="game-page" class="full-screen display-none">
-      <aside class="room-sidebar">
-        <h1 id="room-name">Room name</h1>
-        <button id="quit-room-btn" class="btn">‹ Back To Rooms</button>
-        <div id="users-wrapper"></div>
-      </aside>
-      <main>
-        <div id="game-container">
-          <div id="game-timer" class="display-none">
+    <div id="game-page" class="page display-none">
+      <header class="race-header">
+        <div class="race-header-left">
+          <button id="quit-room-btn" class="btn btn-ghost btn-small">‹ Back to rooms</button>
+          <h1 id="room-name">Room name</h1>
+        </div>
+        <div id="start-lights" class="start-lights" role="img" aria-label="Start lights">
+          <span class="light"></span><span class="light"></span><span class="light"></span><span class="light"></span><span class="light"></span>
+        </div>
+        <div class="race-header-right">
+          <div id="game-timer" class="game-timer display-none">
             <span id="game-timer-seconds"></span>
-            <span> seconds left</span>
-          </div>
-          <button id="ready-btn" class="btn">READY</button>
-          <div id="timer" class="display-none"></div>
-          <p id="text-container" class="display-none"></p>
-          <div class="game-footer">
-            <span id="typing-speed" class="display-none"></span>
-            <span id="finished-message" class="display-none">Finished! Waiting for the others…</span>
+            <span class="game-timer-label">left</span>
           </div>
         </div>
-      </main>
+      </header>
+
+      <section class="track" aria-label="Drivers">
+        <div class="kerb" aria-hidden="true"></div>
+        <div id="users-wrapper"></div>
+        <div class="kerb" aria-hidden="true"></div>
+      </section>
+
+      <section id="game-container" class="race-panel">
+        <div id="ready-panel" class="ready-panel">
+          <button id="ready-btn" class="btn btn-ready">READY</button>
+          <p class="ready-hint">The race starts when every driver is ready.</p>
+        </div>
+        <div id="timer" class="countdown display-none" aria-live="polite"></div>
+        <p id="text-container" class="race-text display-none"></p>
+        <div class="race-stats">
+          <span id="typing-speed" class="display-none"></span>
+          <span id="finished-message" class="display-none">Finished! Waiting for the other drivers…</span>
+        </div>
+      </section>
+    </div>
+
+    <div id="mobile-notice" class="mobile-notice" role="dialog" aria-modal="true" aria-labelledby="mobile-notice-title">
+      <div class="mobile-notice-card">
+        <div class="checker-band" aria-hidden="true"></div>
+        <h2 id="mobile-notice-title">Grab a keyboard</h2>
+        <p>Keyboard Runner is a typing race, so it needs a physical keyboard. Open it on a laptop or desktop to play.</p>
+        <button id="mobile-notice-continue" class="btn btn-ghost">Continue anyway</button>
+      </div>
     </div>
   </div>
 </body>

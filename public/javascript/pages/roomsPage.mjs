@@ -8,7 +8,7 @@ import { showMessageModal } from '../views/modal.mjs';
  * Rooms list page (#rooms-page).
  * @param onEnterRoom called with room details after a successful create/join
  */
-export const createRoomsPage = ({ socket, onEnterRoom }) => {
+export const createRoomsPage = ({ socket, maxUsers, onEnterRoom }) => {
 	const pageElement = document.querySelector('#rooms-page');
 	const addRoomButton = document.querySelector('#add-room-btn');
 
@@ -45,7 +45,7 @@ export const createRoomsPage = ({ socket, onEnterRoom }) => {
 	addRoomButton.addEventListener('click', createRoom);
 
 	// The server sends this only while we are in the lobby (on this page)
-	socket.on(SERVER_EVENTS.ROOMS_UPDATED, rooms => renderRooms({ rooms, onJoin: joinRoom }));
+	socket.on(SERVER_EVENTS.ROOMS_UPDATED, rooms => renderRooms({ rooms, maxUsers, onJoin: joinRoom }));
 
 	return {
 		show: () => show(pageElement),

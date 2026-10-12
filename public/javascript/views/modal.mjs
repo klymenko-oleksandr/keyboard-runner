@@ -1,77 +1,121 @@
 import { createElement } from '../helpers/domHelper.mjs';
 
-const createModalElement = title => {
+/** Dimmed overlay + dark card with a checkered band on top. Returns a function that closes it. */
+const mountModal = ({ title, children, labelId }) => {
 	const titleElement = createElement({
 		tagName: 'h1',
-		className: 'title',
+		className: 'modal-title',
+		attributes: { id: labelId },
 		innerElements: [title],
 	});
 
 	const modal = createElement({
 		tagName: 'div',
 		className: 'modal',
-		attributes: { role: 'dialog', 'aria-modal': 'true' },
-		innerElements: [titleElement],
+		attributes: { role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': labelId },
+		innerElements: [
+			createElement({ tagName: 'div', className: 'checker-band', attributes: { 'aria-hidden': 'true' } }),
+			createElement({ tagName: 'div', className: 'modal-body', innerElements: [titleElement, ...children] }),
+		],
 	});
 
-	return modal;
-};
-
-const getFooter = children =>
-	createElement({
-		tagName: 'div',
-		className: 'inputs-wrapper',
-		innerElements: children,
-	});
-
-/** Wraps the modal into a dimmed overlay and returns a function that closes it */
-const mountModal = modalElement => {
-	const overlay = createElement({ tagName: 'div', className: 'modal-overlay', innerElements: [modalElement] });
+	const overlay = createElement({ tagName: 'div', className: 'modal-overlay', innerElements: [modal] });
 	document.querySelector('#root').append(overlay);
 	return () => overlay.remove();
 };
 
-const formatResultMeta = ({ finished, finishTimeMs, progress }) =>
-	finished ? `${(finishTimeMs / 1000).toFixed(1)} s` : `${progress}%`;
+const createFooter = button =>
+	createElement({ tagName: 'div', className: 'modal-footer', innerElements: [button] });
+
+const formatSeconds = ms => `${(ms / 1000).toFixed(1)} s`;
+
+/** Winner: own time. Other finishers: gap to the winner. Still typing at the flag: how much was done. */
+const formatTime = (result, winner) => {
+	if (!result.finished) {
+		return `${result.progress}% done`;
+	}
+	if (result === winner || !winner.finished) {
+		return formatSeconds(result.finishTimeMs);
+	}
+	return `+${formatSeconds(result.finishTimeMs - winner.finishTimeMs)}`;
+};
+
+const createCell = (tagName, className, content, attributes = {}) =>
+	createElement({ tagName, className, attributes, innerElements: [content] });
 
 export const showResultsModal = ({ results, currentUsername, onClose = () => {} }) => {
-	const modalElement = createModalElement('Results');
+	const [winner] = results;
 
-	const resultElements = results.map(result => {
-		const { place, username } = result;
+	const header = createElement({
+		tagName: 'tr',
+		innerElements: [
+			createCell('th', 'col-pos', 'Pos', { scope: 'col' }),
+			createCell('th', 'col-driver', 'Driver', { scope: 'col' }),
+			createCell('th', 'col-num', 'Time', { scope: 'col' }),
+			createCell('th', 'col-num', 'WPM', { scope: 'col' }),
+			createCell('th', 'col-num', 'Chars/min', { scope: 'col' }),
+		],
+	});
 
-		return createElement({
-			tagName: 'li',
-			className: `user-result${username === currentUsername ? ' current-user' : ''}`,
+	const rows = results.map(result => {
+		const isCurrentUser = result.username === currentUsername;
+		const driver = createElement({
+			tagName: 'td',
+			className: 'col-driver',
 			innerElements: [
-				createElement({ tagName: 'span', className: 'result-place', innerElements: [`${place}.`] }),
 				// Required: id `place-${place}` on every username
 				createElement({
 					tagName: 'span',
 					className: 'result-username',
-					attributes: { id: `place-${place}` },
-					innerElements: [username],
+					attributes: { id: `place-${result.place}` },
+					innerElements: [result.username],
 				}),
-				createElement({ tagName: 'span', className: 'result-meta', innerElements: [formatResultMeta(result)] }),
+				...(isCurrentUser ? [createElement({ tagName: 'em', className: 'you-label', innerElements: [' (you)'] })] : []),
+			],
+		});
+
+		return createElement({
+			tagName: 'tr',
+			className: `user-result${isCurrentUser ? ' current-user' : ''}${result.place === 1 ? ' winner' : ''}`,
+			innerElements: [
+				createCell('td', 'col-pos', `P${result.place}`),
+				driver,
+				createCell('td', 'col-num', formatTime(result, winner)),
+				createCell('td', 'col-num col-wpm', String(result.wpm)),
+				createCell('td', 'col-num', String(result.charsPerMinute)),
 			],
 		});
 	});
 
-	const bodyWrapper = createElement({
-		tagName: 'ol',
-		className: 'body-wrapper results-list',
-		innerElements: resultElements,
+	const table = createElement({
+		tagName: 'table',
+		className: 'results-table',
+		innerElements: [
+			createElement({ tagName: 'thead', innerElements: [header] }),
+			createElement({ tagName: 'tbody', innerElements: rows }),
+		],
+	});
+
+	const note = createElement({
+		tagName: 'p',
+		className: 'modal-note',
+		innerElements: [
+			'Gaps are to the winner. Drivers still typing at the flag are ranked by characters typed. WPM counts every 5 characters as a word.',
+		],
 	});
 
 	const closeButton = createElement({
 		tagName: 'button',
-		className: 'submit-btn',
+		className: 'btn btn-primary',
 		attributes: { id: 'quit-results-btn' },
 		innerElements: ['Close'],
 	});
 
-	modalElement.append(bodyWrapper, getFooter([closeButton]));
-	const close = mountModal(modalElement);
+	const close = mountModal({
+		title: 'Final classification',
+		labelId: 'results-title',
+		children: [table, note, createFooter(closeButton)],
+	});
 	closeButton.focus();
 
 	closeButton.addEventListener('click', () => {
@@ -80,17 +124,14 @@ export const showResultsModal = ({ results, currentUsername, onClose = () => {} 
 	});
 };
 
-export const showMessageModal = ({ message, onClose = () => {} }) => {
-	const modalElement = createModalElement(message);
-
+export const showMessageModal = ({ message, buttonText = 'Close', onClose = () => {} }) => {
 	const closeButton = createElement({
 		tagName: 'button',
-		className: 'submit-btn',
-		innerElements: ['Close'],
+		className: 'btn btn-primary',
+		innerElements: [buttonText],
 	});
 
-	modalElement.append(getFooter([closeButton]));
-	const close = mountModal(modalElement);
+	const close = mountModal({ title: message, labelId: 'message-title', children: [createFooter(closeButton)] });
 	closeButton.focus();
 
 	closeButton.addEventListener('click', () => {
