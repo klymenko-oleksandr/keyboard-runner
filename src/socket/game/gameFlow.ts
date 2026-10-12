@@ -3,7 +3,7 @@
 //   waiting --(everyone ready)--> countdown --(timer)--> playing --(all finished | time is up)--> waiting
 //
 // Every state transition lives here, together with the broadcasts it causes.
-import { SECONDS_FOR_GAME, SECONDS_TIMER_BEFORE_START_GAME } from '../config';
+import { SECONDS_FOR_GAME, SECONDS_TIMER_BEFORE_START_GAME, START_LIGHTS_HOLD_MS } from '../config';
 import { LOBBY_CHANNEL, SERVER_EVENTS } from '../events';
 import { roomRepository } from '../services/roomRepository';
 import { texts } from '../../data';
@@ -63,7 +63,9 @@ export const tryStartCountdown = (io: AppServer, room: Room): boolean => {
 	});
 	broadcastRooms(io); // the room disappears from the list
 
-	room.timer = setTimeout(() => startGame(io, room), SECONDS_TIMER_BEFORE_START_GAME * 1000);
+	// The client shows the countdown; the extra random hold is known only to the server
+	const holdMs = START_LIGHTS_HOLD_MS.MIN + Math.random() * (START_LIGHTS_HOLD_MS.MAX - START_LIGHTS_HOLD_MS.MIN);
+	room.timer = setTimeout(() => startGame(io, room), SECONDS_TIMER_BEFORE_START_GAME * 1000 + holdMs);
 	return true;
 };
 
@@ -93,7 +95,7 @@ export const tryFinishGame = (io: AppServer, room: Room): boolean => {
 const finishGame = (io: AppServer, room: Room) => {
 	clearRoomTimer(room);
 
-	const results = buildResults(room);
+	const results = buildResults(room, Date.now());
 
 	room.status = 'waiting';
 	room.textId = null;

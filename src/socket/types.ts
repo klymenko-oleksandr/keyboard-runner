@@ -54,6 +54,8 @@ export interface GameResultDto {
 	finished: boolean;
 	progress: number;
 	finishTimeMs: number | null;
+	wpm: number;
+	charsPerMinute: number;
 }
 
 export type AckResponse<T> = { ok: true; data: T } | { ok: false; error: string };

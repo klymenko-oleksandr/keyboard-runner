@@ -45,26 +45,41 @@ export const pickRandomTextId = (previousId: number | null) => {
 	return id;
 };
 
+/** Typing speed: chars per minute, and WPM where every 5 characters count as one word */
+export const getSpeed = (chars: number, ms: number) => {
+	const charsPerMinute = ms > 0 ? Math.round((chars * 60000) / ms) : 0;
+	return { charsPerMinute, wpm: Math.round(charsPerMinute / 5) };
+};
+
 /**
  * 1) everyone who finished — by finish time
  * 2) everyone else — by typed characters (more = better)
  * Players who left the room are already removed from `room.players`, so they are not in the results.
  */
-export const buildResults = (room: Room): GameResultDto[] => {
+export const buildResults = (room: Room, now: number): GameResultDto[] => {
 	const players = [...room.players.values()];
+	const elapsedMs = room.gameStartedAt ? now - room.gameStartedAt : 0;
 
 	const finished = players
 		.filter(isFinished)
 		.sort((a, b) => (a.finishTimeMs as number) - (b.finishTimeMs as number));
 	const unfinished = players.filter(player => !isFinished(player)).sort((a, b) => b.typedChars - a.typedChars);
 
-	return [...finished, ...unfinished].map((player, index) => ({
-		place: index + 1,
-		username: player.username,
-		finished: isFinished(player),
-		progress: getProgressPercent(player, room),
-		finishTimeMs: player.finishTimeMs,
-	}));
+	return [...finished, ...unfinished].map((player, index) => {
+		const done = isFinished(player);
+		const speed = done
+			? getSpeed(room.textLength, player.finishTimeMs as number)
+			: getSpeed(player.typedChars, elapsedMs);
+
+		return {
+			place: index + 1,
+			username: player.username,
+			finished: done,
+			progress: getProgressPercent(player, room),
+			finishTimeMs: player.finishTimeMs,
+			...speed,
+		};
+	});
 };
 
 export const resetPlayersForNextRace = (room: Room) => {
