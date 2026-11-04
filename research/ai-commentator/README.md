@@ -16,6 +16,7 @@ Raw material and scripts for the AI commentator decision (see the spec doc). Not
 - `races-v3/*.jsonl`: 7 more bot races recorded with the template payload in every comment (the facts of the event). Used by prompt v3.
 - `judge.mjs`: LLM judge (Sonnet 5.5 by default) of every shown AI line AND the template line for the same moment: factual, about the event, coherent, gender-neutral, Ukrainian. The template score is the judge's own false-alarm rate. Writes `judge-<tag>.json` and a sheet `judge-<tag>.md` for a human spot check.
 - `slots.mjs` + `slots-bench.mjs`: the slow slots ADR-001 gives to the LLM (pre-race block, 30 s status, filler, results recap) from `races-v3/`, each run `REPEAT` times (default 2), validated, one retry, deadline per slot. Writes `bench-slots-<model>.json`; `judge.mjs` reads it too (plus a world-fact check for fillers).
+- `slots-bench-v4.mjs`: control run for spec Revision 3 (step 0): prompt v4, renamed payloads (`racesBefore`, `bestWpm: null`, `debut`, `personalBest`), the pre-race block as keyed parts (`greeting:` / `driver:<username>:` / `rivalry:` / `track:`) streamed line by line with a template for every part that is late, invalid or missing; status and results with one retry. Writes `bench-slots-v4-<model>.json`.
 - `revalidate.mjs`: runs the current validator over saved first-generation results (`bench-<model>.json`) without API calls.
 
 ## Run
@@ -36,6 +37,8 @@ RACES=races-v3 node --env-file=.env llm-bench.mjs       # prompt v3: with event 
 RACES=races-v3 node --env-file=.env judge.mjs bench-claude-haiku-5-5-v3.json
 node --env-file=.env slots-bench.mjs                    # slow slots
 node --env-file=.env judge.mjs bench-slots-claude-haiku-5-5.json
+node --env-file=.env slots-bench-v4.mjs                 # control run (Revision 3, step 0)
+node --env-file=.env judge.mjs bench-slots-v4-claude-haiku-5-5.json
 ```
 
 61 calls on Haiku 5.5 cost well under one cent.

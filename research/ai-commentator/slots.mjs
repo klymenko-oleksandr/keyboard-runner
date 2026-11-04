@@ -16,7 +16,20 @@ const describeDriver = ({ driver, gridNumber }) => ({
 	debut: driver.races === 0,
 });
 
-export const loadSlots = (dir = process.env.RACES ?? 'races-v3') => {
+// v4 (spec Revision 3): names that cannot be misread. `races: 1` was read as "the first race".
+const describeDriverV4 = ({ driver, gridNumber }) => ({
+	gridNumber,
+	username: driver.username,
+	car: { brand: driver.car.brand, colorLocative: driver.car.color, number: driver.car.number },
+	racesBefore: driver.races,
+	winsBefore: driver.wins,
+	bestWpm: driver.races === 0 ? null : driver.bestWpm,
+	winsInARow: driver.winStreak,
+	debut: driver.races === 0,
+});
+
+export const loadSlots = (dir = process.env.RACES ?? 'races-v3', { version = 'v3' } = {}) => {
+	const v4 = version === 'v4';
 	const slots = [];
 	for (const file of readdirSync(dir).filter(f => f.endsWith('.jsonl')).sort()) {
 		const ev = readFileSync(`${dir}/${file}`, 'utf8').trim().split('\n').map(JSON.parse);
@@ -30,7 +43,7 @@ export const loadSlots = (dir = process.env.RACES ?? 'races-v3') => {
 		const greeting = byType('greeting')[0];
 		const rivalry = byType('rivalry')[0] ?? null;
 		const track = byType('track')[0] ?? null;
-		const drivers = byType('lineup').map(describeDriver);
+		const drivers = byType('lineup').map(v4 ? describeDriverV4 : describeDriver);
 		slots.push({
 			race: file,
 			slot: 'prerace',
@@ -77,6 +90,11 @@ export const loadSlots = (dir = process.env.RACES ?? 'races-v3') => {
 				});
 			}
 			if (type === 'results') {
+				// v4: the finish lines' speed news, so the model does not have to dig it out of earlier lines
+				const speedNews = new Map(
+					comments.filter(f => f.data.type === 'finish' && f.data.payload.speed).map(f => [f.data.payload.username, f.data.payload.speed]),
+				);
+				const debutAt = new Set(drivers.filter(d => d.debut).map(d => d.username));
 				slots.push({
 					...base,
 					slot: 'results',
@@ -90,6 +108,10 @@ export const loadSlots = (dir = process.env.RACES ?? 'races-v3') => {
 							timeSeconds: r.finishTimeMs === null ? null : seconds(r.finishTimeMs),
 							wpm: r.wpm,
 							percent: r.progress,
+							...(v4 && {
+								debut: debutAt.has(r.username),
+								personalBest: speedNews.get(r.username)?.kind === 'personalBest' ? { previous: speedNews.get(r.username).previousBest } : null,
+							}),
 						})),
 						winnerWinsInARow: payload.winnerStreak,
 						comeback: payload.comeback && { username: payload.comeback.username, worstPosition: payload.comeback.worstPosition, place: payload.comeback.place },

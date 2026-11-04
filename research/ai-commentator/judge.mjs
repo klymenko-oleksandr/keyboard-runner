@@ -17,7 +17,7 @@ const { summary: benchSummary, results } = JSON.parse(readFileSync(benchFile, 'u
 // fast-moment benches carry no data (it is rebuilt from the recordings); slot benches carry their own context
 const isSlots = benchSummary.kind === 'slots';
 const moments = isSlots
-	? results.map(r => ({ type: r.type, subject: null, snapshot: r.context }))
+	? results.map(r => ({ type: r.type, subject: null, snapshot: r.context, said: r.said ?? [] }))
 	: loadMoments();
 if (moments.length !== results.length) throw new Error(`${results.length} results vs ${moments.length} moments: wrong RACES dir?`);
 
@@ -38,7 +38,8 @@ Return ONLY a JSON object, no prose:
   "languageIssue": string | null,
   "worldFactOk": true | false | null  // only for claims about the real world that are NOT in the data (history of typewriters, keyboards...): true if correct, false if wrong or doubtful, null if there are none
 }
-A line may contain several lines of commentary (a pre-race block); judge all of them together. For a block, "aboutEvent" means it does the task: greets, presents every driver from the data, mentions the rivalry and the book if they are in the data.`;
+A line may contain several lines of commentary (a pre-race block); judge all of them together. For a block, "aboutEvent" means each line does its part (a greeting, a driver introduction, the rivalry, the book). A block may hold only some of the parts: the rest is said by templates, so do not count missing parts against it.
+<said> holds the lines said earlier in the same race; a claim that agrees with them (a debut, a record) is supported.`;
 
 const client = new Anthropic();
 let cost = 0;
@@ -51,7 +52,7 @@ const judge = async (moment, line) => {
 		messages: [
 			{
 				role: 'user',
-				content: `<event>${moment.type}${moment.subject ? `, main driver: ${moment.subject}` : ''}</event>\n<race>\n${JSON.stringify(moment.snapshot)}\n</race>\n<line>${line}</line>`,
+				content: `<event>${moment.type}${moment.subject ? `, main driver: ${moment.subject}` : ''}</event>\n${moment.said?.length ? `<said>\n${moment.said.join('\n')}\n</said>\n` : ''}<race>\n${JSON.stringify(moment.snapshot)}\n</race>\n<line>${line}</line>`,
 			},
 		],
 	});
