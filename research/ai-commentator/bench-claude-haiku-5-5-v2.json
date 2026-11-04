@@ -1,0 +1,2141 @@
+{
+  "summary": {
+    "model": "claude-haiku-5-5",
+    "prompt": "v2",
+    "retry": true,
+    "calls": 61,
+    "emptyLines": 0,
+    "ttft": {
+      "p50": 837,
+      "p95": 1408
+    },
+    "total": {
+      "p50": 1086,
+      "p95": 1783
+    },
+    "withRetry": {
+      "p50": 1193,
+      "p95": 2742
+    },
+    "firstTryValid": 44,
+    "shownAi": 60,
+    "fallbackInvalid": 0,
+    "fallbackTimeout": 1,
+    "cacheHits": 60,
+    "avgCostPerMoment": 0.00008530040983606556,
+    "overtakeStillTrue": "7/15"
+  },
+  "results": [
+    {
+      "race": "duel-1.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1246,
+      "ttftMs": 967,
+      "totalMs": 1246,
+      "usage": {
+        "input_tokens": 290,
+        "cache_creation_input_tokens": 655,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 655,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 40,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.000130875,
+      "stopReason": "end_turn",
+      "template": "Зміна лідера! duel_ann випереджає duel_bob, і тепер попереду.",
+      "firstTry": "duel_ann тримає перше місце з 56% тексту, а duel_bob відстає лише на один відсоток!",
+      "firstReasons": [],
+      "llm": "duel_ann тримає перше місце з 56% тексту, а duel_bob відстає лише на один відсоток!",
+      "reasons": [],
+      "shown": "duel_ann тримає перше місце з 56% тексту, а duel_bob відстає лише на один відсоток!",
+      "stillTrueOnDelivery": true
+    },
+    {
+      "race": "duel-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1086,
+      "ttftMs": 802,
+      "totalMs": 1086,
+      "usage": {
+        "input_tokens": 301,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 46,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005965,
+      "stopReason": "end_turn",
+      "template": "До фінішу зовсім небагато, і на фінішну пряму виходить duel_ann: лишилось 30 символів! Друге місце поки за duel_bob.",
+      "firstTry": "duel_ann на першому місці і тисне з 87%! duel_bob дихає в спину, але відстає вже лише на 3%!",
+      "firstReasons": [],
+      "llm": "duel_ann на першому місці і тисне з 87%! duel_bob дихає в спину, але відстає вже лише на 3%!",
+      "reasons": [],
+      "shown": "duel_ann на першому місці і тисне з 87%! duel_bob дихає в спину, але відстає вже лише на 3%!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1110,
+      "ttftMs": 921,
+      "totalMs": 1110,
+      "usage": {
+        "input_tokens": 325,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 40,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005905,
+      "stopReason": "end_turn",
+      "template": "duel_bob теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "duel_bob дихає в спину лідеру: різниця лише 3%, а до фінішу 18 секунд!",
+      "firstReasons": [],
+      "llm": "duel_bob дихає в спину лідеру: різниця лише 3%, а до фінішу 18 секунд!",
+      "reasons": [],
+      "shown": "duel_bob дихає в спину лідеру: різниця лише 3%, а до фінішу 18 секунд!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 1804,
+      "ttftMs": 645,
+      "totalMs": 917,
+      "usage": {
+        "input_tokens": 301,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 46,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001257,
+      "stopReason": "end_turn",
+      "template": "Перемога! duel_bob перетинає фінішну лінію з часом 46,7 с. 64 WPM у першій же гонці. Запам'ятаймо це ім'я!",
+      "firstTry": "duel_bob уже фінішував на першому місці, а duel_ann лишилася за крок до лінії: 99% проти 100%!",
+      "firstReasons": [
+        "past tense: фінішував, лишилася"
+      ],
+      "llm": "duel_bob фінішує на першому місці, а duel_ann ще за крок до лінії: 99% проти 100%!",
+      "reasons": [],
+      "shown": "duel_bob фінішує на першому місці, а duel_ann ще за крок до лінії: 99% проти 100%!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1619,
+      "ttftMs": 1194,
+      "totalMs": 1619,
+      "usage": {
+        "input_tokens": 292,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 50,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006075,
+      "stopReason": "end_turn",
+      "template": "Фотофініш! duel_ann перетинає лінію лише на 0,0 с пізніше за duel_bob: друге місце. Для дебюту дуже непогано: 64 WPM.",
+      "firstTry": "duel_ann теж фінішує! Другий, але з тим самим текстом: 249 символів до кінця, відрив усього кілька секунд!",
+      "firstReasons": [],
+      "llm": "duel_ann теж фінішує! Другий, але з тим самим текстом: 249 символів до кінця, відрив усього кілька секунд!",
+      "reasons": [],
+      "shown": "duel_ann теж фінішує! Другий, але з тим самим текстом: 249 символів до кінця, відрив усього кілька секунд!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-1.jsonl",
+      "type": "results",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 972,
+      "ttftMs": 720,
+      "totalMs": 972,
+      "usage": {
+        "input_tokens": 364,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 40,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006295,
+      "stopReason": "end_turn",
+      "template": "Гонку завершено! Фінальний результат: перше місце — duel_bob (46,7 с, 64 WPM); друге місце — duel_ann (46,7 с, 64 WPM). Вітаємо duel_bob! З вами був Таб Шифтович. До зустрічі на трасі!",
+      "firstTry": "duel_bob фінішує на першому місці з 64 WPM, а duel_ann на другому — фотофініш!",
+      "firstReasons": [],
+      "llm": "duel_bob фінішує на першому місці з 64 WPM, а duel_ann на другому — фотофініш!",
+      "reasons": [],
+      "shown": "duel_bob фінішує на першому місці з 64 WPM, а duel_ann на другому — фотофініш!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-2.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1067,
+      "ttftMs": 630,
+      "totalMs": 1067,
+      "usage": {
+        "input_tokens": 289,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 45,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.000057950000000000006,
+      "stopReason": "end_turn",
+      "template": "До фінішу зовсім небагато, і на фінішну пряму виходить duel_ann: лишилось 30 символів! Друге місце поки за duel_bob.",
+      "firstTry": "duel_ann веде з 87%, а duel_bob тисне на п'ятах із 83% — до фінішу рукою подати!",
+      "firstReasons": [],
+      "llm": "duel_ann веде з 87%, а duel_bob тисне на п'ятах із 83% — до фінішу рукою подати!",
+      "reasons": [],
+      "shown": "duel_ann веде з 87%, а duel_bob тисне на п'ятах із 83% — до фінішу рукою подати!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-2.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1406,
+      "ttftMs": 1100,
+      "totalMs": 1406,
+      "usage": {
+        "input_tokens": 301,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 46,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005965,
+      "stopReason": "end_turn",
+      "template": "duel_bob теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "duel_bob тисне на другому місці, відстає від лідера лише на 4 відсотки — до фінішу 20 секунд!",
+      "firstReasons": [],
+      "llm": "duel_bob тисне на другому місці, відстає від лідера лише на 4 відсотки — до фінішу 20 секунд!",
+      "reasons": [],
+      "shown": "duel_bob тисне на другому місці, відстає від лідера лише на 4 відсотки — до фінішу 20 секунд!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-2.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2148,
+      "ttftMs": 699,
+      "totalMs": 1021,
+      "usage": {
+        "input_tokens": 283,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 41,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00011800000000000001,
+      "stopReason": "end_turn",
+      "template": "І переможець — duel_ann! Час на фініші: 43,0 с. Особистий рекорд! 69 WPM, попередній найкращий результат — 64.",
+      "firstTry": "duel_ann фінішує на першому місці, а duel_bob лишився з відставанням: 93% проти 100%!",
+      "firstReasons": [
+        "past tense: лишився"
+      ],
+      "llm": "duel_ann фінішує на першому місці, а для duel_bob лишається друге місце з відставанням у 7%!",
+      "reasons": [],
+      "shown": "duel_ann фінішує на першому місці, а для duel_bob лишається друге місце з відставанням у 7%!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-2.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 3451,
+      "ttftMs": 1397,
+      "totalMs": 1726,
+      "usage": {
+        "input_tokens": 286,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 48,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001187,
+      "stopReason": "end_turn",
+      "template": "Круг завершує duel_bob: друге місце, 48,5 с. Усі гонщики на фініші!",
+      "firstTry": "Фініш! duel_ann першою перетинає лінію, а duel_bob на другому місці, тож друге місце — у duel_bob!",
+      "firstReasons": [
+        "gendered: першою"
+      ],
+      "llm": "duel_ann перетинає лінію на першому місці, а друге місце — у duel_bob!",
+      "reasons": [],
+      "shown": "duel_ann перетинає лінію на першому місці, а друге місце — у duel_bob!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "duel-2.jsonl",
+      "type": "results",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2596,
+      "ttftMs": 743,
+      "totalMs": 979,
+      "usage": {
+        "input_tokens": 330,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 42,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001247,
+      "stopReason": "end_turn",
+      "template": "Гонку завершено! Фінальний результат: перше місце — duel_ann (43,0 с, 69 WPM); друге місце — duel_bob (48,5 с, 61 WPM). Вітаємо duel_ann! З вами був Таб Шифтович. До зустрічі на трасі!",
+      "firstTry": "duel_ann фінішує на першому місці з 69 WPM — це новий особистий рекорд, попередній був 64!",
+      "firstReasons": [
+        "numbers not in data: 64"
+      ],
+      "llm": "duel_ann фінішує на першому місці з 69 WPM — новий особистий рекорд!",
+      "reasons": [],
+      "shown": "duel_ann фінішує на першому місці з 69 WPM — новий особистий рекорд!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1709,
+      "ttftMs": 1526,
+      "totalMs": 1709,
+      "usage": {
+        "input_tokens": 375,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 30,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005905,
+      "stopReason": "end_turn",
+      "template": "Обгін! pack_dan випереджає pack_ann, тепер на другій позиції.",
+      "firstTry": "pack_dan обходить pack_bob і вже дихає в спину pack_ann!",
+      "firstReasons": [],
+      "llm": "pack_dan обходить pack_bob і вже дихає в спину pack_ann!",
+      "reasons": [],
+      "shown": "pack_dan обходить pack_bob і вже дихає в спину pack_ann!",
+      "stillTrueOnDelivery": false
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1005,
+      "ttftMs": 734,
+      "totalMs": 1005,
+      "usage": {
+        "input_tokens": 363,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 46,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006584999999999999,
+      "stopReason": "end_turn",
+      "template": "pack_dan обходить pack_eve і очолює гонку!",
+      "firstTry": "pack_dan обганяє pack_ann і вже на першій позиції, а pack_eve тисне з різницею в один відсоток!",
+      "firstReasons": [],
+      "llm": "pack_dan обганяє pack_ann і вже на першій позиції, а pack_eve тисне з різницею в один відсоток!",
+      "reasons": [],
+      "shown": "pack_dan обганяє pack_ann і вже на першій позиції, а pack_eve тисне з різницею в один відсоток!",
+      "stillTrueOnDelivery": true
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2010,
+      "ttftMs": 778,
+      "totalMs": 1060,
+      "usage": {
+        "input_tokens": 315,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 44,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001279,
+      "stopReason": "end_turn",
+      "template": "pack_cat обходить pack_ann і піднімається на четверту позицію.",
+      "firstTry": "pack_cat тисне на газ, але поки що лише п'ятий, відстає від pack_dan на 9% прогресу!",
+      "firstReasons": [
+        "gendered: п'ятий"
+      ],
+      "llm": "pack_cat на останньому місці, а лідер pack_dan уже на 49%, різниця — дев'ять відсотків!",
+      "reasons": [],
+      "shown": "pack_cat на останньому місці, а лідер pack_dan уже на 49%, різниця — дев'ять відсотків!",
+      "stillTrueOnDelivery": true
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 914,
+      "ttftMs": 686,
+      "totalMs": 914,
+      "usage": {
+        "input_tokens": 406,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 47,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00007065000000000001,
+      "stopReason": "end_turn",
+      "template": "До фінішу зовсім небагато, і на фінішну пряму виходить pack_eve: лишилось 30 символів! Друге місце може дістатися pack_bob чи pack_dan. Але давайте дочекаємось фінішу.",
+      "firstTry": "pack_eve тримає лідерство на 83%, а pack_bob і pack_dan ідуть разом на 78%, без відставання!",
+      "firstReasons": [],
+      "llm": "pack_eve тримає лідерство на 83%, а pack_bob і pack_dan ідуть разом на 78%, без відставання!",
+      "reasons": [],
+      "shown": "pack_eve тримає лідерство на 83%, а pack_bob і pack_dan ідуть разом на 78%, без відставання!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 880,
+      "ttftMs": 669,
+      "totalMs": 880,
+      "usage": {
+        "input_tokens": 465,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 34,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00007005,
+      "stopReason": "end_turn",
+      "template": "pack_dan обходить pack_bob і піднімається на другу позицію.",
+      "firstTry": "pack_dan обходить pack_bob і вже дихає в спину лідеру pack_eve!",
+      "firstReasons": [],
+      "llm": "pack_dan обходить pack_bob і вже дихає в спину лідеру pack_eve!",
+      "reasons": [],
+      "shown": "pack_dan обходить pack_bob і вже дихає в спину лідеру pack_eve!",
+      "stillTrueOnDelivery": false
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 874,
+      "ttftMs": 739,
+      "totalMs": 874,
+      "usage": {
+        "input_tokens": 464,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 34,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006995,
+      "stopReason": "end_turn",
+      "template": "pack_dan теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "pack_dan обходить pack_bob і вже дихає в спину лідеру pack_eve!",
+      "firstReasons": [],
+      "llm": "pack_dan обходить pack_bob і вже дихає в спину лідеру pack_eve!",
+      "reasons": [],
+      "shown": "pack_dan обходить pack_bob і вже дихає в спину лідеру pack_eve!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1024,
+      "ttftMs": 787,
+      "totalMs": 1024,
+      "usage": {
+        "input_tokens": 365,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 40,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006305,
+      "stopReason": "end_turn",
+      "template": "pack_cat теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "pack_cat тисне на третьому місці, pack_bob відстає лише на кілька відсотків і не здається!",
+      "firstReasons": [],
+      "llm": "pack_cat тисне на третьому місці, pack_bob відстає лише на кілька відсотків і не здається!",
+      "reasons": [],
+      "shown": "pack_cat тисне на третьому місці, pack_bob відстає лише на кілька відсотків і не здається!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1045,
+      "ttftMs": 707,
+      "totalMs": 1045,
+      "usage": {
+        "input_tokens": 314,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 52,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006395000000000001,
+      "stopReason": "end_turn",
+      "template": "pack_bob теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "pack_bob відстає на четвертому місці, і тепер pack_eve майже на фініші, мабуть, все вирішиться в останні секунди!",
+      "firstReasons": [],
+      "llm": "pack_bob відстає на четвертому місці, і тепер pack_eve майже на фініші, мабуть, все вирішиться в останні секунди!",
+      "reasons": [],
+      "shown": "pack_bob відстає на четвертому місці, і тепер pack_eve майже на фініші, мабуть, все вирішиться в останні секунди!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1056,
+      "ttftMs": 863,
+      "totalMs": 1056,
+      "usage": {
+        "input_tokens": 318,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 39,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.000057850000000000003,
+      "stopReason": "end_turn",
+      "template": "pack_ann теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "pack_ann відстає на п'ять місць, але ще є шанс наздогнати і вирватися вперед!",
+      "firstReasons": [],
+      "llm": "pack_ann відстає на п'ять місць, але ще є шанс наздогнати і вирватися вперед!",
+      "reasons": [],
+      "shown": "pack_ann відстає на п'ять місць, але ще є шанс наздогнати і вирватися вперед!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1025,
+      "ttftMs": 830,
+      "totalMs": 1025,
+      "usage": {
+        "input_tokens": 316,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 35,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005565,
+      "stopReason": "end_turn",
+      "template": "І переможець — pack_eve! Час на фініші: 39,6 с. Для дебюту дуже непогано: 57 WPM.",
+      "firstTry": "Фініш для pack_eve: перше місце, текст повністю надруковано за 40 секунд!",
+      "firstReasons": [],
+      "llm": "Фініш для pack_eve: перше місце, текст повністю надруковано за 40 секунд!",
+      "reasons": [],
+      "shown": "Фініш для pack_eve: перше місце, текст повністю надруковано за 40 секунд!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 950,
+      "ttftMs": 613,
+      "totalMs": 950,
+      "usage": {
+        "input_tokens": 334,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 45,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006245,
+      "stopReason": "end_turn",
+      "template": "Обгін! pack_cat випереджає pack_dan, тепер на другій позиції.",
+      "firstTry": "pack_cat обходить pack_dan і вже тисне на п'яти переможцю pack_eve — 98% проти 100%!",
+      "firstReasons": [],
+      "llm": "pack_cat обходить pack_dan і вже тисне на п'яти переможцю pack_eve — 98% проти 100%!",
+      "reasons": [],
+      "shown": "pack_cat обходить pack_dan і вже тисне на п'яти переможцю pack_eve — 98% проти 100%!",
+      "stillTrueOnDelivery": true
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 934,
+      "ttftMs": 655,
+      "totalMs": 934,
+      "usage": {
+        "input_tokens": 333,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 34,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005685,
+      "stopReason": "end_turn",
+      "template": "pack_cat на фініші: друге місце, час 42,4 с. Для дебюту дуже непогано: 53 WPM.",
+      "firstTry": "pack_cat фінішує на другому місці — обгін pack_dan приніс свої плоди!",
+      "firstReasons": [],
+      "llm": "pack_cat фінішує на другому місці — обгін pack_dan приніс свої плоди!",
+      "reasons": [],
+      "shown": "pack_cat фінішує на другому місці — обгін pack_dan приніс свої плоди!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 884,
+      "ttftMs": 636,
+      "totalMs": 884,
+      "usage": {
+        "input_tokens": 347,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 46,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006425,
+      "stopReason": "end_turn",
+      "template": "Фотофініш! pack_dan перетинає лінію лише на 0,3 с пізніше за pack_cat: третє місце. 53 WPM у першій же гонці. Запам'ятаймо це ім'я!",
+      "firstTry": "pack_dan фінішує на третьому місці, а pack_bob і pack_ann ще на трасі — гонка не закінчена!",
+      "firstReasons": [],
+      "llm": "pack_dan фінішує на третьому місці, а pack_bob і pack_ann ще на трасі — гонка не закінчена!",
+      "reasons": [],
+      "shown": "pack_dan фінішує на третьому місці, а pack_bob і pack_ann ще на трасі — гонка не закінчена!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1295,
+      "ttftMs": 1131,
+      "totalMs": 1295,
+      "usage": {
+        "input_tokens": 375,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 37,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006255,
+      "stopReason": "end_turn",
+      "template": "Фотофініш! pack_bob перетинає лінію лише на 0,7 с пізніше за pack_dan: четверте місце. Для дебюту дуже непогано: 52 WPM.",
+      "firstTry": "pack_bob фінішує на четвертому місці, а pack_ann тисне ззаду з 94%!",
+      "firstReasons": [],
+      "llm": "pack_bob фінішує на четвертому місці, а pack_ann тисне ззаду з 94%!",
+      "reasons": [],
+      "shown": "pack_bob фінішує на четвертому місці, а pack_ann тисне ззаду з 94%!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1148,
+      "ttftMs": 968,
+      "totalMs": 1148,
+      "usage": {
+        "input_tokens": 410,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 31,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006305,
+      "stopReason": "end_turn",
+      "template": "Круг завершує pack_ann: п'яте місце, 45,0 с. Усі гонщики на фініші! Для дебюту дуже непогано: 50 WPM.",
+      "firstTry": "pack_ann фінішує на п'ятому місці, і для дебюту це непогано!",
+      "firstReasons": [],
+      "llm": "pack_ann фінішує на п'ятому місці, і для дебюту це непогано!",
+      "reasons": [],
+      "shown": "pack_ann фінішує на п'ятому місці, і для дебюту це непогано!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-1.jsonl",
+      "type": "results",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 3367,
+      "ttftMs": 960,
+      "totalMs": 1251,
+      "usage": {
+        "input_tokens": 572,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 42,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001748,
+      "stopReason": "end_turn",
+      "template": "Гонку завершено! Фінальний результат: перше місце — pack_eve (39,6 с, 57 WPM); друге місце — pack_cat (42,4 с, 53 WPM); третє місце — pack_dan (42,7 с, 53 WPM). Камбек дня — pack_cat: посеред гонки лише п'ята позиція, а на фініші друге місце! Вітаємо pack_eve! З вами був Таб Шифтович. До зустрічі на трасі!",
+      "firstTry": "pack_eve фінішує на першому місці зі швидкістю 57 WPM, а pack_cat тисне другим!",
+      "firstReasons": [
+        "gendered: другим"
+      ],
+      "llm": "pack_eve фінішує на першому місці з 57 WPM — найшвидший фініш сьогодні!",
+      "reasons": [],
+      "shown": "pack_eve фінішує на першому місці з 57 WPM — найшвидший фініш сьогодні!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 907,
+      "ttftMs": 648,
+      "totalMs": 907,
+      "usage": {
+        "input_tokens": 371,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 39,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006315,
+      "stopReason": "end_turn",
+      "template": "pack_cat обходить pack_eve і піднімається на четверту позицію.",
+      "firstTry": "pack_cat обходить pack_eve і вже дихає в спину pack_ann — гонка розігрівається!",
+      "firstReasons": [],
+      "llm": "pack_cat обходить pack_eve і вже дихає в спину pack_ann — гонка розігрівається!",
+      "reasons": [],
+      "shown": "pack_cat обходить pack_eve і вже дихає в спину pack_ann — гонка розігрівається!",
+      "stillTrueOnDelivery": true
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 874,
+      "ttftMs": 654,
+      "totalMs": 874,
+      "usage": {
+        "input_tokens": 328,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 58,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006835,
+      "stopReason": "end_turn",
+      "template": "pack_bob проривається на першу позицію, позаду лишається pack_dan!",
+      "firstTry": "pack_cat обходить pack_eve і вже на четвертому місці, а pack_bob тримає друге місце, відстаючи від pack_dan лише на два символи!",
+      "firstReasons": [],
+      "llm": "pack_cat обходить pack_eve і вже на четвертому місці, а pack_bob тримає друге місце, відстаючи від pack_dan лише на два символи!",
+      "reasons": [],
+      "shown": "pack_cat обходить pack_eve і вже на четвертому місці, а pack_bob тримає друге місце, відстаючи від pack_dan лише на два символи!",
+      "stillTrueOnDelivery": false
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2179,
+      "ttftMs": 618,
+      "totalMs": 1210,
+      "usage": {
+        "input_tokens": 305,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 120,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001728,
+      "stopReason": "end_turn",
+      "template": "pack_cat обходить pack_dan і піднімається на другу позицію.",
+      "firstTry": "pack_cat обходить pack_eve і вже тисне на pack_dan та pack_cat на третьому місці, pack_bob на першому!\n\nПримітка: у репліці плутанина, бо я одразу згадав pack_cat двічі. Правильна версія:\n\npack_cat обходить pack_eve і піднімається на четверту позицію, а pack_bob",
+      "firstReasons": [
+        "too long: 38 words",
+        "past tense: згадав"
+      ],
+      "llm": "pack_cat обходить pack_eve і піднімається на четверту позицію, pack_bob тримає перше місце з 33%!",
+      "reasons": [],
+      "shown": "pack_cat обходить pack_eve і піднімається на четверту позицію, pack_bob тримає перше місце з 33%!",
+      "stillTrueOnDelivery": false
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1139,
+      "ttftMs": 895,
+      "totalMs": 1139,
+      "usage": {
+        "input_tokens": 309,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 55,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006495,
+      "stopReason": "end_turn",
+      "template": "Обгін! pack_cat випереджає pack_ann, тепер на третій позиції.",
+      "firstTry": "pack_cat рветься вперед і вже на четвертій позиції, попереду лише pack_ann! Але лідер pack_bob ще далеко попереду!",
+      "firstReasons": [],
+      "llm": "pack_cat рветься вперед і вже на четвертій позиції, попереду лише pack_ann! Але лідер pack_bob ще далеко попереду!",
+      "reasons": [],
+      "shown": "pack_cat рветься вперед і вже на четвертій позиції, попереду лише pack_ann! Але лідер pack_bob ще далеко попереду!",
+      "stillTrueOnDelivery": false
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1193,
+      "ttftMs": 1068,
+      "totalMs": 1193,
+      "usage": {
+        "input_tokens": 313,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 42,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005885,
+      "stopReason": "end_turn",
+      "template": "Обгін! pack_cat випереджає pack_bob, тепер на четвертій позиції.",
+      "firstTry": "pack_cat обходить pack_ann і вже на третьому місці, а лідер pack_dan попереду з 56%!",
+      "firstReasons": [],
+      "llm": "pack_cat обходить pack_ann і вже на третьому місці, а лідер pack_dan попереду з 56%!",
+      "reasons": [],
+      "shown": "pack_cat обходить pack_ann і вже на третьому місці, а лідер pack_dan попереду з 56%!",
+      "stillTrueOnDelivery": false
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1783,
+      "ttftMs": 1408,
+      "totalMs": 1783,
+      "usage": {
+        "input_tokens": 421,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 56,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00007665,
+      "stopReason": "end_turn",
+      "template": "pack_ann проривається на першу позицію, позаду лишається pack_dan!",
+      "firstTry": "pack_ann тримає перше місце, pack_dan дихає в спину, а pack_cat уже на четвертій позиції — 21 секунда до фінішу!",
+      "firstReasons": [],
+      "llm": "pack_ann тримає перше місце, pack_dan дихає в спину, а pack_cat уже на четвертій позиції — 21 секунда до фінішу!",
+      "reasons": [],
+      "shown": "pack_ann тримає перше місце, pack_dan дихає в спину, а pack_cat уже на четвертій позиції — 21 секунда до фінішу!",
+      "stillTrueOnDelivery": true
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1843,
+      "ttftMs": 1477,
+      "totalMs": 1843,
+      "usage": {
+        "input_tokens": 418,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 35,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006584999999999999,
+      "stopReason": "end_turn",
+      "template": "До фінішу зовсім небагато, і на фінішну пряму виходить pack_ann: лишилось 30 символів! Друге місце може дістатися pack_dan чи pack_eve. Але давайте дочекаємось фінішу.",
+      "firstTry": "pack_ann вириває перше місце, попереду лише 2 символи відриву від pack_dan!",
+      "firstReasons": [],
+      "llm": "pack_ann вириває перше місце, попереду лише 2 символи відриву від pack_dan!",
+      "reasons": [],
+      "shown": "pack_ann вириває перше місце, попереду лише 2 символи відриву від pack_dan!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1823,
+      "ttftMs": 1574,
+      "totalMs": 1823,
+      "usage": {
+        "input_tokens": 466,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 46,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00007615000000000001,
+      "stopReason": "end_turn",
+      "template": "pack_dan теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "pack_dan тисне з усіх сил, але pack_ann на першому місці і до фінішу залишилось зовсім трохи!",
+      "firstReasons": [],
+      "llm": "pack_dan тисне з усіх сил, але pack_ann на першому місці і до фінішу залишилось зовсім трохи!",
+      "reasons": [],
+      "shown": "pack_dan тисне з усіх сил, але pack_ann на першому місці і до фінішу залишилось зовсім трохи!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2234,
+      "ttftMs": 666,
+      "totalMs": 1306,
+      "usage": {
+        "input_tokens": 367,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 120,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001806,
+      "stopReason": "end_turn",
+      "template": "pack_eve теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "Pack_eve іде на п'ятій... ні, на третьому місці, pack_ann і pack_dan попереду!\n\nХоча ні, перевіряю дані: pack_eve на третьому місці з 86%, а pack_dan на другому з 93%. Тому правильно так: pack_eve тримає третє місце, від другого відділяє лише 7 від",
+      "firstReasons": [
+        "too long: 41 words",
+        "nickname case: Pack_eve",
+        "gendered: п'ятій"
+      ],
+      "llm": "pack_eve тримає третє місце з 86%, а pack_dan попереду з 93%!",
+      "reasons": [],
+      "shown": "pack_eve тримає третє місце з 86%, а pack_dan попереду з 93%!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2224,
+      "ttftMs": 842,
+      "totalMs": 1128,
+      "usage": {
+        "input_tokens": 367,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 43,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001364,
+      "stopReason": "end_turn",
+      "template": "Фінішну пряму перетинає pack_ann, і це перше місце! Час: 49,2 с. Особистий рекорд! 55 WPM, попередній найкращий результат — 50.",
+      "firstTry": "pack_ann перетинає лінію фінішу першим, а pack_dan вже на 96% і тисне на другому місці!",
+      "firstReasons": [
+        "gendered: першим"
+      ],
+      "llm": "pack_ann перетинає фініш на першому місці, а pack_dan на 96% наздоганяє другу позицію!",
+      "reasons": [],
+      "shown": "pack_ann перетинає фініш на першому місці, а pack_dan на 96% наздоганяє другу позицію!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 945,
+      "ttftMs": 711,
+      "totalMs": 945,
+      "usage": {
+        "input_tokens": 353,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 37,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006035,
+      "stopReason": "end_turn",
+      "template": "pack_cat теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "pack_cat наближається до фінішу на четвертому місці, але pack_bob вже близько позаду!",
+      "firstReasons": [],
+      "llm": "pack_cat наближається до фінішу на четвертому місці, але pack_bob вже близько позаду!",
+      "reasons": [],
+      "shown": "pack_cat наближається до фінішу на четвертому місці, але pack_bob вже близько позаду!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1016,
+      "ttftMs": 790,
+      "totalMs": 1016,
+      "usage": {
+        "input_tokens": 351,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 45,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006415,
+      "stopReason": "end_turn",
+      "template": "Фінішну пряму перетинає pack_dan: друге місце, 50,5 с.",
+      "firstTry": "pack_dan фінішує на другому місці, і pack_ann далеко попереду з відривом на весь фінішний відрізок!",
+      "firstReasons": [],
+      "llm": "pack_dan фінішує на другому місці, і pack_ann далеко попереду з відривом на весь фінішний відрізок!",
+      "reasons": [],
+      "shown": "pack_dan фінішує на другому місці, і pack_ann далеко попереду з відривом на весь фінішний відрізок!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2742,
+      "ttftMs": 1104,
+      "totalMs": 1413,
+      "usage": {
+        "input_tokens": 354,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 37,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001275,
+      "stopReason": "end_turn",
+      "template": "Обгін! pack_cat випереджає pack_eve, тепер на третій позиції.",
+      "firstTry": "pack_cat обходить pack_eve і рветься до фінішу, всього 30 символів до лінії!",
+      "firstReasons": [
+        "numbers not in data: 30"
+      ],
+      "llm": "pack_cat обходить pack_eve і рветься до фінішу з 8 секундами на таймері!",
+      "reasons": [],
+      "shown": "pack_cat обходить pack_eve і рветься до фінішу з 8 секундами на таймері!",
+      "stillTrueOnDelivery": false
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1005,
+      "ttftMs": 724,
+      "totalMs": 1005,
+      "usage": {
+        "input_tokens": 320,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 36,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005655,
+      "stopReason": "end_turn",
+      "template": "pack_bob теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "pack_bob ще на п'ятій позиції, але вже наздоганяє: 86% тексту!",
+      "firstReasons": [],
+      "llm": "pack_bob ще на п'ятій позиції, але вже наздоганяє: 86% тексту!",
+      "reasons": [],
+      "shown": "pack_bob ще на п'ятій позиції, але вже наздоганяє: 86% тексту!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2040,
+      "ttftMs": 736,
+      "totalMs": 976,
+      "usage": {
+        "input_tokens": 318,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 44,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001248,
+      "stopReason": "end_turn",
+      "template": "pack_eve на фініші: третє місце, час 55,4 с.",
+      "firstTry": "pack_eve фінішує на третьому місці, а pack_cat ледь не наздоганяє — лише один символ лишився!",
+      "firstReasons": [
+        "past tense: лишився"
+      ],
+      "llm": "pack_cat ледь не наздоганяє — лишається лише один символ, фінал зовсім близько!",
+      "reasons": [],
+      "shown": "pack_cat ледь не наздоганяє — лишається лише один символ, фінал зовсім близько!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2156,
+      "ttftMs": 823,
+      "totalMs": 1023,
+      "usage": {
+        "input_tokens": 311,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 44,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001281,
+      "stopReason": "end_turn",
+      "template": "Фотофініш! pack_cat перетинає лінію лише на 0,5 с пізніше за pack_eve: четверте місце.",
+      "firstTry": "pack_cat фінішує на четвертому місці, а pack_bob ще дихає в спину: лишилося 30 символів!",
+      "firstReasons": [
+        "numbers not in data: 30"
+      ],
+      "llm": "pack_bob ще борониться: до фінішу лишилося зовсім трохи, а pack_cat уже на четвертому місці!",
+      "reasons": [],
+      "shown": "pack_bob ще борониться: до фінішу лишилося зовсім трохи, а pack_cat уже на четвертому місці!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "pack-2.jsonl",
+      "type": "results",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1008,
+      "ttftMs": 837,
+      "totalMs": 1008,
+      "usage": {
+        "input_tokens": 473,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 39,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00007335,
+      "stopReason": "end_turn",
+      "template": "Фінішний прапор, час вийшов! Фінальний результат: перше місце — pack_ann (49,2 с, 55 WPM); друге місце — pack_dan (50,5 с, 53 WPM); третє місце — pack_eve (55,4 с, 49 WPM). Камбек дня — pack_ann: посеред гонки лише п'ята позиція, а на фініші перше місце! Вітаємо pack_ann! З вами був Таб Шифтович. До зустрічі на трасі!",
+      "firstTry": "pack_ann фінішує на першому місці з 55 WPM, а pack_dan відстає лише на крок!",
+      "firstReasons": [],
+      "llm": "pack_ann фінішує на першому місці з 55 WPM, а pack_dan відстає лише на крок!",
+      "reasons": [],
+      "shown": "pack_ann фінішує на першому місці з 55 WPM, а pack_dan відстає лише на крок!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "slow-1.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 958,
+      "ttftMs": 856,
+      "totalMs": 958,
+      "usage": {
+        "input_tokens": 358,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 32,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005835,
+      "stopReason": "end_turn",
+      "template": "slow_bob обходить slow_ann і піднімається на третю позицію.",
+      "firstTry": "slow_bob обходить slow_ann і вже тисне на п'яти slow_cat!",
+      "firstReasons": [],
+      "llm": "slow_bob обходить slow_ann і вже тисне на п'яти slow_cat!",
+      "reasons": [],
+      "shown": "slow_bob обходить slow_ann і вже тисне на п'яти slow_cat!",
+      "stillTrueOnDelivery": true
+    },
+    {
+      "race": "slow-1.jsonl",
+      "type": "overtake",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1197,
+      "ttftMs": 1024,
+      "totalMs": 1197,
+      "usage": {
+        "input_tokens": 340,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 44,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006255,
+      "stopReason": "end_turn",
+      "template": "Зміна лідера! slow_cat випереджає slow_dan, і тепер попереду.",
+      "firstTry": "slow_cat тисне на п'ятках лідера slow_dan: 21% проти 21%, усе рішається на фініші!",
+      "firstReasons": [],
+      "llm": "slow_cat тисне на п'ятках лідера slow_dan: 21% проти 21%, усе рішається на фініші!",
+      "reasons": [],
+      "shown": "slow_cat тисне на п'ятках лідера slow_dan: 21% проти 21%, усе рішається на фініші!",
+      "stillTrueOnDelivery": false
+    },
+    {
+      "race": "slow-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1162,
+      "ttftMs": 841,
+      "totalMs": 1162,
+      "usage": {
+        "input_tokens": 401,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 43,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006815,
+      "stopReason": "end_turn",
+      "template": "До фінішу зовсім небагато, і на фінішну пряму виходить slow_dan: лишилось 30 символів! Друге місце може дістатися slow_cat чи slow_bob. Але давайте дочекаємось фінішу.",
+      "firstTry": "slow_dan тримає перше місце, але slow_cat уже дихає в потилицю — різниця всього 11 символів!",
+      "firstReasons": [],
+      "llm": "slow_dan тримає перше місце, але slow_cat уже дихає в потилицю — різниця всього 11 символів!",
+      "reasons": [],
+      "shown": "slow_dan тримає перше місце, але slow_cat уже дихає в потилицю — різниця всього 11 символів!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "slow-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1327,
+      "ttftMs": 927,
+      "totalMs": 1327,
+      "usage": {
+        "input_tokens": 450,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 46,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00007455,
+      "stopReason": "end_turn",
+      "template": "slow_cat теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "slow_cat тисне ззаду: 82% проти 93% у slow_dan, а до фінішу лишається 14 секунд!",
+      "firstReasons": [],
+      "llm": "slow_cat тисне ззаду: 82% проти 93% у slow_dan, а до фінішу лишається 14 секунд!",
+      "reasons": [],
+      "shown": "slow_cat тисне ззаду: 82% проти 93% у slow_dan, а до фінішу лишається 14 секунд!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "slow-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2149,
+      "ttftMs": 917,
+      "totalMs": 1117,
+      "usage": {
+        "input_tokens": 412,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 43,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001447,
+      "stopReason": "end_turn",
+      "template": "І переможець — slow_dan! Час на фініші: 50,1 с. 42 WPM у першій же гонці. Запам'ятаймо це ім'я!",
+      "firstTry": "slow_dan фінішує першим, перше місце за ним! Друге місце — у slow_cat, який уже на 90%!",
+      "firstReasons": [
+        "gendered: першим, ним"
+      ],
+      "llm": "slow_dan фінішує на першому місці, а slow_cat на другому, до лінії лишається кілька символів!",
+      "reasons": [],
+      "shown": "slow_dan фінішує на першому місці, а slow_cat на другому, до лінії лишається кілька символів!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "slow-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1049,
+      "ttftMs": 816,
+      "totalMs": 1049,
+      "usage": {
+        "input_tokens": 365,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 49,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006755,
+      "stopReason": "end_turn",
+      "template": "Фінішну пряму перетинає slow_cat: друге місце, 55,5 с. Для дебюту дуже непогано: 38 WPM.",
+      "firstTry": "slow_cat фінішує на другому місці! Друге місце — за slow_dan, а slow_bob ще далеко позаду, 80%.",
+      "firstReasons": [],
+      "llm": "slow_cat фінішує на другому місці! Друге місце — за slow_dan, а slow_bob ще далеко позаду, 80%.",
+      "reasons": [],
+      "shown": "slow_cat фінішує на другому місці! Друге місце — за slow_dan, а slow_bob ще далеко позаду, 80%.",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "slow-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1589,
+      "ttftMs": 1308,
+      "totalMs": 1589,
+      "usage": {
+        "input_tokens": 337,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 42,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006125,
+      "stopReason": "end_turn",
+      "template": "slow_bob теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "slow_bob на 82%, а slow_ann тисне з 76%: до фінішу лишилося кілька секунд!",
+      "firstReasons": [],
+      "llm": "slow_bob на 82%, а slow_ann тисне з 76%: до фінішу лишилося кілька секунд!",
+      "reasons": [],
+      "shown": "slow_bob на 82%, а slow_ann тисне з 76%: до фінішу лишилося кілька секунд!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "slow-1.jsonl",
+      "type": "results",
+      "outcome": "fallback:timeout",
+      "attempts": 2,
+      "elapsedMs": 4428,
+      "ttftMs": 1252,
+      "totalMs": 2174,
+      "usage": {
+        "input_tokens": 454,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 40,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001515,
+      "stopReason": "end_turn",
+      "template": "Фінішний прапор, час вийшов! Фінальний результат: перше місце — slow_dan (50,1 с, 42 WPM); друге місце — slow_cat (55,5 с, 38 WPM); третє місце — slow_bob (86% дистанції). Вітаємо slow_dan! З вами був Таб Шифтович. До зустрічі на трасі!",
+      "firstTry": "slow_dan фінішує першим із 42 WPM, а slow_cat на другому місці з 38 WPM!",
+      "firstReasons": [
+        "gendered: першим"
+      ],
+      "llm": "slow_dan фінішує на першому місці з 42 WPM, а slow_cat на другому з 38 WPM!",
+      "reasons": [],
+      "shown": "Фінішний прапор, час вийшов! Фінальний результат: перше місце — slow_dan (50,1 с, 42 WPM); друге місце — slow_cat (55,5 с, 38 WPM); третє місце — slow_bob (86% дистанції). Вітаємо slow_dan! З вами був Таб Шифтович. До зустрічі на трасі!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "solo-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 996,
+      "ttftMs": 816,
+      "totalMs": 996,
+      "usage": {
+        "input_tokens": 284,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 32,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.000050950000000000005,
+      "stopReason": "end_turn",
+      "template": "До фінішу зовсім небагато, і на фінішну пряму виходить solo_ann: лишилось 30 символів! Залишилось лише дотиснути!",
+      "firstTry": "solo_ann на першому місці, попереду всіх на 82%, фініш уже близько!",
+      "firstReasons": [],
+      "llm": "solo_ann на першому місці, попереду всіх на 82%, фініш уже близько!",
+      "reasons": [],
+      "shown": "solo_ann на першому місці, попереду всіх на 82%, фініш уже близько!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "solo-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 1918,
+      "ttftMs": 739,
+      "totalMs": 956,
+      "usage": {
+        "input_tokens": 280,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 36,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001098,
+      "stopReason": "end_turn",
+      "template": "І переможець — solo_ann! Час на фініші: 36,2 с. 58 WPM у першій же гонці. Запам'ятаймо це ім'я!",
+      "firstTry": "solo_ann перетинає лінію фінішу першим і забирає перемогу на «Чайці»!",
+      "firstReasons": [
+        "gendered: першим"
+      ],
+      "llm": "solo_ann фінішує на першому місці і забирає перемогу на «Чайці»!",
+      "reasons": [],
+      "shown": "solo_ann фінішує на першому місці і забирає перемогу на «Чайці»!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "solo-1.jsonl",
+      "type": "results",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1346,
+      "ttftMs": 1108,
+      "totalMs": 1346,
+      "usage": {
+        "input_tokens": 304,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 40,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005695,
+      "stopReason": "end_turn",
+      "template": "Гонку завершено! Фінальний результат: перше місце — solo_ann (36,2 с, 58 WPM). Вітаємо solo_ann! З вами був Таб Шифтович. До зустрічі на трасі!",
+      "firstTry": "solo_ann на першому місці, 58 WPM і фініш за 36 секунд! Перемога в кубку!",
+      "firstReasons": [],
+      "llm": "solo_ann на першому місці, 58 WPM і фініш за 36 секунд! Перемога в кубку!",
+      "reasons": [],
+      "shown": "solo_ann на першому місці, 58 WPM і фініш за 36 секунд! Перемога в кубку!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "spread-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 959,
+      "ttftMs": 608,
+      "totalMs": 959,
+      "usage": {
+        "input_tokens": 296,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 37,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00005465,
+      "stopReason": "end_turn",
+      "template": "До фінішу зовсім небагато, і на фінішну пряму виходить spread_cat: лишилось 30 символів! Друге місце може дістатися spread_bob чи spread_ann. Але давайте дочекаємось фінішу.",
+      "firstTry": "spread_cat уже на 84% і мчить до фінішу, а spread_bob тисне з 63%!",
+      "firstReasons": [],
+      "llm": "spread_cat уже на 84% і мчить до фінішу, а spread_bob тисне з 63%!",
+      "reasons": [],
+      "shown": "spread_cat уже на 84% і мчить до фінішу, а spread_bob тисне з 63%!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "spread-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2171,
+      "ttftMs": 904,
+      "totalMs": 1161,
+      "usage": {
+        "input_tokens": 369,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 43,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001333,
+      "stopReason": "end_turn",
+      "template": "І переможець — spread_cat! Час на фініші: 31,1 с. Для дебюту дуже непогано: 77 WPM.",
+      "firstTry": "spread_cat фінішує першим і лишає позаду spread_bob та spread_ann — перше місце для spread_cat!",
+      "firstReasons": [
+        "gendered: першим"
+      ],
+      "llm": "Фініш для spread_cat: перше місце, а spread_bob з 72% лишається на другому!",
+      "reasons": [],
+      "shown": "Фініш для spread_cat: перше місце, а spread_bob з 72% лишається на другому!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "spread-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 2,
+      "elapsedMs": 2460,
+      "ttftMs": 897,
+      "totalMs": 1115,
+      "usage": {
+        "input_tokens": 377,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 48,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.0001432,
+      "stopReason": "end_turn",
+      "template": "spread_bob теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "spread_bob на другому місці, до фінішу ще 30 символів, а spread_ann тисне з відставанням лише 28 символів!",
+      "firstReasons": [
+        "numbers not in data: 30"
+      ],
+      "llm": "spread_bob на другому місці, до фінішу ще 16% тексту, а spread_ann тисне з відставанням 28%!",
+      "reasons": [],
+      "shown": "spread_bob на другому місці, до фінішу ще 16% тексту, а spread_ann тисне з відставанням 28%!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "spread-1.jsonl",
+      "type": "finish",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1232,
+      "ttftMs": 862,
+      "totalMs": 1232,
+      "usage": {
+        "input_tokens": 324,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 49,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006345,
+      "stopReason": "end_turn",
+      "template": "spread_bob на фініші: друге місце, час 43,6 с. 55 WPM у першій же гонці. Запам'ятаймо це ім'я!",
+      "firstTry": "spread_bob фінішує на другому місці, а spread_cat забирає перемогу з відривом! Друге місце — теж гідний результат.",
+      "firstReasons": [],
+      "llm": "spread_bob фінішує на другому місці, а spread_cat забирає перемогу з відривом! Друге місце — теж гідний результат.",
+      "reasons": [],
+      "shown": "spread_bob фінішує на другому місці, а spread_cat забирає перемогу з відривом! Друге місце — теж гідний результат.",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "spread-1.jsonl",
+      "type": "approaching",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1167,
+      "ttftMs": 892,
+      "totalMs": 1167,
+      "usage": {
+        "input_tokens": 303,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 56,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00006484999999999999,
+      "stopReason": "end_turn",
+      "template": "spread_ann теж виходить на фінішну пряму: лишилось 30 символів.",
+      "firstTry": "spread_ann обходить усіх на шляху до фінішу і вже дихає в спину! Вісім секунд до кінця, але фініш не здасться без бою!",
+      "firstReasons": [],
+      "llm": "spread_ann обходить усіх на шляху до фінішу і вже дихає в спину! Вісім секунд до кінця, але фініш не здасться без бою!",
+      "reasons": [],
+      "shown": "spread_ann обходить усіх на шляху до фінішу і вже дихає в спину! Вісім секунд до кінця, але фініш не здасться без бою!",
+      "stillTrueOnDelivery": null
+    },
+    {
+      "race": "spread-1.jsonl",
+      "type": "results",
+      "outcome": "ai",
+      "attempts": 1,
+      "elapsedMs": 1120,
+      "ttftMs": 928,
+      "totalMs": 1120,
+      "usage": {
+        "input_tokens": 376,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 655,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 58,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        }
+      },
+      "cost": 0.00007315,
+      "stopReason": "end_turn",
+      "template": "Фінішний прапор, час вийшов! Фінальний результат: перше місце — spread_cat (31,1 с, 77 WPM); друге місце — spread_bob (43,6 с, 55 WPM); третє місце — spread_ann (94% дистанції). Вітаємо spread_cat! З вами був Таб Шифтович. До зустрічі на трасі!",
+      "firstTry": "spread_cat на першому місці зі швидкістю 77 WPM! Перше місце для spread_cat, а spread_ann ще лишається на фініші з 94%.",
+      "firstReasons": [],
+      "llm": "spread_cat на першому місці зі швидкістю 77 WPM! Перше місце для spread_cat, а spread_ann ще лишається на фініші з 94%.",
+      "reasons": [],
+      "shown": "spread_cat на першому місці зі швидкістю 77 WPM! Перше місце для spread_cat, а spread_ann ще лишається на фініші з 94%.",
+      "stillTrueOnDelivery": null
+    }
+  ]
+}
