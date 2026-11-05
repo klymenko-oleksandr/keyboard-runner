@@ -4,7 +4,7 @@
 //
 // usage: node --env-file=.env slots-bench-v4.mjs          (REPEAT=2, SLOTS=prerace,status,results)
 //        node slots-bench-v4.mjs --dry
-// then:  node --env-file=.env judge.mjs bench-slots-v4-claude-haiku-5-5.json
+// then:  node --env-file=.env judge.mjs bench-slots-v4b-claude-haiku-5-5.json
 import Anthropic from '@anthropic-ai/sdk';
 import { writeFileSync } from 'node:fs';
 import { loadSlots } from './slots.mjs';
@@ -15,6 +15,8 @@ const MODEL = process.env.MODEL ?? 'claude-haiku-5-5';
 const REPEAT = Number(process.env.REPEAT ?? 2);
 const ONLY = (process.env.SLOTS ?? 'prerace,status,results').split(',');
 const PRICE = { in: 0.1, out: 0.5, cacheRead: 0.01 };
+// v4b: driver lines must name the driver, raceNumber, status task clarified, stricter gender checks
+const TAG = process.env.TAG ?? 'v4b';
 
 // Prompt v4, as in the spec (Revision 3, "Prompt v4")
 const SYSTEM = `Ти — Таб Шифтович, емоційний український коментатор гонок на клавіатурах на автодромі «Чайка».
@@ -43,7 +45,7 @@ const SLOTS = {
 		maxTokens: 700,
 		task: `Передстартовий блок, поки йде відлік. Кожна репліка — окремий рядок, що починається з ключа:
 greeting: привітання глядачів, погода (weather) і назва кімнати;
-driver:<username>: по одному рядку на кожного гонщика в порядку gridNumber — номер на старті, машина («на <colorLocative> <brand>», номер car.number на борту) і статистика з racesBefore, winsBefore, bestWpm, winsInARow, або що це дебют;
+driver:<username>: по одному рядку на кожного гонщика в порядку gridNumber. Рядок обов'язково називає гонщика ніком: номер на старті, машина («на <colorLocative> <brand>», номер car.number на борту) і статистика: raceNumber — котра це гонка для гонщика (2 = друга), winsBefore, bestWpm, winsInARow, або що це дебют (debut: true);
 rivalry: якщо rivalry не null — суперництво з рахунком;
 track: якщо track не null — книжка дня і факт про неї.
 Без порожніх рядків і без інших ключів.`,
@@ -52,7 +54,7 @@ track: якщо track не null — книжка дня і факт про не�
 		deadlineMs: 3500,
 		maxWords: 45,
 		maxTokens: 200,
-		task: 'Статус посередині заїзду: скільки секунд лишилось, хто лідирує, хто за ким і з яким відставанням. 1–2 речення.',
+		task: 'Статус посередині заїзду: secondsLeft — скільки секунд лишилось на таймері гонки; хто лідирує, хто за ким (position) і з яким відставанням. Гонщик з finished: true уже на фініші, але гонка триває, доки інші друкують. 1–2 речення.',
 	},
 	results: {
 		deadlineMs: 3500,
@@ -132,7 +134,9 @@ const runPrerace = async slot => {
 		// tolerate "- " bullets and **bold** keys the model sometimes adds
 		const match = line.replace(/\*\*/g, '').replace(/^[\s\-–•]+/, '').match(PART_LINE);
 		if (!match || got.has(match[1])) return;
-		got.set(match[1], { text: match[2].trim(), atMs: answer.lineTimes[i], reasons: validateLine(match[2], context).reasons });
+		// a driver line is about that driver throughout and must name them
+		const aboutDriver = match[1].startsWith('driver:') ? match[1].slice('driver:'.length) : null;
+		got.set(match[1], { text: match[2].trim(), atMs: answer.lineTimes[i], reasons: validateLine(match[2], { ...context, aboutDriver }).reasons });
 	});
 	// Said in order: a part goes out when it and every part before it are settled
 	let clock = 0;
@@ -223,5 +227,5 @@ const summary = {
 	results: single('results'),
 	avgCostPerSlot: results.reduce((a, r) => a + r.cost, 0) / results.length,
 };
-writeFileSync(`bench-slots-v4-${MODEL}.json`, JSON.stringify({ summary, results }, null, 2));
+writeFileSync(`bench-slots-${TAG}-${MODEL}.json`, JSON.stringify({ summary, results }, null, 2));
 console.log(JSON.stringify(summary, null, 2));

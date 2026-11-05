@@ -22,6 +22,8 @@ const describeDriverV4 = ({ driver, gridNumber }) => ({
 	username: driver.username,
 	car: { brand: driver.car.brand, colorLocative: driver.car.color, number: driver.car.number },
 	racesBefore: driver.races,
+	// "racesBefore: 1" was still read as "the first race": say which race this is
+	raceNumber: driver.races + 1,
 	winsBefore: driver.wins,
 	bestWpm: driver.races === 0 ? null : driver.bestWpm,
 	winsInARow: driver.winStreak,

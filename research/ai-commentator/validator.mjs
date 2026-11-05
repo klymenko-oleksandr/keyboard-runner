@@ -25,9 +25,12 @@ const GENDERED = new Set([
 	'він', 'вона', 'його', 'її', 'йому', 'їй', 'ним', 'нею', 'нього', 'неї', 'ньому', 'ній',
 	'переможниця', 'переможниці', 'суперниця', 'суперниці', 'лідерка', 'дебютантка', 'гонщиця', 'королева', 'чемпіонка',
 ]);
+// Feminine nouns that reveal a driver's gender (the masculine ones are the accepted generic form)
+const GENDERED_STEMS = /^(дебютантк|учасниц|переможниц|суперниц|лідерк|гонщиц|чемпіонк|солістк)/u;
 const PRONOUNS = new Set(['він', 'вона', 'його', 'її', 'йому', 'їй', 'ним', 'нею', 'нього', 'неї', 'ньому', 'ній']);
 // "pack_ann перша, pack_dan другий": an ordinal that agrees with a driver, not with a noun after it
-const ordinalAboutDriver = /(?<![\p{L}'])((?:перш|друг|трет|четверт|п'ят|останн)(?:ий|ій|а|я))(?=\s*(?:[,.!?;:—–-]|$)|\s+[A-Za-z0-9])/giu;
+// …and "solo_ann перша на подіумі", "Другий на старті": an ordinal followed by a preposition
+const ordinalAboutDriver = /(?<![\p{L}'])((?:перш|друг|трет|четверт|п'ят|останн)(?:ий|ій|а|я))(?=\s*(?:[,.!?;:—–-]|$)|\s+[A-Za-z0-9]|\s+(?:на|у|в|з|із|зі)\s)/giu;
 const ALLOWED_LATIN = new Set(['WPM']);
 
 const normalize = word => word.toLowerCase().replace(/[’ʼ]/g, "'");
@@ -56,7 +59,10 @@ const allowedNumbers = numbers => {
  *   nicknames in the room, numbers the model was given; Latin words from the data (car brands, "Le Temps") are allowed.
  *   Fillers talk about the world, so their numbers and Latin words are left to the judge.
  */
-export const validateLine = (text, { names, numbers, maxWords = MAX_WORDS, allowedLatin = [], checkNumbers = true, checkLatin = true }) => {
+export const validateLine = (
+	text,
+	{ names, numbers, maxWords = MAX_WORDS, allowedLatin = [], checkNumbers = true, checkLatin = true, aboutDriver: lineAboutDriver = null },
+) => {
 	const reasons = [];
 	const line = text.trim();
 	if (!line) return { ok: false, reasons: ['empty'] };
@@ -85,13 +91,14 @@ export const validateLine = (text, { names, numbers, maxWords = MAX_WORDS, allow
 	const past = [];
 	const gendered = [];
 	sentences.forEach((sentence, index) => {
-		const aboutDriver = mentionsDriver(sentence);
+		// a pre-race driver line is about that driver from start to end, named or not
+		const aboutDriver = Boolean(lineAboutDriver) || mentionsDriver(sentence);
 		const afterDriver = index > 0 && mentionsDriver(sentences[index - 1]);
 		if (!aboutDriver && !afterDriver) return;
 		const words = (sentence.replace(NICK, ' ').match(WORD) ?? []).filter(word => /\p{Script=Cyrillic}/u.test(word));
 		if (aboutDriver) {
 			past.push(...words.filter(isPastTense));
-			gendered.push(...words.filter(word => GENDERED.has(normalize(word))));
+			gendered.push(...words.filter(word => GENDERED.has(normalize(word)) || GENDERED_STEMS.test(normalize(word))));
 			gendered.push(...[...sentence.replace(/[’ʼ]/g, "'").matchAll(ordinalAboutDriver)].map(match => match[1]));
 		} else {
 			// "duel_ann теж фінішує! Другий, але…": pronouns and bare ordinals still point at that driver
@@ -99,6 +106,7 @@ export const validateLine = (text, { names, numbers, maxWords = MAX_WORDS, allow
 			gendered.push(...[...sentence.replace(/[’ʼ]/g, "'").matchAll(ordinalAboutDriver)].map(match => match[1]));
 		}
 	});
+	if (lineAboutDriver && !(line.match(NICK) ?? []).includes(lineAboutDriver)) reasons.push(`driver not named: ${lineAboutDriver}`);
 	if (past.length) reasons.push(`past tense: ${past.join(', ')}`);
 	if (gendered.length) reasons.push(`gendered: ${[...new Set(gendered)].join(', ')}`);
 

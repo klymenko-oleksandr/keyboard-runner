@@ -47,6 +47,19 @@ test('the past tense is fine in sentences about the world, not about a driver', 
 	assert.match(reasons('Гонку завершено, а pack_eve не фінішувала.'), /past tense: фінішувала/);
 });
 
+test('a pre-race driver line: named, and about that driver throughout', () => {
+	const line = (text, aboutDriver) => validateLine(text, { ...context, allowedLatin: ['Aston', 'Martin'], aboutDriver }).reasons.join(' | ');
+	assert.equal(line('duel_ann на зеленому Aston Martin. Це дебют, перемог поки немає.', 'duel_ann'), '');
+	assert.match(line('Стартовий номер 1, Aston Martin. Це дебют.', 'duel_ann'), /driver not named: duel_ann/);
+	assert.match(line('duel_ann стартує. Перше місце для дебютантки!', 'duel_ann'), /gendered: дебютантки/);
+	assert.match(line('duel_bob на старті. Другий на старті!', 'duel_bob'), /gendered: Другий/);
+});
+
+test('an ordinal followed by a preposition is about the driver', () => {
+	assert.match(reasons('Фініш! duel_ann перша на подіумі з 62 WPM.'), /gendered: перша/);
+	assert.equal(reasons('duel_ann на першому місці, друга позиція — у duel_bob.'), '');
+});
+
 test('does not mistake genitive plurals for past tense', () => {
 	assert.equal(reasons('duel_bob відстає на 21 відсоток, до фінішу 21 секунда, а символів лишилось мало!'), '');
 	assert.equal(reasons('pack_eve наздоганяє лідерів!'), '');

@@ -33,7 +33,7 @@ Return ONLY a JSON object, no prose:
   "factualIssue": string | null,  // if false: the wrong claim, quoted, and what the data says
   "aboutEvent": true | false,     // the line is about the event given (its eventFacts / main driver), not something else
   "coherent": true | false,       // no self-contradiction inside the line
-  "genderNeutral": true | false,  // no past tense or other forms that reveal a driver's gender (першим/першою, фінішував/фінішувала, він/вона)
+  "genderNeutral": true | false,  // no past tense or other forms that reveal a driver's gender (першим/першою, фінішував/фінішувала, він/вона, дебютантка). Generic masculine nouns (гонщик, лідер, переможець, дебютант, учасник) are the accepted neutral form and are fine.
   "languageOk": true | false,     // natural, grammatical Ukrainian; no russisms, no made-up words
   "languageIssue": string | null,
   "worldFactOk": true | false | null  // only for claims about the real world that are NOT in the data (history of typewriters, keyboards...): true if correct, false if wrong or doubtful, null if there are none
