@@ -182,6 +182,26 @@ Driver profiles and head-to-head records are read from memory (the commentator n
 
 A win needs someone to beat: a solo race adds to `races` and `bestWpm`, but not to `wins` or the win streak (and does not reset the streak either).
 
+### AI lines (optional)
+
+With `AI_COMMENTATOR_ENABLED=true` and `ANTHROPIC_API_KEY`, some comments are written by Claude Haiku 5.5 instead of templates (ADR-001, spec Revision 3). The model gets the same facts as the template; a validator checks every line (driver names, numbers from the data, gender-neutral Ukrainian, length); a rejected line gets one retry with the reasons; a slow, failed or rejected line falls back to the template. Fast moments (overtakes, finishes) are always templates.
+
+- Slots: `AI_COMMENTATOR_SLOTS` (default `prerace,results`; add `status` to test it). Results and status are live; pre-race is the next step.
+- Deadlines: results and status 3.5 s. Every slot is logged as one JSON line `{"type":"ai-line", "outcome": "ai" | "fallback:…", …}` with timings, retries, rejected lines and cost.
+- `AI_COMMENTATOR_MODEL` overrides the model.
+
+```
+src/commentator/ai/
+├── config.ts          slots, deadlines, limits, env -> config
+├── payloads.ts        template payloads -> model data
+├── prompts.ts         system prompt v4, slot tasks
+├── validator.ts       checks a line against the data
+├── preraceParts.ts    the pre-race block: parts, parsing, AI-or-template plan
+├── lineWriter.ts      the model port; anthropicWriter.ts (real), fakeWriter.ts (tests)
+├── sayWithin.ts       deadline + validation + one retry
+└── aiCommentator.ts   what the facade uses: has(slot), line() -> text or null, ai-line log
+```
+
 ## Race traces
 
 Every finished race leaves one **trace** per player: the text, `[ms, typedChars]` samples from lights out, the finish time, WPM, players in the race and which attempt on this text it was. Traces are the data the ghost race (and the commentator research) is built on.
@@ -235,5 +255,6 @@ The one-time formatting commit is listed in `.git-blame-ignore-revs`, so `git bl
 2. On [render.com](https://render.com), choose **New → Blueprint** and select the repo. `render.yaml` sets up a free web service (`npm ci && npm run build`, then `npm run start:prod`).
 3. Render passes `PORT` through env. Locally the app falls back to `3002`.
 4. Optional: `MONGODB_URI` (a MongoDB Atlas connection string with the database name in the path) keeps driver profiles and race traces between restarts. Atlas must allow the service's outbound IP ranges (Render: service → Connect → Outbound). Locally, put it in `.env` (ignored by git) or leave it out to keep everything in memory.
+5. Optional: `ANTHROPIC_API_KEY` + `AI_COMMENTATOR_ENABLED=true` turn on the AI lines (see "AI lines"). Without them the commentator is all templates.
 
 The free instance sleeps after about 15 minutes without traffic, so the first request after that takes up to a minute.
