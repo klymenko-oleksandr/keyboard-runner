@@ -45,7 +45,7 @@ export const isGoodSentence = (sentence: string) =>
 	/^["']?[A-Z]/.test(sentence) &&
 	/[.!?]["']?$/.test(sentence) &&
 	sentence.split(' ').length >= 3 &&
-	!/[*#\[\]{}<>|\\^~`@]/.test(sentence);
+	!/[*#[\]{}<>|\\^~`@]/.test(sentence);
 
 /**
  * Every quote opened in the passage is closed, and nothing is closed that was opened before it
