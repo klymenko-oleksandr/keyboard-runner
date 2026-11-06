@@ -24,8 +24,7 @@ const mountModal = ({ title, children, labelId }) => {
 	return () => overlay.remove();
 };
 
-const createFooter = button =>
-	createElement({ tagName: 'div', className: 'modal-footer', innerElements: [button] });
+const createFooter = button => createElement({ tagName: 'div', className: 'modal-footer', innerElements: [button] });
 
 const formatSeconds = ms => `${(ms / 1000).toFixed(1)} s`;
 

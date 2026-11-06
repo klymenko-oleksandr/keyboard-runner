@@ -58,7 +58,10 @@ const describeSpeedNews = (speed: CommentPayloads['finish']['speed'], { pick }: 
 		return '';
 	}
 	if (speed.kind === 'debut') {
-		return pick([`Для дебюту дуже непогано: ${speed.wpm} WPM.`, `${speed.wpm} WPM у першій же гонці. Запам'ятаймо це ім'я!`]);
+		return pick([
+			`Для дебюту дуже непогано: ${speed.wpm} WPM.`,
+			`${speed.wpm} WPM у першій же гонці. Запам'ятаймо це ім'я!`,
+		]);
 	}
 	return pick([
 		`І це новий особистий рекорд: ${speed.wpm} WPM замість ${speed.previousBest}!`,
@@ -66,7 +69,10 @@ const describeSpeedNews = (speed: CommentPayloads['finish']['speed'], { pick }: 
 	]);
 };
 
-const describeFinishLine = ({ username, place, finishTimeMs, isLast, previous }: CommentPayloads['finish'], { pick }: TemplateTools) => {
+const describeFinishLine = (
+	{ username, place, finishTimeMs, isLast, previous }: CommentPayloads['finish'],
+	{ pick }: TemplateTools,
+) => {
 	const time = formatRaceTime(finishTimeMs);
 	if (previous && previous.gapMs < PHOTO_FINISH_MS) {
 		return `Фотофініш! ${username} перетинає лінію лише на ${formatRaceTime(previous.gapMs)} пізніше за ${previous.username}: ${placeWord(place)} місце.`;

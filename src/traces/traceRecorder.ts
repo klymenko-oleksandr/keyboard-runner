@@ -18,7 +18,11 @@ export const createTraceRecorder = () => {
 	const races = new Map<string, LiveRace>();
 
 	/** Lights out: everyone in the room races from zero */
-	const startRace = (room: Room, text: string, { startedAt, vsGhost = false }: { startedAt: number; vsGhost?: boolean }) => {
+	const startRace = (
+		room: Room,
+		text: string,
+		{ startedAt, vsGhost = false }: { startedAt: number; vsGhost?: boolean },
+	) => {
 		races.set(room.name, {
 			text,
 			startedAt,

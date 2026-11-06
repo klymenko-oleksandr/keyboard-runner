@@ -14,7 +14,9 @@ export const createMemoryTraceRepository = (): TraceRepository & { all: () => Ra
 };
 
 /** MongoDB: collection `raceTraces`, index on { username, textKey } (see storage/mongo.ts) */
-export const createMongoTraceRepository = (collection: Collection<RaceTrace & { createdAt: Date }>): TraceRepository => ({
+export const createMongoTraceRepository = (
+	collection: Collection<RaceTrace & { createdAt: Date }>,
+): TraceRepository => ({
 	save: async trace => {
 		// Two saves of the same player and text at the same moment are not possible: one race at a time per player
 		const attempt = (await collection.countDocuments({ username: trace.username, textKey: trace.textKey })) + 1;

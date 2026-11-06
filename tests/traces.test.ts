@@ -57,7 +57,16 @@ test('trace recorder: samples in order, one trace per player in results order', 
 	assert.deepEqual(
 		traces.map(t => [t.username, t.samples, t.chars, t.finishTimeMs]),
 		[
-			['ann', [[100, 1], [200, 2], [300, 5]], 5, 300],
+			[
+				'ann',
+				[
+					[100, 1],
+					[200, 2],
+					[300, 5],
+				],
+				5,
+				300,
+			],
 			['bob', [[150, 1]], 1, null],
 		],
 	);
@@ -106,7 +115,10 @@ test('driver stats: a solo race counts races and best speed, not wins or the str
 test('driver repository: starts from the stored snapshot and reports every change', () => {
 	const saved: DriverSnapshot[] = [];
 	const drivers = createDriverRepository(() => profile('x').car, {
-		initial: { profiles: [profile('ann', { races: 5, wins: 3 })], headToHead: [['ann|bob', { meetings: 1, wins: { ann: 1 }, lastWinner: 'ann' }]] },
+		initial: {
+			profiles: [profile('ann', { races: 5, wins: 3 })],
+			headToHead: [['ann|bob', { meetings: 1, wins: { ann: 1 }, lastWinner: 'ann' }]],
+		},
 		save: changes => saved.push(changes),
 	});
 	assert.equal(drivers.getOrCreate('ann').races, 5);

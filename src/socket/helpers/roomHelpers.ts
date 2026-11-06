@@ -19,8 +19,7 @@ export const isFinished = (player: Player) => player.finishTimeMs !== null;
 export const areAllReady = (room: Room) =>
 	room.players.size > 0 && [...room.players.values()].every(player => player.ready);
 
-export const areAllFinished = (room: Room) =>
-	room.players.size > 0 && [...room.players.values()].every(isFinished);
+export const areAllFinished = (room: Room) => room.players.size > 0 && [...room.players.values()].every(isFinished);
 
 export const getProgressPercent = (player: Player, room: Room) => {
 	if (isFinished(player)) {
@@ -47,9 +46,7 @@ export const buildResults = (room: Room, now: number): GameResultDto[] => {
 	const players = [...room.players.values()];
 	const elapsedMs = room.gameStartedAt ? now - room.gameStartedAt : 0;
 
-	const finished = players
-		.filter(isFinished)
-		.sort((a, b) => (a.finishTimeMs as number) - (b.finishTimeMs as number));
+	const finished = players.filter(isFinished).sort((a, b) => (a.finishTimeMs as number) - (b.finishTimeMs as number));
 	const unfinished = players.filter(player => !isFinished(player)).sort((a, b) => b.typedChars - a.typedChars);
 
 	return [...finished, ...unfinished].map((player, index) => {

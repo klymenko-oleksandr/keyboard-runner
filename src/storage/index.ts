@@ -28,24 +28,27 @@ const logError = (what: string) => (error: unknown) =>
 const toProfile = ({ _id, ...profile }: DriverDoc): DriverProfile => ({ ...profile, username: _id });
 const toHeadToHead = ({ _id, ...record }: HeadToHeadDoc): [string, HeadToHead] => [_id, record];
 
-const saveDrivers = (drivers: Collection<DriverDoc>, headToHead: Collection<HeadToHeadDoc>) => (changes: DriverSnapshot) => {
-	if (changes.profiles.length) {
-		drivers
-			.bulkWrite(
-				changes.profiles.map(({ username, ...profile }) => ({
-					replaceOne: { filter: { _id: username }, replacement: { ...profile, username }, upsert: true },
-				})),
-			)
-			.catch(logError('saving driver profiles'));
-	}
-	if (changes.headToHead.length) {
-		headToHead
-			.bulkWrite(
-				changes.headToHead.map(([key, record]) => ({ replaceOne: { filter: { _id: key }, replacement: record, upsert: true } })),
-			)
-			.catch(logError('saving head-to-head'));
-	}
-};
+const saveDrivers =
+	(drivers: Collection<DriverDoc>, headToHead: Collection<HeadToHeadDoc>) => (changes: DriverSnapshot) => {
+		if (changes.profiles.length) {
+			drivers
+				.bulkWrite(
+					changes.profiles.map(({ username, ...profile }) => ({
+						replaceOne: { filter: { _id: username }, replacement: { ...profile, username }, upsert: true },
+					})),
+				)
+				.catch(logError('saving driver profiles'));
+		}
+		if (changes.headToHead.length) {
+			headToHead
+				.bulkWrite(
+					changes.headToHead.map(([key, record]) => ({
+						replaceOne: { filter: { _id: key }, replacement: record, upsert: true },
+					})),
+				)
+				.catch(logError('saving head-to-head'));
+		}
+	};
 
 const mongoStorage = async (db: Db): Promise<Storage> => {
 	const traces = db.collection<TraceDoc>('raceTraces');

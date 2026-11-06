@@ -29,7 +29,11 @@ const getBody = (raw: string) => {
 	return lines.slice(start + 1, end === -1 ? undefined : end).join('\n');
 };
 
-const toParagraphs = (body: string) => body.split(/\n\s*\n/).map(normalizeParagraph).filter(isProseParagraph);
+const toParagraphs = (body: string) =>
+	body
+		.split(/\n\s*\n/)
+		.map(normalizeParagraph)
+		.filter(isProseParagraph);
 
 const prepare = async (book: BookInfo) => {
 	const paragraphs = toParagraphs(getBody(await download(book)));

@@ -39,8 +39,7 @@ export const registerGameHandlers = (io: AppServer, socket: AppSocket) => {
 		}
 
 		const typedChars = Number(rawTypedChars);
-		const isValid =
-			Number.isInteger(typedChars) && typedChars > player.typedChars && typedChars <= room.textLength;
+		const isValid = Number.isInteger(typedChars) && typedChars > player.typedChars && typedChars <= room.textLength;
 		if (!isValid) {
 			return;
 		}

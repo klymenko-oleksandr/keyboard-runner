@@ -29,14 +29,12 @@ const ABBREVIATION = /(?:\b(?:Mr|Mrs|Dr|St|Messrs|Mme|Col|Capt|Gen|Lt|No|Jr|Sr|v
 
 /** Split after . ! ? (and a closing quote), but not after "Mr." or an initial like "K." */
 export const splitSentences = (paragraph: string): string[] =>
-	paragraph
-		.split(/(?<=[.!?]["']?)\s+(?=["']?[A-Z])/)
-		.reduce<string[]>((sentences, piece) => {
-			const previous = sentences[sentences.length - 1];
-			return previous !== undefined && ABBREVIATION.test(previous)
-				? [...sentences.slice(0, -1), `${previous} ${piece}`]
-				: [...sentences, piece];
-		}, []);
+	paragraph.split(/(?<=[.!?]["']?)\s+(?=["']?[A-Z])/).reduce<string[]>((sentences, piece) => {
+		const previous = sentences[sentences.length - 1];
+		return previous !== undefined && ABBREVIATION.test(previous)
+			? [...sentences.slice(0, -1), `${previous} ${piece}`]
+			: [...sentences, piece];
+	}, []);
 
 const TYPEABLE = /^[\x20-\x7E]+$/;
 
