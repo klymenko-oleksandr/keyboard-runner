@@ -203,9 +203,11 @@ export const createCommentator = ({
 		const usernames = [...room.players.keys()];
 
 		announce('greeting', { roomName: room.name, weather: pick(WEATHER) });
-		usernames.map(drivers.getOrCreate).forEach((driver, index, grid) =>
-			announce('lineup', { driver, gridNumber: index + 1, driversCount: grid.length }),
-		);
+		usernames
+			.map(drivers.getOrCreate)
+			.forEach((driver, index, grid) =>
+				announce('lineup', { driver, gridNumber: index + 1, driversCount: grid.length }),
+			);
 
 		const rivalry = findRivalry(usernames, drivers.getHeadToHead);
 		if (rivalry) {

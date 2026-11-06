@@ -23,6 +23,8 @@ const init = async () => {
 		renderBriefing(document.querySelector('#briefing'), config);
 	}
 
+	// `io` is a global from /socket.io/socket.io.js, loaded by game.html before this module
+	// eslint-disable-next-line no-undef
 	const socket = io('', {
 		query: { username },
 		// sessionId = "this browser tab". Lets the server recognise a page reload as the same user.

@@ -22,28 +22,27 @@ const readHandshakeValue = (socket: AppSocket, key: 'username' | 'sessionId'): u
  *  - taken by the SAME tab (page reload, lost connection) -> it's the same person:
  *    the old socket is disconnected and the new one takes its place
  */
-export const createAuthMiddleware =
-	(io: AppServer) => (socket: AppSocket, next: (err?: ExtendedError) => void) => {
-		const username = readHandshakeValue(socket, 'username');
-		const rawSessionId = readHandshakeValue(socket, 'sessionId');
-		const sessionId = typeof rawSessionId === 'string' ? rawSessionId : '';
+export const createAuthMiddleware = (io: AppServer) => (socket: AppSocket, next: (err?: ExtendedError) => void) => {
+	const username = readHandshakeValue(socket, 'username');
+	const rawSessionId = readHandshakeValue(socket, 'sessionId');
+	const sessionId = typeof rawSessionId === 'string' ? rawSessionId : '';
 
-		if (!isValidUsername(username)) {
-			return next(new Error(CONNECTION_ERRORS.INVALID_USERNAME));
+	if (!isValidUsername(username)) {
+		return next(new Error(CONNECTION_ERRORS.INVALID_USERNAME));
+	}
+
+	const owner = userRegistry.get(username);
+	if (owner) {
+		if (!sessionId || owner.sessionId !== sessionId) {
+			return next(new Error(CONNECTION_ERRORS.USERNAME_TAKEN));
 		}
+		// Same tab came back before the server noticed the old connection was gone
+		io.sockets.sockets.get(owner.socketId)?.disconnect(true);
+	}
 
-		const owner = userRegistry.get(username);
-		if (owner) {
-			if (!sessionId || owner.sessionId !== sessionId) {
-				return next(new Error(CONNECTION_ERRORS.USERNAME_TAKEN));
-			}
-			// Same tab came back before the server noticed the old connection was gone
-			io.sockets.sockets.get(owner.socketId)?.disconnect(true);
-		}
-
-		// Register right here (not in `connection`) so two simultaneous handshakes with one name can't both pass
-		userRegistry.set(username, { sessionId, socketId: socket.id });
-		socket.data.username = username;
-		socket.data.roomName = null;
-		next();
-	};
+	// Register right here (not in `connection`) so two simultaneous handshakes with one name can't both pass
+	userRegistry.set(username, { sessionId, socketId: socket.id });
+	socket.data.username = username;
+	socket.data.roomName = null;
+	next();
+};

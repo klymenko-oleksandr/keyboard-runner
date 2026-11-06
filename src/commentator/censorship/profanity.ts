@@ -5,7 +5,23 @@
 // because usernames are Latin-only.
 
 /** Unambiguous roots: masked wherever they appear inside a word ("xXfuckXx" too) */
-const ROOTS_ANYWHERE = ['fuck', 'cunt', 'хуй', 'хуе', 'хує', 'хуя', 'хуї', 'хуё', 'пизд', 'пізд', 'pizd', 'blyat', 'blyad', 'xuy', 'huy'];
+const ROOTS_ANYWHERE = [
+	'fuck',
+	'cunt',
+	'хуй',
+	'хуе',
+	'хує',
+	'хуя',
+	'хуї',
+	'хуё',
+	'пизд',
+	'пізд',
+	'pizd',
+	'blyat',
+	'blyad',
+	'xuy',
+	'huy',
+];
 
 /** Roots that are also the start of normal words ("небагато" contains "еба"), so only at the start of a word */
 const ROOTS_AT_WORD_START = [

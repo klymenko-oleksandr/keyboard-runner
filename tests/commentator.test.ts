@@ -102,7 +102,9 @@ test('lists and times', () => {
 /* ---------- Standings and race moments ---------- */
 
 test('standings: finishers by time, then the rest by typed characters', () => {
-	const standings = getStandings(room([player('slow', 10), player('second', 100, 9000), player('fast', 100, 8000), player('mid', 50)]));
+	const standings = getStandings(
+		room([player('slow', 10), player('second', 100, 9000), player('fast', 100, 8000), player('mid', 50)]),
+	);
 	assert.deepEqual(
 		standings.map(s => s.username),
 		['fast', 'second', 'mid', 'slow'],
@@ -137,7 +139,14 @@ test('factory builds every comment type with clean, polished text', () => {
 			charsLeft: 30,
 			isFirst: true,
 		}),
-		createComment('finish', { username: 'ivan', place: 1, finishTimeMs: 41234, isLast: false, previous: null, speed: null }),
+		createComment('finish', {
+			username: 'ivan',
+			place: 1,
+			finishTimeMs: 41234,
+			isLast: false,
+			previous: null,
+			speed: null,
+		}),
 		createComment('retired', { username: 'max', isRaceRunning: true }),
 		createComment('filler', { line: FILLERS[0] }),
 	];
@@ -146,9 +155,15 @@ test('factory builds every comment type with clean, polished text', () => {
 		assert.ok(comment.text.length > 0, comment.type);
 		assert.doesNotMatch(comment.text, /\s{2,}|\s[,.!?]/, comment.text);
 	});
-	assert.match(comments[1].text, /Під номером 1 — ivan на червоному Ferrari з номером 7 на борту\. На рахунку 3 гонки, із них 1 перемога\./);
+	assert.match(
+		comments[1].text,
+		/Під номером 1 — ivan на червоному Ferrari з номером 7 на борту\. На рахунку 3 гонки, із них 1 перемога\./,
+	);
 	assert.match(comments[2].text, /^Під номером 2 — olena .* Це дебютна гонка!$/);
-	assert.match(comments[4].text, /До кінця гонки 30 секунд\. Попереду ivan \(60%\); на другій позиції olena \(48%\), відставання 12 символів\./);
+	assert.match(
+		comments[4].text,
+		/До кінця гонки 30 секунд\. Попереду ivan \(60%\); на другій позиції olena \(48%\), відставання 12 символів\./,
+	);
 	assert.match(comments[5].text, /Друге місце може дістатися olena чи max/);
 	assert.match(comments[6].text, /перше місце! Час: 41,2 с/);
 	assert.deepEqual(
@@ -165,13 +180,16 @@ test('results announce the top three with their times', () => {
 		{ place: 4, username: 'taras', finished: false, progress: 50, finishTimeMs: null, wpm: 30, charsPerMinute: 150 },
 	];
 	const { text } = createComment('results', { results, winnerStreak: 1, comeback: null });
-	assert.match(text, /перше місце — ivan \(40,0 с, 60 WPM\); друге місце — olena \(45,1 с, 53 WPM\); третє місце — max \(78% дистанції/);
+	assert.match(
+		text,
+		/перше місце — ivan \(40,0 с, 60 WPM\); друге місце — olena \(45,1 с, 53 WPM\); третє місце — max \(78% дистанції/,
+	);
 	assert.doesNotMatch(text, /taras/);
 });
 
 /* ---------- Censorship proxy ---------- */
 
-test('the commentator\'s own phrases are clean', () => {
+test("the commentator's own phrases are clean", () => {
 	[...FILLERS, ...WEATHER, 'До фінішу зовсім небагато', 'потребами'].forEach(line =>
 		assert.equal(containsProfanity(line), false, line),
 	);
@@ -187,8 +205,28 @@ test('proxy censors what reaches the real broadcaster and keeps the interface', 
 	const { said, broadcaster } = recordingBroadcaster();
 	const proxied = withCensorship(broadcaster);
 
-	proxied.say('room:x', createComment('finish', { username: 'shithead', place: 1, finishTimeMs: 1000, isLast: false, previous: null, speed: null }));
-	proxied.say('room:x', createComment('finish', { username: 'olena', place: 2, finishTimeMs: 2000, isLast: false, previous: null, speed: null }));
+	proxied.say(
+		'room:x',
+		createComment('finish', {
+			username: 'shithead',
+			place: 1,
+			finishTimeMs: 1000,
+			isLast: false,
+			previous: null,
+			speed: null,
+		}),
+	);
+	proxied.say(
+		'room:x',
+		createComment('finish', {
+			username: 'olena',
+			place: 2,
+			finishTimeMs: 2000,
+			isLast: false,
+			previous: null,
+			speed: null,
+		}),
+	);
 
 	assert.match(said[0].text, /s\*{7}/);
 	assert.match(said[1].text, /olena/);
@@ -198,7 +236,15 @@ test('proxy censors what reaches the real broadcaster and keeps the interface', 
 
 test('driver profile is updated immutably after a race', () => {
 	const before = driver('ivan', 2, 1);
-	const after = applyResult(before, { place: 1, username: 'ivan', finished: true, progress: 100, finishTimeMs: 1, wpm: 70, charsPerMinute: 350 });
+	const after = applyResult(before, {
+		place: 1,
+		username: 'ivan',
+		finished: true,
+		progress: 100,
+		finishTimeMs: 1,
+		wpm: 70,
+		charsPerMinute: 350,
+	});
 	assert.deepEqual([before.races, before.wins], [2, 1]);
 	assert.deepEqual([after.races, after.wins, after.bestWpm], [3, 2, 70]);
 });
@@ -256,7 +302,11 @@ test('ties keep the previous order; overtakes are found by comparing orders', ()
 });
 
 test('overtakes: silent at the start, rate-limited, a new leader always counts', () => {
-	const timing = { gameStartedAt: 0, lastOvertakeAt: 10000, pairAnnouncedAt: new Map([[pairKey('ivan', 'olena'), 12000]]) };
+	const timing = {
+		gameStartedAt: 0,
+		lastOvertakeAt: 10000,
+		pairAnnouncedAt: new Map([[pairKey('ivan', 'olena'), 12000]]),
+	};
 	assert.deepEqual(filterAnnounceableOvertakes('ivan', ['olena'], true, { ...timing, now: 3000 }), []); // grace period
 	assert.deepEqual(filterAnnounceableOvertakes('max', ['olena'], false, { ...timing, now: 13000 }), []); // cooldown
 	assert.deepEqual(filterAnnounceableOvertakes('max', ['olena'], true, { ...timing, now: 13000 }), ['olena']); // new leader
@@ -265,14 +315,24 @@ test('overtakes: silent at the start, rate-limited, a new leader always counts',
 
 test('head-to-head: every pair of a race, winner first', () => {
 	const results = [result(1, 'ivan'), result(2, 'olena'), result(3, 'max')];
-	assert.deepEqual(toMeetings(results), [['ivan', 'olena'], ['ivan', 'max'], ['olena', 'max']]);
+	assert.deepEqual(toMeetings(results), [
+		['ivan', 'olena'],
+		['ivan', 'max'],
+		['olena', 'max'],
+	]);
 	const twice = applyMeeting(applyMeeting(undefined, 'ivan'), 'olena');
 	assert.deepEqual(twice, { meetings: 2, wins: { ivan: 1, olena: 1 }, lastWinner: 'olena' });
 
-	const records = new Map([[pairKey('max', 'olena'), applyMeeting(undefined, 'max')], [pairKey('ivan', 'olena'), twice]]);
+	const records = new Map([
+		[pairKey('max', 'olena'), applyMeeting(undefined, 'max')],
+		[pairKey('ivan', 'olena'), twice],
+	]);
 	const rivalry = findRivalry(['ivan', 'olena', 'max'], (a, b) => records.get(pairKey(a, b)));
 	assert.deepEqual(rivalry?.drivers, ['ivan', 'olena']);
-	assert.equal(findRivalry(['ivan', 'taras'], () => undefined), null);
+	assert.equal(
+		findRivalry(['ivan', 'taras'], () => undefined),
+		null,
+	);
 });
 
 test('finish line news: previous finisher, debut, personal best', () => {
@@ -281,17 +341,33 @@ test('finish line news: previous finisher, debut, personal best', () => {
 	assert.equal(getPreviousFinisher(standings, 'ivan'), null);
 
 	assert.deepEqual(getSpeedNews(driver('ivan'), 50), { kind: 'debut', wpm: 50 });
-	assert.deepEqual(getSpeedNews({ ...driver('ivan', 3), bestWpm: 48 }, 50), { kind: 'personalBest', wpm: 50, previousBest: 48 });
+	assert.deepEqual(getSpeedNews({ ...driver('ivan', 3), bestWpm: 48 }, 50), {
+		kind: 'personalBest',
+		wpm: 50,
+		previousBest: 48,
+	});
 	assert.equal(getSpeedNews({ ...driver('ivan', 3), bestWpm: 60 }, 50), null);
 });
 
 test('comeback: biggest climb to the podium, at least two places', () => {
 	const results = [result(1, 'max'), result(2, 'ivan'), result(3, 'olena')];
-	assert.deepEqual(findComeback(results, new Map([['max', 4], ['ivan', 3]])), { username: 'max', place: 1, worstPosition: 4 });
+	assert.deepEqual(
+		findComeback(
+			results,
+			new Map([
+				['max', 4],
+				['ivan', 3],
+			]),
+		),
+		{ username: 'max', place: 1, worstPosition: 4 },
+	);
 	assert.equal(findComeback(results, new Map([['max', 2]])), null);
 	assert.deepEqual(
 		[...updateWorstPositions(new Map([['ivan', 3]]), ['ivan', 'olena']).entries()],
-		[['ivan', 3], ['olena', 2]],
+		[
+			['ivan', 3],
+			['olena', 2],
+		],
 	);
 });
 
@@ -303,18 +379,44 @@ test('win streak grows with every win and resets otherwise', () => {
 
 test('templates for the new moments', () => {
 	const finish = (overrides: Partial<CommentPayloads['finish']>) =>
-		createComment('finish', { username: 'olena', place: 2, finishTimeMs: 30400, isLast: false, previous: null, speed: null, ...overrides }).text;
+		createComment('finish', {
+			username: 'olena',
+			place: 2,
+			finishTimeMs: 30400,
+			isLast: false,
+			previous: null,
+			speed: null,
+			...overrides,
+		}).text;
 
-	assert.match(finish({ previous: { username: 'ivan', gapMs: 400 } }), /^Фотофініш! olena перетинає лінію лише на 0,4 с пізніше за ivan: друге місце\.$/);
+	assert.match(
+		finish({ previous: { username: 'ivan', gapMs: 400 } }),
+		/^Фотофініш! olena перетинає лінію лише на 0,4 с пізніше за ivan: друге місце\.$/,
+	);
 	assert.doesNotMatch(finish({ previous: { username: 'ivan', gapMs: 2500 } }), /Фотофініш/);
-	assert.match(finish({ speed: { kind: 'personalBest', wpm: 61, previousBest: 55 } }), /особистий рекорд: 61 WPM замість 55!/);
+	assert.match(
+		finish({ speed: { kind: 'personalBest', wpm: 61, previousBest: 55 } }),
+		/особистий рекорд: 61 WPM замість 55!/,
+	);
 	assert.match(finish({ speed: { kind: 'debut', wpm: 40 } }), /Для дебюту дуже непогано: 40 WPM\./);
 
-	assert.match(createComment('overtake', { username: 'max', overtaken: ['ivan'], position: 1 }).text, /max обходить ivan і очолює гонку!/);
-	assert.match(createComment('overtake', { username: 'max', overtaken: ['ivan', 'olena'], position: 2 }).text, /max обходить одразу ivan і olena і піднімається на другу позицію\./);
+	assert.match(
+		createComment('overtake', { username: 'max', overtaken: ['ivan'], position: 1 }).text,
+		/max обходить ivan і очолює гонку!/,
+	);
+	assert.match(
+		createComment('overtake', { username: 'max', overtaken: ['ivan', 'olena'], position: 2 }).text,
+		/max обходить одразу ivan і olena і піднімається на другу позицію\./,
+	);
 
-	const rivalry = createComment('rivalry', { drivers: ['ivan', 'olena'], record: { meetings: 3, wins: { ivan: 2, olena: 1 }, lastWinner: 'olena' } });
-	assert.match(rivalry.text, /між ними вже 3 зустрічі, рахунок 2:1 на користь ivan\. Минулого разу перемога за olena\./);
+	const rivalry = createComment('rivalry', {
+		drivers: ['ivan', 'olena'],
+		record: { meetings: 3, wins: { ivan: 2, olena: 1 }, lastWinner: 'olena' },
+	});
+	assert.match(
+		rivalry.text,
+		/між ними вже 3 зустрічі, рахунок 2:1 на користь ivan\. Минулого разу перемога за olena\./,
+	);
 
 	const book = { ...BOOKS[0] };
 	assert.match(createComment('track', { book }).text, /«Пригоди Шерлока Холмса», автор Артур Конан Дойл\./);
@@ -362,14 +464,23 @@ test('facade: overtakes, a comeback and, in the next race, a rivalry', () => {
 		type(max, 40); // max from last to first
 
 		const overtakes = said.filter(c => c.type === 'overtake').map(c => c.text);
-		assert.deepEqual(overtakes, ['ivan обходить olena і очолює гонку!', 'max обходить одразу ivan і olena і очолює гонку!']);
+		assert.deepEqual(overtakes, [
+			'ivan обходить olena і очолює гонку!',
+			'max обходить одразу ivan і olena і очолює гонку!',
+		]);
 
 		commentator.raceFinished(race, [result(1, 'max'), result(2, 'ivan'), result(3, 'olena')]);
-		assert.match(said[said.length - 1].text, /Камбек дня — max: посеред гонки лише третя позиція, а на фініші перше місце!/);
+		assert.match(
+			said[said.length - 1].text,
+			/Камбек дня — max: посеред гонки лише третя позиція, а на фініші перше місце!/,
+		);
 
 		said.length = 0;
 		commentator.raceAnnounced(race);
-		assert.deepEqual(said.map(c => c.type), ['greeting', 'lineup', 'lineup', 'lineup', 'rivalry']);
+		assert.deepEqual(
+			said.map(c => c.type),
+			['greeting', 'lineup', 'lineup', 'lineup', 'rivalry'],
+		);
 		assert.match(said[2].text, /На рахунку 1 гонка, найкраща швидкість — 40 WPM\./);
 	} finally {
 		commentator.roomClosed(race); // no timers left behind, even if an assertion fails

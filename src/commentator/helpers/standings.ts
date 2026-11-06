@@ -20,15 +20,12 @@ export const rankPlayers = (players: readonly Player[], previousOrder: readonly 
 		const index = previousOrder.indexOf(username);
 		return index === -1 ? Number.MAX_SAFE_INTEGER : index;
 	};
-	return orderBy(
-		players.map(toStanding),
-		[
-			standing => (standing.finished ? 0 : 1),
-			standing => standing.finishTimeMs ?? 0,
-			standing => -standing.typedChars,
-			standing => previousIndex(standing.username),
-		],
-	);
+	return orderBy(players.map(toStanding), [
+		standing => (standing.finished ? 0 : 1),
+		standing => standing.finishTimeMs ?? 0,
+		standing => -standing.typedChars,
+		standing => previousIndex(standing.username),
+	]);
 };
 
 export const getStandings = (room: Room, previousOrder?: readonly string[]) =>

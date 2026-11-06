@@ -9,9 +9,7 @@ import type { ClientToServerEvents, ServerToClientEvents, SocketData } from './s
 
 const app = express();
 const httpServer = new http.Server(app);
-const socketIo = new Server<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>(
-	httpServer,
-);
+const socketIo = new Server<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>(httpServer);
 
 app.use(express.static(STATIC_PATH));
 

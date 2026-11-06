@@ -151,7 +151,7 @@ export const createRoomPage = ({ socket, username, commentary, onLeave }) => {
 		let text;
 		try {
 			text = await textPromise;
-		} catch (error) {
+		} catch {
 			showMessageModal({ message: 'Could not load the text. Please try again.' });
 			return;
 		}

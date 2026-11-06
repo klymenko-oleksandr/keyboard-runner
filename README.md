@@ -216,6 +216,19 @@ src/texts/
 └── index.ts                  the instance the game uses
 ```
 
+## Checks
+
+Every PR and every push to `main` runs [CI](.github/workflows/ci.yml): lint, format, typecheck, tests, build, and `npm audit` of the production dependencies (fails on high or critical). [CodeQL](.github/workflows/codeql.yml) scans the code for security issues, and [Dependabot](.github/dependabot.yml) opens weekly update PRs.
+
+```bash
+npm run lint          # ESLint (typescript-eslint, browser globals for public/)
+npm run format        # Prettier: tabs, single quotes, 120 columns
+npm run format:check  # what CI runs
+npm run typecheck && npm test && npm run build
+```
+
+The one-time formatting commit is listed in `.git-blame-ignore-revs`, so `git blame` skips it (GitHub does this automatically).
+
 ## Deploy (Render)
 
 1. Push the repo to GitHub.

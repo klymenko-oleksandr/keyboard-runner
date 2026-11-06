@@ -15,13 +15,13 @@ import { createRaceTextService } from '../src/texts/raceTextService';
 import type { Book } from '../src/texts/types';
 
 test('Gutenberg typography becomes keyboard-friendly', () => {
-	assert.equal(
-		normalizeParagraph('"I said--and\n_he_ agreed [Illustration: a boat]."'),
-		'"I said - and he agreed ."',
-	);
+	assert.equal(normalizeParagraph('"I said--and\n_he_ agreed [Illustration: a boat]."'), '"I said - and he agreed ."');
 	assert.equal(isProseParagraph('CHAPTER I. THE BEGINNING'), false);
 	assert.equal(isProseParagraph('I. A Scandal in Bohemia II. The Red-headed League'), false);
-	assert.equal(isProseParagraph('To Sherlock Holmes she is always THE woman. I have seldom heard him mention her.'), true);
+	assert.equal(
+		isProseParagraph('To Sherlock Holmes she is always THE woman. I have seldom heard him mention her.'),
+		true,
+	);
 });
 
 test('sentences are split, but not after Mr. or an initial', () => {
@@ -43,7 +43,11 @@ test('quotes: a passage never starts or ends in the middle of a line of dialogue
 });
 
 test('a passage is whole sentences within the length limits', () => {
-	const sentences = ['This is the first sentence of the passage.', 'Here comes another one, a little bit longer.', 'And the third.'];
+	const sentences = [
+		'This is the first sentence of the passage.',
+		'Here comes another one, a little bit longer.',
+		'And the third.',
+	];
 	const limits = { MIN: 60, MAX: 120 };
 	assert.equal(cutPassage(sentences, 0, limits), `${sentences[0]} ${sentences[1]}`);
 	assert.equal(cutPassage(sentences, 2, limits), null); // runs out of sentences before MIN
@@ -54,7 +58,10 @@ test('every prepared book loads and gives good passages', () => {
 	const books = loadBooks();
 	assert.equal(books.length, BOOKS.length, 'run `npm run books:prepare`');
 	books.forEach(book => {
-		const passage = cutPassage(book.sentences, book.sentences.findIndex((_, index) => cutPassage(book.sentences, index)));
+		const passage = cutPassage(
+			book.sentences,
+			book.sentences.findIndex((_, index) => cutPassage(book.sentences, index)),
+		);
 		assert.ok(passage, book.info.id);
 		assert.ok(passage.length >= PASSAGE_LENGTH.MIN && passage.length <= PASSAGE_LENGTH.MAX);
 	});

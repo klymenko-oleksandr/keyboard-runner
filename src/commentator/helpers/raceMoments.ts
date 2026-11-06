@@ -1,6 +1,11 @@
 // Pure functions that find "moments" worth a comment: rivalries, records, photo finishes, comebacks, overtakes.
 import { maxBy } from 'lodash';
-import { COMEBACK_MIN_PLACES, OVERTAKE_COOLDOWN_SECONDS, OVERTAKE_GRACE_SECONDS, OVERTAKE_PAIR_COOLDOWN_SECONDS } from '../config';
+import {
+	COMEBACK_MIN_PLACES,
+	OVERTAKE_COOLDOWN_SECONDS,
+	OVERTAKE_GRACE_SECONDS,
+	OVERTAKE_PAIR_COOLDOWN_SECONDS,
+} from '../config';
 import { pairKey } from '../drivers/driverRepository';
 import type { GameResultDto } from '../../socket/types';
 import type { DriverProfile, HeadToHead, SpeedNews, Standing } from '../types';
@@ -48,7 +53,8 @@ export const filterAnnounceableOvertakes = (
 		return [];
 	}
 	return overtaken.filter(
-		other => now - (pairAnnouncedAt.get(pairKey(username, other)) ?? -Infinity) >= OVERTAKE_PAIR_COOLDOWN_SECONDS * 1000,
+		other =>
+			now - (pairAnnouncedAt.get(pairKey(username, other)) ?? -Infinity) >= OVERTAKE_PAIR_COOLDOWN_SECONDS * 1000,
 	);
 };
 
