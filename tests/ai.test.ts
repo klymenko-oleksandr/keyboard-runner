@@ -3,11 +3,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
 	DEFAULT_MODEL,
-	SLOT_LIMITS,
 	SYSTEM_PROMPT,
 	createFakeWriter,
 	parsePartLine,
-	planPrerace,
 	preraceParts,
 	readAiConfig,
 	retryMessage,
@@ -18,7 +16,7 @@ import {
 	validateLine,
 	validatePart,
 } from '../src/commentator/ai';
-import type { PartArrival, Sleep } from '../src/commentator/ai';
+import type { Sleep } from '../src/commentator/ai';
 import type { DriverProfile } from '../src/commentator/types';
 
 // ---- validator: cases are real lines from the 3 Nov 2026 bench ----
@@ -248,40 +246,6 @@ test('pre-race: a driver part must name its driver and stay neutral', () => {
 		/driver not named/,
 	);
 	assert.match(validatePart('driver:duel_bob', 'duel_bob виграв двічі.', prerace).reasons.join(), /past tense/);
-});
-
-test('pre-race plan: valid parts are AI, missing / invalid / late ones fall back to templates', () => {
-	const parts = preraceParts(prerace);
-	const arrivals: PartArrival[] = [
-		{ part: 'greeting', text: 'Вітаю на «Чайці», сьогодні сонячно!', atMs: 1100 },
-		{ part: 'driver:duel_ann', text: 'Дебют на зеленому Aston Martin!', atMs: 1600 },
-		{ part: 'driver:duel_bob', text: 'duel_bob має 2 перемоги і рекорд 61 WPM.', atMs: 2200 },
-		{ part: 'driver:duel_bob', text: 'duel_bob — друга версія, ігнорується.', atMs: 2300 },
-	];
-	const plan = planPrerace(parts, arrivals, prerace);
-	assert.deepEqual(
-		plan.map(p => [p.part, p.source, p.reason]),
-		[
-			['greeting', 'ai', 'ok'],
-			['driver:duel_ann', 'template', 'invalid'],
-			['driver:duel_bob', 'ai', 'ok'],
-			['rivalry', 'template', 'missing'],
-		],
-	);
-	assert.equal(plan[2].text, 'duel_bob має 2 перемоги і рекорд 61 WPM.');
-	// an invalid part waits for its deadline only in the clock, and later parts never go before earlier ones
-	const times = plan.map(p => p.sayAtMs);
-	assert.deepEqual(
-		times,
-		[...times].sort((a, b) => a - b),
-	);
-	assert.equal(plan[3].sayAtMs, SLOT_LIMITS.prerace.deadlineMs);
-});
-
-test('pre-race plan: the first line has its own earlier deadline', () => {
-	const plan = planPrerace(['greeting'], [{ part: 'greeting', text: 'Вітаю на «Чайці»!', atMs: 3200 }], prerace);
-	assert.equal(plan[0].reason, 'late');
-	assert.equal(plan[0].sayAtMs, SLOT_LIMITS.prerace.firstLineDeadlineMs);
 });
 
 // ---- fake writer ----

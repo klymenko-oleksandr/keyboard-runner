@@ -31,7 +31,7 @@ import {
 	rankPlayers,
 	toOrder,
 } from './helpers/standings';
-import { toResultsPayload, toStatusPayload } from './ai/payloads';
+import { toPreracePayload, toResultsPayload, toStatusPayload } from './ai/payloads';
 import type { AiCommentator } from './ai/aiCommentator';
 import type { CreateComment } from './comments/commentFactory';
 import type { DriverRepository } from './drivers/driverRepository';
@@ -79,6 +79,8 @@ interface RaceSession {
 	pairAnnouncedAt: Map<string, number>;
 	/** every line said this race, for the AI's <said> */
 	said: string[];
+	/** stops the AI's pre-race block when the session ends */
+	abort: AbortController;
 }
 
 export const createCommentator = ({
@@ -96,7 +98,9 @@ export const createCommentator = ({
 	/* ---------- Session ---------- */
 
 	const closeSession = (room: Room) => {
-		sessions.get(room.channel)?.timers.forEach(timer => clearInterval(timer));
+		const session = sessions.get(room.channel);
+		session?.timers.forEach(timer => clearInterval(timer));
+		session?.abort.abort();
 		sessions.delete(room.channel);
 	};
 
@@ -112,6 +116,7 @@ export const createCommentator = ({
 			lastOvertakeAt: -Infinity,
 			pairAnnouncedAt: new Map(),
 			said: [],
+			abort: new AbortController(),
 		};
 		sessions.set(room.channel, session);
 		return session;
@@ -242,27 +247,41 @@ export const createCommentator = ({
 	/* ---------- Facade ---------- */
 
 	const raceAnnounced = (room: Room) => {
-		openSession(room);
+		const session = openSession(room);
+		const usernames = [...room.players.keys()];
+		const greeting = { roomName: room.name, weather: pick(WEATHER) };
+		const lineup = usernames
+			.map(drivers.getOrCreate)
+			.map((driver, index, grid) => ({ driver, gridNumber: index + 1, driversCount: grid.length }));
+		const rivalry = findRivalry(usernames, drivers.getHeadToHead) ?? null;
+		const book = room.textId === null ? null : getBook(room.textId);
+		const track = book ? { book } : null;
+
+		// greeting, a line per driver, an old rivalry, today's book: each part with its template.
 		// partial application: the room is fixed, only "what to say" changes
 		const announce = partial(say, room);
-		const usernames = [...room.players.keys()];
+		type Part = [part: string, sayPart: (text: string | null) => void];
+		const parts: Part[] = [
+			['greeting', text => announce('greeting', greeting, text)],
+			...lineup.map((entry): Part => [`driver:${entry.driver.username}`, text => announce('lineup', entry, text)]),
+			...(rivalry ? [['rivalry', text => announce('rivalry', rivalry, text)] satisfies Part] : []),
+			...(track ? [['track', text => announce('track', track, text)] satisfies Part] : []),
+		];
 
-		announce('greeting', { roomName: room.name, weather: pick(WEATHER) });
-		usernames
-			.map(drivers.getOrCreate)
-			.forEach((driver, index, grid) =>
-				announce('lineup', { driver, gridNumber: index + 1, driversCount: grid.length }),
-			);
-
-		const rivalry = findRivalry(usernames, drivers.getHeadToHead);
-		if (rivalry) {
-			announce('rivalry', rivalry);
+		if (!ai?.has('prerace')) {
+			parts.forEach(([, sayPart]) => sayPart(null));
+			return;
 		}
-
-		const book = room.textId === null ? null : getBook(room.textId);
-		if (book) {
-			announce('track', { book });
-		}
+		const byPart = new Map(parts);
+		// the AI says each part as soon as it is ready (or its template at the deadline), in the same order
+		void ai
+			.prerace(room.name, {
+				payload: toPreracePayload({ greeting, lineup, rivalry, track }),
+				said: [],
+				sayPart: (part, text) => byPart.get(part)?.(text),
+				signal: session.abort.signal,
+			})
+			.catch(error => console.error('[commentator] pre-race AI failed:', error));
 	};
 
 	const raceStarted = (room: Room) => {

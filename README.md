@@ -186,8 +186,9 @@ A win needs someone to beat: a solo race adds to `races` and `bestWpm`, but not 
 
 With `AI_COMMENTATOR_ENABLED=true` and `ANTHROPIC_API_KEY`, some comments are written by Claude Haiku 5.5 instead of templates (ADR-001, spec Revision 3). The model gets the same facts as the template; a validator checks every line (driver names, numbers from the data, gender-neutral Ukrainian, length); a rejected line gets one retry with the reasons; a slow, failed or rejected line falls back to the template. Fast moments (overtakes, finishes) are always templates.
 
-- Slots: `AI_COMMENTATOR_SLOTS` (default `prerace,results`; add `status` to test it). Results and status are live; pre-race is the next step.
-- Deadlines: results and status 3.5 s. Every slot is logged as one JSON line `{"type":"ai-line", "outcome": "ai" | "fallback:…", …}` with timings, retries, rejected lines and cost.
+- Slots: `AI_COMMENTATOR_SLOTS` (default `prerace,results`; add `status` to test it).
+- Pre-race: one streamed call during the countdown, keyed lines (`greeting:`, `driver:<username>:`, `rivalry:`, `track:`). Each part is said as soon as it and the parts before it are settled; a rejected or missing part is its template (no retry: it would hold back the parts after it). The first line by 3 s, the whole block by 4.5 s.
+- Deadlines: results and status 3.5 s, one retry. Every slot is logged as one JSON line `{"type":"ai-line", "outcome": "ai" | "fallback:…", …}` with timings, retries, rejected lines and cost.
 - `AI_COMMENTATOR_MODEL` overrides the model.
 
 ```
@@ -196,7 +197,8 @@ src/commentator/ai/
 ├── payloads.ts        template payloads -> model data
 ├── prompts.ts         system prompt v4, slot tasks
 ├── validator.ts       checks a line against the data
-├── preraceParts.ts    the pre-race block: parts, parsing, AI-or-template plan
+├── preraceParts.ts    the pre-race block: parts, parsing, validation
+├── preraceStream.ts   the pre-race block said live, part by part
 ├── lineWriter.ts      the model port; anthropicWriter.ts (real), fakeWriter.ts (tests)
 ├── sayWithin.ts       deadline + validation + one retry
 └── aiCommentator.ts   what the facade uses: has(slot), line() -> text or null, ai-line log
