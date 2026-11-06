@@ -264,7 +264,8 @@ export const createCommentator = ({
 		if (results.length > 0) {
 			say(room, 'results', {
 				results,
-				winnerStreak: drivers.getOrCreate(results[0].username).winStreak + 1,
+				// a solo race is not a win (driverRepository.applyResult), so it has no streak to announce
+				winnerStreak: results.length >= 2 ? drivers.getOrCreate(results[0].username).winStreak + 1 : 0,
 				comeback: session ? findComeback(results, session.worstPositions) : null,
 			});
 			drivers.recordResults(results);
