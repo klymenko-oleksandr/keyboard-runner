@@ -26,7 +26,9 @@ const GENDERED = new Set([
 	'переможниця', 'переможниці', 'суперниця', 'суперниці', 'лідерка', 'дебютантка', 'гонщиця', 'королева', 'чемпіонка',
 ]);
 // Feminine nouns that reveal a driver's gender (the masculine ones are the accepted generic form)
-const GENDERED_STEMS = /^(дебютантк|учасниц|переможниц|суперниц|лідерк|гонщиц|чемпіонк|солістк)/u;
+const GENDERED_STEMS = /^(дебютантк|учасниц|переможниц|суперниц(?!тв)|лідерк|гонщиц|чемпіонк|солістк)/u; // not "суперництво"
+// "duel_ann, яка відстає": a relative pronoun right after a nickname agrees with the driver
+const RELATIVE_AFTER_NICK = /[A-Za-z0-9-]*_[A-Za-z0-9_-]*,?\s+(як(?:ий|а|ого|ої|ому|ій|у|им|ою))(?![\p{L}'])/giu;
 const PRONOUNS = new Set(['він', 'вона', 'його', 'її', 'йому', 'їй', 'ним', 'нею', 'нього', 'неї', 'ньому', 'ній']);
 // "pack_ann перша, pack_dan другий": an ordinal that agrees with a driver, not with a noun after it
 // …and "solo_ann перша на подіумі", "Другий на старті": an ordinal followed by a preposition
@@ -100,6 +102,7 @@ export const validateLine = (
 			past.push(...words.filter(isPastTense));
 			gendered.push(...words.filter(word => GENDERED.has(normalize(word)) || GENDERED_STEMS.test(normalize(word))));
 			gendered.push(...[...sentence.replace(/[’ʼ]/g, "'").matchAll(ordinalAboutDriver)].map(match => match[1]));
+			gendered.push(...[...sentence.matchAll(RELATIVE_AFTER_NICK)].map(match => match[1]));
 		} else {
 			// "duel_ann теж фінішує! Другий, але…": pronouns and bare ordinals still point at that driver
 			gendered.push(...words.filter(word => PRONOUNS.has(normalize(word))));

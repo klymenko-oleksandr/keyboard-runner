@@ -60,6 +60,12 @@ test('an ordinal followed by a preposition is about the driver', () => {
 	assert.equal(reasons('duel_ann на першому місці, друга позиція — у duel_bob.'), '');
 });
 
+test('a relative pronoun after a nickname is gendered; суперництво is not a person', () => {
+	assert.match(reasons('Друге місце — у duel_ann, яка відстає на 6 символів.'), /gendered: яка/);
+	assert.equal(reasons('Суперництво duel_ann і duel_bob триває!'), '');
+	assert.equal(reasons('duel_bob на синьому авто, номер якого 87.'), '');
+});
+
 test('does not mistake genitive plurals for past tense', () => {
 	assert.equal(reasons('duel_bob відстає на 21 відсоток, до фінішу 21 секунда, а символів лишилось мало!'), '');
 	assert.equal(reasons('pack_eve наздоганяє лідерів!'), '');
