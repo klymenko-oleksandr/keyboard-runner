@@ -31,6 +31,8 @@ import {
 	rankPlayers,
 	toOrder,
 } from './helpers/standings';
+import { toResultsPayload, toStatusPayload } from './ai/payloads';
+import type { AiCommentator } from './ai/aiCommentator';
 import type { CreateComment } from './comments/commentFactory';
 import type { DriverRepository } from './drivers/driverRepository';
 import type { BookInfo } from '../texts';
@@ -58,6 +60,8 @@ interface CommentatorDeps {
 	createComment: CreateComment;
 	/** which book today's text comes from (null for the classic texts) */
 	getBook?: (textId: number) => BookInfo | null;
+	/** AI lines for some slots (status, results); without it every comment is a template */
+	ai?: AiCommentator;
 	random?: Random;
 	now?: () => number;
 }
@@ -73,6 +77,8 @@ interface RaceSession {
 	worstPositions: Map<string, number>;
 	lastOvertakeAt: number;
 	pairAnnouncedAt: Map<string, number>;
+	/** every line said this race, for the AI's <said> */
+	said: string[];
 }
 
 export const createCommentator = ({
@@ -80,6 +86,7 @@ export const createCommentator = ({
 	drivers,
 	createComment,
 	getBook = () => null,
+	ai,
 	random = Math.random,
 	now = Date.now,
 }: CommentatorDeps): Commentator => {
@@ -104,6 +111,7 @@ export const createCommentator = ({
 			worstPositions: new Map(),
 			lastOvertakeAt: -Infinity,
 			pairAnnouncedAt: new Map(),
+			said: [],
 		};
 		sessions.set(room.channel, session);
 		return session;
@@ -111,25 +119,62 @@ export const createCommentator = ({
 
 	/* ---------- Speaking ---------- */
 
-	const say = <T extends CommentType>(room: Room, type: T, payload: CommentPayloads[T]) => {
+	/** The template comment, with the AI's text instead when there is one */
+	const broadcast = <T extends CommentType>(room: Room, type: T, payload: CommentPayloads[T], text?: string | null) => {
+		const comment = createComment(type, payload);
+		broadcaster.say(room.channel, text ? { ...comment, text } : comment);
+		return comment;
+	};
+
+	const say = <T extends CommentType>(room: Room, type: T, payload: CommentPayloads[T], text?: string | null) => {
 		const session = sessions.get(room.channel);
 		if (!session) {
 			return; // nobody is on air in this room
 		}
 		session.lastSpokeAt = now();
-		broadcaster.say(room.channel, createComment(type, payload));
+		const comment = broadcast(room, type, payload, text);
+		session.said.push(text || comment.text);
+	};
+
+	/** An AI line, or null on any failure: the AI never breaks the race */
+	const aiLine = (room: Room, request: Parameters<AiCommentator['line']>[1]) =>
+		ai ? ai.line(room.name, request).catch(() => null) : Promise.resolve(null);
+
+	const statusPayload = (room: Room, session: RaceSession): CommentPayloads['status'] | null => {
+		if (room.status !== 'playing' || room.gameStartedAt === null) {
+			return null;
+		}
+		const secondsLeft = getSecondsLeft(room.gameStartedAt, SECONDS_FOR_GAME, now());
+		return secondsLeft < MIN_SECONDS_LEFT_FOR_STATUS
+			? null
+			: { standings: getStandings(room, session.order), textLength: room.textLength, secondsLeft };
 	};
 
 	const reportStatus = (room: Room) => {
 		const session = sessions.get(room.channel);
-		if (!session || room.status !== 'playing' || room.gameStartedAt === null) {
+		const payload = session && statusPayload(room, session);
+		if (!session || !payload) {
 			return;
 		}
-		const secondsLeft = getSecondsLeft(room.gameStartedAt, SECONDS_FOR_GAME, now());
-		if (secondsLeft < MIN_SECONDS_LEFT_FOR_STATUS) {
+		if (!ai?.has('status')) {
+			say(room, 'status', payload);
 			return;
 		}
-		say(room, 'status', { standings: getStandings(room, session.order), textLength: room.textLength, secondsLeft });
+		void aiLine(room, {
+			slot: 'status',
+			data: toStatusPayload(payload),
+			said: [...session.said],
+			names: [...room.players.keys()],
+		}).then(text => {
+			// the race may be over by now; a fallback template uses fresh standings
+			if (sessions.get(room.channel) !== session) {
+				return;
+			}
+			const fresh = text ? payload : statusPayload(room, session);
+			if (fresh) {
+				say(room, 'status', fresh, text);
+			}
+		});
 	};
 
 	const fillSilence = (room: Room) => {
@@ -261,16 +306,38 @@ export const createCommentator = ({
 
 	const raceFinished = (room: Room, results: GameResultDto[]) => {
 		const session = sessions.get(room.channel);
-		if (results.length > 0) {
-			say(room, 'results', {
-				results,
-				// a solo race is not a win (driverRepository.applyResult), so it has no streak to announce
-				winnerStreak: results.length >= 2 ? drivers.getOrCreate(results[0].username).winStreak + 1 : 0,
-				comeback: session ? findComeback(results, session.worstPositions) : null,
-			});
-			drivers.recordResults(results);
+		if (results.length === 0) {
+			closeSession(room);
+			return;
 		}
+		const payload: CommentPayloads['results'] = {
+			results,
+			// a solo race is not a win (driverRepository.applyResult), so it has no streak to announce
+			winnerStreak: results.length >= 2 ? drivers.getOrCreate(results[0].username).winStreak + 1 : 0,
+			comeback: session ? findComeback(results, session.worstPositions) : null,
+		};
+		if (!ai?.has('results') || !session) {
+			say(room, 'results', payload);
+			drivers.recordResults(results);
+			closeSession(room);
+			return;
+		}
+		// the model gets debuts and personal bests from the profiles BEFORE this race is recorded
+		const request = {
+			slot: 'results' as const,
+			data: toResultsPayload(payload, drivers.getOrCreate),
+			said: [...session.said],
+			names: results.map(result => result.username),
+		};
+		drivers.recordResults(results);
 		closeSession(room);
+		// said after the session is closed: at most the results deadline later, AI or template
+		void aiLine(room, request).then(text => {
+			// a new countdown already started: the results are in the modal, don't talk over the new grid
+			if (!sessions.has(room.channel)) {
+				broadcast(room, 'results', payload, text);
+			}
+		});
 	};
 
 	return { raceAnnounced, raceStarted, progressUpdated, driverLeft, raceFinished, roomClosed: closeSession };
