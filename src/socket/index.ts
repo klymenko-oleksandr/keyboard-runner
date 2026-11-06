@@ -1,5 +1,6 @@
 import { LOBBY_CHANNEL, SERVER_EVENTS } from './events';
 import { createAuthMiddleware } from './middleware/authMiddleware';
+import { whenStorageReady } from '../storage';
 import { userRegistry } from './services/userRegistry';
 import { registerRoomHandlers } from './handlers/roomHandlers';
 import { registerGameHandlers } from './handlers/gameHandlers';
@@ -8,6 +9,10 @@ import { removePlayerFromRoom } from './game/roomMembership';
 import type { AppServer } from './types';
 
 export default (io: AppServer) => {
+	// Driver profiles are loaded from the database at startup: no race may start before that
+	io.use((_socket, next) => {
+		whenStorageReady().then(() => next());
+	});
 	io.use(createAuthMiddleware(io));
 
 	io.on('connection', socket => {

@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
 import socketHandler from './socket';
+import { initStorage } from './storage';
 import routes from './routes';
 import { STATIC_PATH, PORT } from './config';
 import type { ClientToServerEvents, ServerToClientEvents, SocketData } from './socket/types';
@@ -18,6 +19,8 @@ routes(app);
 
 app.get('*', (req, res) => res.redirect('/login'));
 
+// MongoDB when MONGODB_URI is set, memory otherwise; socket connections wait until it is ready
+initStorage();
 socketHandler(socketIo);
 
 httpServer.listen(PORT, () => console.log(`Listen server on port ${PORT}`));

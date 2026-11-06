@@ -8,6 +8,7 @@ import { LOBBY_CHANNEL, SERVER_EVENTS } from '../events';
 import { roomRepository } from '../services/roomRepository';
 import { raceTexts } from '../../texts';
 import { getCommentator } from '../../commentator';
+import { keepTraces, traceRecorder } from '../../traces';
 import {
 	areAllFinished,
 	areAllReady,
@@ -75,6 +76,10 @@ export const tryStartCountdown = (io: AppServer, room: Room): boolean => {
 const startGame = (io: AppServer, room: Room) => {
 	room.status = 'playing';
 	room.gameStartedAt = Date.now();
+	const text = room.textId === null ? undefined : raceTexts.get(room.textId)?.text;
+	if (text) {
+		traceRecorder.startRace(room, text, { startedAt: room.gameStartedAt });
+	}
 
 	io.to(room.channel).emit(SERVER_EVENTS.GAME_STARTED, { seconds: SECONDS_FOR_GAME });
 	getCommentator(io).raceStarted(room);
@@ -99,6 +104,7 @@ const finishGame = (io: AppServer, room: Room) => {
 	clearRoomTimer(room);
 
 	const results = buildResults(room, Date.now());
+	const traces = traceRecorder.finishRace(room, results);
 
 	room.status = 'waiting';
 	room.textId = null;
@@ -110,11 +116,13 @@ const finishGame = (io: AppServer, room: Room) => {
 	getCommentator(io).raceFinished(room, results);
 	broadcastRoomUsers(io, room); // everyone is "not ready" again
 	broadcastRooms(io); // the room is visible in the list again (if not full)
+	void keepTraces(traces); // after everything players see; never throws
 };
 
 /** Last user left: stop timers and forget the room */
 export const destroyRoom = (io: AppServer, room: Room) => {
 	clearRoomTimer(room);
+	traceRecorder.dropRace(room);
 	getCommentator(io).roomClosed(room);
 	roomRepository.delete(room.name);
 };

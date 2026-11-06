@@ -7,6 +7,7 @@ import { createCarFactory } from './drivers/carFactory';
 import { createDriverRepository } from './drivers/driverRepository';
 import { createCommentator } from './commentator';
 import { raceTexts } from '../texts';
+import { getStorage } from '../storage';
 import type { AppServer } from '../socket/types';
 import type { Broadcaster } from './types';
 
@@ -23,7 +24,8 @@ const createSocketBroadcaster = (io: AppServer): Broadcaster => ({
 export const getCommentator = memoize((io: AppServer) =>
 	createCommentator({
 		broadcaster: withCensorship(createSocketBroadcaster(io)),
-		drivers: createDriverRepository(createCarFactory()),
+		// profiles loaded from the database (if any) and written back after every race
+		drivers: createDriverRepository(createCarFactory(), getStorage().drivers),
 		createComment: createCommentFactory(),
 		getBook: textId => raceTexts.get(textId)?.book ?? null,
 	}),
