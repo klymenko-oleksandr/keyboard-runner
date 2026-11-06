@@ -3,6 +3,7 @@ import { getProgressPercent, isFinished } from '../helpers/roomHelpers';
 import { broadcastRoomUsers, tryFinishGame, tryStartCountdown } from '../game/gameFlow';
 import { getCurrentRoom } from '../game/roomMembership';
 import { getCommentator } from '../../commentator';
+import { traceRecorder } from '../../traces';
 import type { AppServer, AppSocket } from '../types';
 
 export const registerGameHandlers = (io: AppServer, socket: AppSocket) => {
@@ -46,6 +47,7 @@ export const registerGameHandlers = (io: AppServer, socket: AppSocket) => {
 
 		const previousTypedChars = player.typedChars;
 		player.typedChars = typedChars;
+		traceRecorder.addSample(room, player.username, Date.now() - (room.gameStartedAt as number), typedChars);
 		if (typedChars === room.textLength) {
 			player.finishTimeMs = Date.now() - (room.gameStartedAt as number);
 		}

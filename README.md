@@ -178,7 +178,25 @@ The game talks to the commentator in exactly one line per event, e.g. `getCommen
 
 ### Data
 
-Driver profiles and head-to-head records live in server memory, like rooms. Render's free instance sleeps after ~15 minutes, and after that the profiles start from zero. To keep them, implement `DriverRepository` on top of a database (e.g. MongoDB Atlas, which replaced mLab) and plug it in `index.ts`.
+Driver profiles and head-to-head records are read from memory (the commentator needs them instantly). With `MONGODB_URI` set they are loaded from MongoDB Atlas once at startup and every change is written back after the race, so they survive Render putting the instance to sleep. Without it they live in memory only, like rooms.
+
+A win needs someone to beat: a solo race adds to `races` and `bestWpm`, but not to `wins` or the win streak (and does not reset the streak either).
+
+## Race traces
+
+Every finished race leaves one **trace** per player: the text, `[ms, typedChars]` samples from lights out, the finish time, WPM, players in the race and which attempt on this text it was. Traces are the data the ghost race (and the commentator research) is built on.
+
+- Recorded by the server from the progress updates it already receives; the client did not change.
+- Saved to the `raceTraces` collection (with `MONGODB_URI`) after `game:finished` is sent, and written to the log as one JSON line `{"type":"race-trace", …}`. A failed save is logged, never shown to players.
+
+```
+src/storage/index.ts          MongoDB connection at startup, in-memory fallback; socket connections wait until it is ready
+src/traces/
+├── types.ts                  RaceTrace, ProgressSample
+├── traceRecorder.ts          one live recording per room: start, sample, finish, drop
+├── traceRepository.ts        in-memory and MongoDB versions (attempt number per player and text)
+└── index.ts                  the recorder the game uses + keepTraces (save + log)
+```
 
 ## Race texts
 
@@ -203,5 +221,6 @@ src/texts/
 1. Push the repo to GitHub.
 2. On [render.com](https://render.com), choose **New → Blueprint** and select the repo. `render.yaml` sets up a free web service (`npm ci && npm run build`, then `npm run start:prod`).
 3. Render passes `PORT` through env. Locally the app falls back to `3002`.
+4. Optional: `MONGODB_URI` (a MongoDB Atlas connection string with the database name in the path) keeps driver profiles and race traces between restarts. Atlas must allow the service's outbound IP ranges (Render: service → Connect → Outbound). Locally, put it in `.env` (ignored by git) or leave it out to keep everything in memory.
 
 The free instance sleeps after about 15 minutes without traffic, so the first request after that takes up to a minute.
