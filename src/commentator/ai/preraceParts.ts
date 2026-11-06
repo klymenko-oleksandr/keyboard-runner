@@ -1,5 +1,6 @@
 // The pre-race block arrives as keyed lines ("greeting: …", "driver:pack_ann: …", "rivalry: …", "track: …").
-// Pure helpers: which parts this race has, which line is which part, and what gets said when.
+// Pure helpers: which parts this race has, which line is which part, and whether it is valid.
+// preraceStream.ts says them live.
 import { contextFromData, validateLine } from './validator';
 import { SLOT_LIMITS } from './config';
 import type { PreracePayload } from './payloads';
@@ -38,58 +39,3 @@ export const validatePart = (part: PreracePart, text: string, payload: PreracePa
 			},
 		),
 	);
-
-export interface PartArrival {
-	part: PreracePart;
-	text: string;
-	/** ms after the call started */
-	atMs: number;
-}
-
-export interface PlannedPart {
-	part: PreracePart;
-	source: 'ai' | 'template';
-	reason: 'ok' | 'missing' | 'invalid' | 'late';
-	text: string | null;
-	reasons: string[];
-	/** when it can be said: a part waits for every part before it */
-	sayAtMs: number;
-}
-
-/**
- * Arrivals -> what is said, in order. A part is AI if it arrived valid before the deadline, else its template.
- * The first line has its own, earlier deadline: a silent countdown is worse than a template greeting.
- * Pure, so the streaming code in sayWithin stays small and this stays testable.
- */
-export const planPrerace = (
-	parts: readonly PreracePart[],
-	arrivals: readonly PartArrival[],
-	payload: PreracePayload,
-	limits = SLOT_LIMITS.prerace,
-): PlannedPart[] => {
-	const firstArrival = new Map<PreracePart, PartArrival>();
-	arrivals.forEach(arrival => !firstArrival.has(arrival.part) && firstArrival.set(arrival.part, arrival));
-	let clock = 0;
-	return parts.map((part, index) => {
-		const arrival = firstArrival.get(part);
-		const deadline = index === 0 ? (limits.firstLineDeadlineMs ?? limits.deadlineMs) : limits.deadlineMs;
-		const reasons = arrival ? validatePart(part, arrival.text, payload).reasons : [];
-		const reason: PlannedPart['reason'] = !arrival
-			? 'missing'
-			: reasons.length
-				? 'invalid'
-				: arrival.atMs > deadline
-					? 'late'
-					: 'ok';
-		const ok = reason === 'ok';
-		clock = Math.max(clock, ok ? (arrival as PartArrival).atMs : deadline);
-		return {
-			part,
-			source: ok ? 'ai' : 'template',
-			reason,
-			text: ok ? (arrival as PartArrival).text : null,
-			reasons,
-			sayAtMs: clock,
-		};
-	});
-};

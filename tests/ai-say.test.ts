@@ -7,6 +7,7 @@ import {
 	createAnthropicWriter,
 	createFakeWriter,
 	createSayWithin,
+	preraceParts,
 	readAiConfig,
 	toParams,
 } from '../src/commentator/ai';
@@ -178,6 +179,7 @@ const setup = (answer: (request: SayWithinRequest) => string | null, slots = ['r
 			requests.push(req);
 			return answer(req);
 		},
+		prerace: async (_room, req) => preraceParts(req.payload).forEach(part => req.sayPart(part, null)),
 	};
 	const drivers = createDriverRepository(() => ({ brand: 'Ferrari', color: 'червоному', number: 7 }));
 	const commentator = createCommentator({

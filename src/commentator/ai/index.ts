@@ -13,3 +13,5 @@ export { createAiCommentator } from './aiCommentator';
 export type { AiCommentator, AiLog } from './aiCommentator';
 export { costOf, createAnthropicWriter, toParams } from './anthropicWriter';
 export type { MessagesClient } from './anthropicWriter';
+export { createPreraceRunner } from './preraceStream';
+export type { PreraceLog, PreracePartLog, PreraceRequest, PreraceRunner } from './preraceStream';
